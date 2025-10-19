@@ -80,7 +80,7 @@
   ],
   "Widget_Html": [
     {
-      "place": "Content:1"
+      "place": "-"
     }
   ],
   "Widget_Menu": [
@@ -123,6 +123,12 @@
     {
       "place": "Content:1",
       "contentType": "Application"
+    }
+  ],
+  "Content": [
+    {
+      "place": "Content:1",
+      "displayType": "HomePage"
     }
   ],
   "Parts_Course": [
