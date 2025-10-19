@@ -315,8 +315,8 @@ MigrationBackup/
 .ionide/
 
 # OrchardCore specific
-App_Data/
-*.db
-*.db-shm
-*.db-wal
+# App_Data/ - Commented out to include database in git
+# *.db - Commented out to include database in git
+# *.db-shm - Commented out to include database in git
+# *.db-wal - Commented out to include database in git
 server.log
