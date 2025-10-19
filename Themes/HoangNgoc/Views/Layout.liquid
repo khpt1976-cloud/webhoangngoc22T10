@@ -56,8 +56,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Theme CSS Resources -->
-    {{ "hoangngoc-theme.css" | asset_url | stylesheet_tag }}
-    {{ "hoangngoc-responsive.css" | asset_url | stylesheet_tag }}
+    <link rel="stylesheet" href="{{ '~/Themes/HoangNgoc/css/hoangngoc-theme.css' | href }}" />
+    <link rel="stylesheet" href="{{ '~/Themes/HoangNgoc/css/hoangngoc-responsive.css' | href }}" />
     
     <!-- Head Resources -->
     {% render_section "HeadMeta", required: false %}
@@ -88,7 +88,29 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <!-- Main Navigation -->
                 <nav class="navbar-nav me-auto">
-                    {% shape "Menu", Alias: "main-menu", Classes: ["navbar-nav"] %}
+                    <a class="nav-link" href="{{ '~/' | href }}">
+                        <i class="fas fa-home me-1"></i>Trang chủ
+                    </a>
+                    <a class="nav-link" href="{{ '~/News' | href }}">
+                        <i class="fas fa-newspaper me-1"></i>Tin tức
+                    </a>
+                    <a class="nav-link" href="{{ '~/Training' | href }}">
+                        <i class="fas fa-graduation-cap me-1"></i>Đào tạo
+                    </a>
+                    <a class="nav-link" href="{{ '~/Application' | href }}">
+                        <i class="fas fa-briefcase me-1"></i>Ứng dụng
+                    </a>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cogs me-1"></i>Dịch vụ
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ '~/Payment' | href }}"><i class="fas fa-credit-card me-2"></i>Thanh toán</a></li>
+                            <li><a class="dropdown-item" href="{{ '~/Core' | href }}"><i class="fas fa-wallet me-2"></i>Ví điện tử</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ '~/Support' | href }}"><i class="fas fa-headset me-2"></i>Hỗ trợ</a></li>
+                        </ul>
+                    </div>
                 </nav>
                 
                 <!-- User Menu -->
@@ -167,32 +189,70 @@
         </div>
     </header>
     
+    <!-- Breadcrumb Navigation -->
+    {% unless Model.IsHomePage %}
+    <nav class="breadcrumb-nav bg-light py-2" aria-label="breadcrumb">
+        <div class="container">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="{{ '~/' | href }}">
+                        <i class="fas fa-home me-1"></i>Trang chủ
+                    </a>
+                </li>
+                {% if Model.ContentItem.ContentType %}
+                    <li class="breadcrumb-item">
+                        <a href="{{ '~/' | append: Model.ContentItem.ContentType | href }}">
+                            {{ Model.ContentItem.ContentType }}
+                        </a>
+                    </li>
+                {% endif %}
+                {% if Model.Title %}
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{ Model.Title }}
+                    </li>
+                {% endif %}
+            </ol>
+        </div>
+    </nav>
+    {% endunless %}
+    
     <!-- Main Content -->
     <main class="site-main" id="main-content" role="main">
         <!-- Hero Section -->
         {% if Model.IsHomePage %}
-            <section class="hero-section">
+            <section class="hero-section bg-gradient-primary text-white py-5">
                 <div class="container">
-                    <div class="hero-content">
-                        <h1 class="hero-title">{{ Site.SiteName }}</h1>
-                        <p class="hero-subtitle">{{ Site.Description }}</p>
-                        <div class="hero-actions">
-                            <a href="{{ '~/Training' | href }}" class="btn btn-primary btn-lg">Khám phá khóa học</a>
-                            <a href="{{ '~/About' | href }}" class="btn btn-outline btn-lg">Tìm hiểu thêm</a>
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <h1 class="hero-title display-4 fw-bold mb-3">{{ Site.SiteName }}</h1>
+                            <p class="hero-subtitle lead mb-4">{{ Site.Description | default: "Nền tảng quản lý và đào tạo chuyên nghiệp" }}</p>
+                            <div class="hero-actions">
+                                {% unless User.Identity.IsAuthenticated %}
+                                    <a href="{{ '~/Account/Register' | href }}" class="btn btn-light btn-lg me-3">
+                                        <i class="fas fa-rocket me-2"></i>Bắt đầu ngay
+                                    </a>
+                                    <a href="{{ '~/Training' | href }}" class="btn btn-outline-light btn-lg">
+                                        <i class="fas fa-graduation-cap me-2"></i>Khám phá khóa học
+                                    </a>
+                                {% else %}
+                                    <a href="{{ '~/Dashboard' | href }}" class="btn btn-light btn-lg me-3">
+                                        <i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển
+                                    </a>
+                                    <a href="{{ '~/Training/MyCourses' | href }}" class="btn btn-outline-light btn-lg">
+                                        <i class="fas fa-book-open me-2"></i>Khóa học của tôi
+                                    </a>
+                                {% endunless %}
+                            </div>
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <div class="hero-image">
+                                <i class="fas fa-laptop-code display-1 text-white-50"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
         {% endif %}
-        
-        <!-- Breadcrumb -->
-        {% unless Model.IsHomePage %}
-            <section class="breadcrumb-section">
-                <div class="container">
-                    {% shape "Breadcrumb" %}
-                </div>
-            </section>
-        {% endunless %}
         
         <!-- Page Content -->
         <section class="page-content">
@@ -201,7 +261,7 @@
                     <!-- Main Content Area -->
                     <div class="col-main">
                         <!-- Messages -->
-                        {% shape "Messages" %}
+                        {% render_section "Messages", required: false %}
                         
                         <!-- Page Title -->
                         {% if Model.Title and Model.IsHomePage == false %}
