@@ -1,0 +1,128 @@
+{
+  "name": "News Workflows",
+  "displayName": "News Workflows",
+  "description": "Creates default workflows for news management",
+  "author": "HoangNgoc",
+  "website": "https://hoangngocdevelopment.com",
+  "version": "1.0.0",
+  "issetuprecipe": false,
+  "categories": ["news"],
+  "tags": ["news", "workflow", "automation"],
+  "steps": [
+    {
+      "name": "workflows",
+      "Workflows": [
+        {
+          "WorkflowId": "news-publish-notification",
+          "Name": "News Publish Notification",
+          "Enabled": true,
+          "Activities": [
+            {
+              "ActivityId": "news-published-event",
+              "Name": "NewsPublishedActivity",
+              "X": 100,
+              "Y": 100,
+              "IsStart": true
+            },
+            {
+              "ActivityId": "send-notification",
+              "Name": "SendNewsNotificationActivity",
+              "X": 300,
+              "Y": 100,
+              "Properties": {
+                "NotificationType": "published",
+                "Recipients": "subscribers"
+              }
+            }
+          ],
+          "Transitions": [
+            {
+              "Id": "transition-1",
+              "SourceActivityId": "news-published-event",
+              "DestinationActivityId": "send-notification",
+              "SourceOutcomeName": "Done"
+            }
+          ]
+        },
+        {
+          "WorkflowId": "news-view-counter",
+          "Name": "News View Counter",
+          "Enabled": true,
+          "Activities": [
+            {
+              "ActivityId": "content-displayed-event",
+              "Name": "ContentDisplayedEvent",
+              "X": 100,
+              "Y": 100,
+              "IsStart": true,
+              "Properties": {
+                "ContentTypes": ["NewsArticle"]
+              }
+            },
+            {
+              "ActivityId": "increment-view-count",
+              "Name": "IncrementNewsViewCountActivity",
+              "X": 300,
+              "Y": 100
+            }
+          ],
+          "Transitions": [
+            {
+              "Id": "transition-2",
+              "SourceActivityId": "content-displayed-event",
+              "DestinationActivityId": "increment-view-count",
+              "SourceOutcomeName": "Done"
+            }
+          ]
+        },
+        {
+          "WorkflowId": "featured-news-notification",
+          "Name": "Featured News Notification",
+          "Enabled": true,
+          "Activities": [
+            {
+              "ActivityId": "news-published-featured",
+              "Name": "NewsPublishedActivity",
+              "X": 100,
+              "Y": 100,
+              "IsStart": true
+            },
+            {
+              "ActivityId": "check-featured",
+              "Name": "IfElseActivity",
+              "X": 300,
+              "Y": 100,
+              "Properties": {
+                "Condition": "{{ Properties.NewsIsFeatured == true }}"
+              }
+            },
+            {
+              "ActivityId": "send-featured-notification",
+              "Name": "SendNewsNotificationActivity",
+              "X": 500,
+              "Y": 100,
+              "Properties": {
+                "NotificationType": "featured",
+                "Recipients": "all"
+              }
+            }
+          ],
+          "Transitions": [
+            {
+              "Id": "transition-3",
+              "SourceActivityId": "news-published-featured",
+              "DestinationActivityId": "check-featured",
+              "SourceOutcomeName": "Done"
+            },
+            {
+              "Id": "transition-4",
+              "SourceActivityId": "check-featured",
+              "DestinationActivityId": "send-featured-notification",
+              "SourceOutcomeName": "True"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

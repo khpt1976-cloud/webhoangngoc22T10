@@ -1,0 +1,322 @@
+@using OrchardCore.ContentManagement
+@using HoangNgoc.News.Models
+@using OrchardCore.Autoroute.Models
+@using OrchardCore.Media.Fields
+
+@{
+    ContentItem contentItem = Model.ContentItem;
+    var newsArticlePart = contentItem.As<NewsArticlePart>();
+    var titlePart = contentItem.As<OrchardCore.Title.Models.TitlePart>();
+    var htmlBodyPart = contentItem.As<OrchardCore.Html.Models.HtmlBodyPart>();
+    ViewData["Title"] = titlePart?.Title;
+}
+
+<article class="news-detail">
+    <header class="news-header">
+        @if (newsArticlePart?.IsFeatured?.Value == true)
+        {
+            <div class="featured-indicator">
+                <i class="fas fa-star"></i>
+                <span>Bài viết nổi bật</span>
+            </div>
+        }
+
+        <h1 class="news-title">@titlePart?.Title</h1>
+
+        @if (!string.IsNullOrEmpty(newsArticlePart?.Summary?.Text))
+        {
+            <div class="news-lead">
+                <p>@newsArticlePart.Summary.Text</p>
+            </div>
+        }
+
+        <div class="news-meta">
+            @if (newsArticlePart?.PublishedDate?.Value != null)
+            {
+                <div class="meta-item">
+                    <i class="fas fa-calendar"></i>
+                    <span>@newsArticlePart.PublishedDate.Value.Value.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+            }
+            
+            @if (!string.IsNullOrEmpty(newsArticlePart?.Author?.Text))
+            {
+                <div class="meta-item">
+                    <i class="fas fa-user"></i>
+                    <span>@newsArticlePart.Author.Text</span>
+                </div>
+            }
+            
+            @if (newsArticlePart?.ViewCount?.Value > 0)
+            {
+                <div class="meta-item">
+                    <i class="fas fa-eye"></i>
+                    <span>@newsArticlePart.ViewCount.Value lượt xem</span>
+                </div>
+            }
+        </div>
+    </header>
+
+    @if (newsArticlePart?.FeaturedImage?.Paths?.Any() == true)
+    {
+        <div class="news-featured-image">
+            <img src="@newsArticlePart.FeaturedImage.Paths.First()" alt="@titlePart?.Title" class="img-fluid" />
+        </div>
+    }
+
+    <div class="news-body">
+        @if (!string.IsNullOrEmpty(htmlBodyPart?.Html))
+        {
+            @Html.Raw(htmlBodyPart.Html)
+        }
+    </div>
+
+    <footer class="news-footer">
+        <div class="news-actions">
+            <div class="social-share">
+                <span>Chia sẻ:</span>
+                <a href="#" class="share-btn facebook" onclick="shareOnFacebook()">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" class="share-btn twitter" onclick="shareOnTwitter()">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" class="share-btn linkedin" onclick="shareOnLinkedIn()">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="#" class="share-btn copy" onclick="copyToClipboard()">
+                    <i class="fas fa-link"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="news-navigation">
+            <a href="/news" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left"></i> Quay lại danh sách
+            </a>
+        </div>
+    </footer>
+</article>
+
+<script>
+function shareOnFacebook() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(document.title);
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
+}
+
+function shareOnTwitter() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(document.title);
+    window.open(`https://twitter.com/intent/tweet?url=${url}&text=${title}`, '_blank', 'width=600,height=400');
+}
+
+function shareOnLinkedIn() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent(document.title);
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank', 'width=600,height=400');
+}
+
+function copyToClipboard() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+        alert('Đã sao chép liên kết!');
+    });
+}
+</script>
+
+<style>
+.news-detail {
+    max-width: 800px;
+    margin: 2rem auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.news-header {
+    padding: 2rem 2rem 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.featured-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #ffc107;
+    color: #212529;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.news-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #333;
+    line-height: 1.3;
+    margin-bottom: 1rem;
+}
+
+.news-lead {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-left: 4px solid #007bff;
+    margin-bottom: 1.5rem;
+    border-radius: 0 8px 8px 0;
+}
+
+.news-lead p {
+    font-size: 1.1rem;
+    color: #555;
+    margin: 0;
+    line-height: 1.6;
+    font-style: italic;
+}
+
+.news-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.meta-item i {
+    color: #007bff;
+}
+
+.news-featured-image {
+    text-align: center;
+    padding: 0;
+}
+
+.news-featured-image img {
+    width: 100%;
+    height: auto;
+    max-height: 400px;
+    object-fit: cover;
+}
+
+.news-body {
+    padding: 2rem;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #333;
+}
+
+.news-body h2, .news-body h3, .news-body h4 {
+    color: #333;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.news-body p {
+    margin-bottom: 1.5rem;
+}
+
+.news-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 1rem 0;
+}
+
+.news-footer {
+    padding: 2rem;
+    border-top: 1px solid #eee;
+    background: #f8f9fa;
+}
+
+.news-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.social-share {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.social-share span {
+    font-weight: 600;
+    color: #333;
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: #fff;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.share-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    color: #fff;
+}
+
+.share-btn.facebook { background: #1877f2; }
+.share-btn.twitter { background: #1da1f2; }
+.share-btn.linkedin { background: #0077b5; }
+.share-btn.copy { background: #6c757d; }
+
+.news-navigation {
+    text-align: center;
+}
+
+@@media (max-width: 768px) {
+    .news-detail {
+        margin: 1rem;
+        border-radius: 8px;
+    }
+    
+    .news-header {
+        padding: 1.5rem 1.5rem 1rem;
+    }
+    
+    .news-title {
+        font-size: 1.5rem;
+    }
+    
+    .news-body {
+        padding: 1.5rem;
+        font-size: 1rem;
+    }
+    
+    .news-footer {
+        padding: 1.5rem;
+    }
+    
+    .news-actions {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .social-share {
+        justify-content: center;
+    }
+    
+    .news-meta {
+        gap: 1rem;
+        font-size: 0.85rem;
+    }
+}
+</style>
