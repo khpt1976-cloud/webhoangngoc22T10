@@ -1,23 +1,30 @@
 {% comment %}
-News List View - HoangNgoc Theme
-Modern news listing with categories and search
+News List View - HoangNgoc Professional Theme v2.0
+Bootstrap 5.3 Enhanced News listing with modern components
 {% endcomment %}
 
 <div class="news-list-page" data-animate="fade-in">
-    <div class="container">
+    <div class="container py-4">
         <!-- Page Header -->
-        <div class="page-header">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h1 class="page-title">Tin tức & Sự kiện</h1>
-                    <p class="page-subtitle">Cập nhật những thông tin mới nhất về công nghệ, đào tạo và sự kiện</p>
-                </div>
-                <div class="col-md-4 text-right">
-                    <div class="header-actions">
-                        <a href="{{ '~/News/Subscribe' | href }}" class="btn btn-primary">
-                            <i class="fas fa-bell"></i> Đăng ký nhận tin
-                        </a>
-                    </div>
+        <div class="row align-items-center mb-5">
+            <div class="col-md-8">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ '~/' | href }}">Trang chủ</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Tin tức</li>
+                    </ol>
+                </nav>
+                <h1 class="display-5 fw-bold mb-3">Tin tức & Sự kiện</h1>
+                <p class="lead text-muted">Cập nhật những thông tin mới nhất về công nghệ, đào tạo và sự kiện</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="d-flex gap-2 justify-content-end">
+                    <a href="{{ '~/News/Subscribe' | href }}" class="btn btn-outline-primary">
+                        <i class="fas fa-bell me-2"></i>Đăng ký nhận tin
+                    </a>
+                    <a href="{{ '~/News/RSS' | href }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-rss me-2"></i>RSS
+                    </a>
                 </div>
             </div>
         </div>

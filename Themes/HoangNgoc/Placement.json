@@ -1,53 +1,76 @@
 {
+  // ===== CORE CONTENT PARTS =====
   "Parts_Title": [
     {
-      "place": "Header:1"
+      "place": "Header:1",
+      "wrapper": "div",
+      "classes": ["page-title-wrapper", "mb-3"]
     }
   ],
   "Parts_Common_Body": [
     {
-      "place": "Content:1"
+      "place": "Content:1",
+      "wrapper": "div",
+      "classes": ["content-body", "mb-4"]
     }
   ],
   "Parts_Common_Metadata": [
     {
-      "place": "Meta:1"
+      "place": "Meta:1",
+      "wrapper": "div",
+      "classes": ["content-meta", "text-muted", "small", "mb-2"]
     }
   ],
   "Parts_Tags": [
     {
-      "place": "Footer:1"
+      "place": "Footer:1",
+      "wrapper": "div",
+      "classes": ["content-tags", "mt-3"]
     }
   ],
   "Parts_Publish": [
     {
-      "place": "Meta:2"
+      "place": "Meta:2",
+      "wrapper": "div",
+      "classes": ["publish-info", "text-muted", "small"]
     }
   ],
   "Parts_Comments": [
     {
-      "place": "Footer:2"
+      "place": "Footer:2",
+      "wrapper": "div",
+      "classes": ["comments-section", "mt-4", "pt-4", "border-top"]
     }
   ],
+  
+  // ===== NAVIGATION & UI ELEMENTS =====
   "Menu": [
     {
       "place": "Navigation:1",
-      "differentiator": "main-menu"
+      "differentiator": "main-menu",
+      "wrapper": "nav",
+      "classes": ["main-navigation"]
     }
   ],
   "Breadcrumb": [
     {
-      "place": "Header:0"
+      "place": "Header:0",
+      "wrapper": "nav",
+      "classes": ["breadcrumb-nav", "mb-3"]
     }
   ],
   "Messages": [
     {
-      "place": "Messages:1"
+      "place": "Messages:1",
+      "wrapper": "div",
+      "classes": ["alert-container", "mb-4"]
     }
   ],
   "Pager": [
     {
-      "place": "Footer:0"
+      "place": "Footer:0",
+      "wrapper": "nav",
+      "classes": ["pagination-nav", "mt-4", "d-flex", "justify-content-center"]
     }
   ],
   "Widget": [

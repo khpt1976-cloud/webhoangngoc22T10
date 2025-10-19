@@ -2,98 +2,173 @@
 <html lang="{{ Culture.Name }}" dir="{{ Culture.Dir }}">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';" />
+    
     <title>{% if Model.Title %}{{ Model.Title }} - {% endif %}{{ Site.SiteName }}</title>
     
     <!-- Meta Tags -->
     <meta name="description" content="{{ Model.Description | default: Site.Description }}" />
     <meta name="keywords" content="{{ Model.Keywords | default: Site.Keywords }}" />
-    <meta name="author" content="HoangNgoc Team" />
+    <meta name="author" content="HoangNgoc Professional Theme v2.0" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0d6efd" />
+    
+    <!-- Accessibility Meta -->
+    <meta name="color-scheme" content="light dark" />
+    <meta name="supported-color-schemes" content="light dark" />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% if Model.Title %}{{ Model.Title }} - {% endif %}{{ Site.SiteName }}" />
+    <meta property="og:description" content="{{ Model.Description | default: Site.Description }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ Request.Url }}" />
+    <meta property="og:site_name" content="{{ Site.SiteName }}" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{% if Model.Title %}{{ Model.Title }} - {% endif %}{{ Site.SiteName }}" />
+    <meta name="twitter:description" content="{{ Model.Description | default: Site.Description }}" />
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ '~/favicon.ico' | href }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ '~/apple-touch-icon.png' | href }}" />
     
-    <!-- CSS Resources -->
-    {{ "hoangngoc-theme.css" | asset_url | stylesheet_tag }}
-    {{ "hoangngoc-responsive.css" | asset_url | stylesheet_tag }}
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
     
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <!-- Font Awesome 6.5 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
-    <!-- Google Fonts -->
+    <!-- Google Fonts - Inter & Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Theme CSS Resources -->
+    {{ "hoangngoc-theme.css" | asset_url | stylesheet_tag }}
+    {{ "hoangngoc-responsive.css" | asset_url | stylesheet_tag }}
     
     <!-- Head Resources -->
     {% render_section "HeadMeta", required: false %}
     {% render_section "HeadLinks", required: false %}
     {% render_section "HeadScripts", required: false %}
 </head>
-<body class="{% if User.Identity.IsAuthenticated %}authenticated{% else %}anonymous{% endif %} {{ Model.Classes | join: ' ' }}">
+<body class="{% if User.Identity.IsAuthenticated %}authenticated{% else %}anonymous{% endif %} {{ Model.Classes | join: ' ' }}" data-theme="hoangngoc-v2">
+    
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link visually-hidden-focusable">Bỏ qua đến nội dung chính</a>
     
     <!-- Header -->
-    <header class="site-header">
+    <header class="site-header navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top" role="banner">
         <div class="container">
-            <div class="header-content">
-                <!-- Logo -->
-                <div class="site-logo">
-                    <a href="{{ '~/' | href }}" title="{{ Site.SiteName }}">
-                        <img src="{{ '~/images/logo.png' | href }}" alt="{{ Site.SiteName }}" class="logo-img" />
-                        <span class="logo-text">{{ Site.SiteName }}</span>
-                    </a>
-                </div>
-                
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="{{ '~/' | href }}" title="{{ Site.SiteName }}" aria-label="Trang chủ {{ Site.SiteName }}">
+                <img src="{{ '~/images/logo.png' | href }}" alt="{{ Site.SiteName }}" class="logo-img me-2" height="40" width="40" loading="eager" />
+                <span class="logo-text fw-bold text-primary">{{ Site.SiteName }}</span>
+            </a>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Mở/đóng menu điều hướng">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation -->
+            <div class="collapse navbar-collapse" id="navbarNav">
                 <!-- Main Navigation -->
-                <nav class="main-navigation">
-                    {% shape "Menu", Alias: "main-menu", Classes: ["nav", "navbar-nav"] %}
+                <nav class="navbar-nav me-auto">
+                    {% shape "Menu", Alias: "main-menu", Classes: ["navbar-nav"] %}
                 </nav>
                 
                 <!-- User Menu -->
-                <div class="user-menu">
+                <div class="navbar-nav ms-auto">
                     {% if User.Identity.IsAuthenticated %}
-                        <div class="user-dropdown">
-                            <button class="user-toggle" type="button">
-                                <i class="fas fa-user-circle"></i>
-                                <span>{{ User.Identity.Name }}</span>
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                            <div class="user-dropdown-menu">
-                                <a href="{{ '~/Account/Profile' | href }}" class="dropdown-item">
-                                    <i class="fas fa-user"></i> Hồ sơ
+                        <!-- Wallet Balance -->
+                        <div class="nav-item me-3">
+                            <span class="navbar-text">
+                                <i class="fas fa-wallet text-success"></i>
+                                <span class="fw-semibold">{{ User.WalletBalance | default: "0" | number_format }} VNĐ</span>
+                            </span>
+                        </div>
+                        
+                        <!-- Notifications -->
+                        <div class="nav-item dropdown me-2">
+                            <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bell"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    3
+                                    <span class="visually-hidden">unread messages</span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><h6 class="dropdown-header">Thông báo</h6></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-info-circle text-info me-2"></i>Khóa học mới đã được thêm</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle text-success me-2"></i>Thanh toán thành công</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-graduation-cap text-primary me-2"></i>Hoàn thành bài học</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-center" href="{{ '~/Notifications' | href }}">Xem tất cả</a></li>
+                            </ul>
+                        </div>
+                        
+                        <!-- User Dropdown -->
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{{ User.Avatar | default: '~/images/default-avatar.png' | href }}" alt="{{ User.Identity.Name }}" class="rounded-circle me-2" width="32" height="32" />
+                                <span class="d-none d-md-inline">{{ User.Identity.Name }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><h6 class="dropdown-header">{{ User.Identity.Name }}</h6></li>
+                                <li><a class="dropdown-item" href="{{ '~/Account/Profile' | href }}">
+                                    <i class="fas fa-user me-2"></i>Hồ sơ cá nhân
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ '~/Wallet/Dashboard' | href }}">
+                                    <i class="fas fa-wallet me-2"></i>Ví điện tử
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ '~/Training/MyCourses' | href }}">
+                                    <i class="fas fa-graduation-cap me-2"></i>Khóa học của tôi
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ '~/Application/MyApps' | href }}">
+                                    <i class="fas fa-mobile-alt me-2"></i>Ứng dụng của tôi
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ '~/Account/Settings' | href }}">
+                                    <i class="fas fa-cog me-2"></i>Cài đặt
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ '~/Account/Logout' | href }}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                                </a></li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <div class="nav-item">
+                            <div class="d-flex gap-2">
+                                <a href="{{ '~/Account/Login' | href }}" class="btn btn-outline-primary">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Đăng nhập
                                 </a>
-                                <a href="{{ '~/Wallet/Dashboard' | href }}" class="dropdown-item">
-                                    <i class="fas fa-wallet"></i> Ví điện tử
-                                </a>
-                                <a href="{{ '~/Training/MyCourses' | href }}" class="dropdown-item">
-                                    <i class="fas fa-graduation-cap"></i> Khóa học của tôi
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <a href="{{ '~/Account/Logout' | href }}" class="dropdown-item">
-                                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                                <a href="{{ '~/Account/Register' | href }}" class="btn btn-primary">
+                                    <i class="fas fa-user-plus me-1"></i>Đăng ký
                                 </a>
                             </div>
                         </div>
-                    {% else %}
-                        <div class="auth-buttons">
-                            <a href="{{ '~/Account/Login' | href }}" class="btn btn-outline">Đăng nhập</a>
-                            <a href="{{ '~/Account/Register' | href }}" class="btn btn-primary">Đăng ký</a>
-                        </div>
                     {% endif %}
                 </div>
-                
-                <!-- Mobile Menu Toggle -->
-                <button class="mobile-menu-toggle" type="button">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
             </div>
         </div>
     </header>
     
     <!-- Main Content -->
-    <main class="site-main">
+    <main class="site-main" id="main-content" role="main">
         <!-- Hero Section -->
         {% if Model.IsHomePage %}
             <section class="hero-section">
@@ -234,7 +309,10 @@
         </div>
     </footer>
     
-    <!-- JavaScript Resources -->
+    <!-- Bootstrap 5.3 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
+    <!-- Theme JavaScript -->
     {{ "hoangngoc-theme.js" | asset_url | script_tag }}
     
     <!-- Footer Scripts -->
@@ -242,5 +320,10 @@
     
     <!-- Analytics -->
     {% render_section "Analytics", required: false %}
+    
+    <!-- Back to Top Button -->
+    <button type="button" class="btn btn-primary btn-floating btn-lg" id="btn-back-to-top" style="display: none;">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 </body>
 </html>

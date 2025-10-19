@@ -1,6 +1,7 @@
 /**
- * HoangNgoc Theme JavaScript
- * Modern interactive features for OrchardCore CMS
+ * HoangNgoc Professional Theme v2.0 JavaScript
+ * Bootstrap 5.3 Enhanced Interactive Features for OrchardCore CMS
+ * Compatible with Bootstrap 5.3 components and utilities
  */
 
 (function() {
@@ -9,16 +10,25 @@
     // Theme namespace
     window.HoangNgoc = window.HoangNgoc || {};
 
-    // Configuration
+    // Configuration - Bootstrap 5.3 Breakpoints
     const config = {
         breakpoints: {
-            mobile: 768,
-            tablet: 1024,
-            desktop: 1200
+            xs: 0,
+            sm: 576,
+            md: 768,
+            lg: 992,
+            xl: 1200,
+            xxl: 1400
         },
         animations: {
             duration: 300,
-            easing: 'ease-in-out'
+            easing: 'cubic-bezier(0.4, 0, 0.2, 1)',
+            bounce: 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'
+        },
+        theme: {
+            name: 'HoangNgoc Professional',
+            version: '2.0.0',
+            bootstrap: '5.3.2'
         }
     };
 
@@ -83,17 +93,22 @@
         }
     };
 
-    // Mobile Navigation
+    // Bootstrap 5.3 Enhanced Mobile Navigation
     const mobileNav = {
         init: function() {
-            const toggle = document.querySelector('.mobile-menu-toggle');
-            const nav = document.querySelector('.main-navigation');
+            const toggle = document.querySelector('.navbar-toggler');
+            const nav = document.querySelector('#navbarNav');
             
             if (!toggle || !nav) return;
 
+            // Use Bootstrap 5.3 Collapse API
+            const bsCollapse = new bootstrap.Collapse(nav, {
+                toggle: false
+            });
+
             toggle.addEventListener('click', function() {
-                nav.classList.toggle('active');
-                toggle.classList.toggle('active');
+                bsCollapse.toggle();
+                this.classList.toggle('active');
                 document.body.classList.toggle('nav-open');
             });
 
@@ -544,6 +559,419 @@
         }
     };
 
+    // Advanced Theme Features
+    const advancedFeatures = {
+        init: function() {
+            this.initScrollReveal();
+            this.initAdvancedAnimations();
+            this.initPerformanceMonitoring();
+        },
+
+        // Scroll Reveal Animation
+        initScrollReveal: function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            // Observe scroll reveal elements
+            document.querySelectorAll('.scroll-reveal, .scroll-reveal-left, .scroll-reveal-right').forEach(el => {
+                observer.observe(el);
+            });
+        },
+
+        // Advanced Animations
+        initAdvancedAnimations: function() {
+            // Stagger animations
+            const staggerGroups = document.querySelectorAll('[data-stagger]');
+            
+            staggerGroups.forEach(group => {
+                const children = group.children;
+                const delay = parseInt(group.dataset.stagger) || 100;
+                
+                Array.from(children).forEach((child, index) => {
+                    child.style.animationDelay = `${index * delay}ms`;
+                    child.classList.add('animate-slide-in-left');
+                });
+            });
+
+            // Mouse follow effects
+            const followElements = document.querySelectorAll('[data-mouse-follow]');
+            
+            followElements.forEach(element => {
+                element.addEventListener('mousemove', (e) => {
+                    const rect = element.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const rotateX = (y - centerY) / 10;
+                    const rotateY = (centerX - x) / 10;
+                    
+                    element.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    element.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg)';
+                });
+            });
+        },
+
+        // Performance Monitoring
+        initPerformanceMonitoring: function() {
+            if (!window.performance) return;
+
+            // Core Web Vitals monitoring
+            this.monitorCoreWebVitals();
+            
+            // Resource loading monitoring
+            this.monitorResourceLoading();
+            
+            // Memory usage monitoring
+            this.monitorMemoryUsage();
+
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    const perfData = performance.getEntriesByType('navigation')[0];
+                    if (perfData) {
+                        const metrics = {
+                            loadTime: Math.round(perfData.loadEventEnd - perfData.loadEventStart),
+                            domContentLoaded: Math.round(perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart),
+                            firstByte: Math.round(perfData.responseStart - perfData.requestStart),
+                            theme: config.theme.version
+                        };
+                        
+                        console.log(`🚀 ${config.theme.name} Performance:`, metrics);
+                        
+                        // Send to analytics if available
+                        if (window.gtag) {
+                            window.gtag('event', 'theme_performance', {
+                                custom_parameter: metrics.loadTime
+                            });
+                        }
+                    }
+                }, 0);
+            });
+        },
+
+        // Core Web Vitals monitoring
+        monitorCoreWebVitals: function() {
+            // Largest Contentful Paint (LCP)
+            if ('PerformanceObserver' in window) {
+                const lcpObserver = new PerformanceObserver((list) => {
+                    const entries = list.getEntries();
+                    const lastEntry = entries[entries.length - 1];
+                    console.log('LCP:', Math.round(lastEntry.startTime), 'ms');
+                });
+                lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+
+                // First Input Delay (FID)
+                const fidObserver = new PerformanceObserver((list) => {
+                    const entries = list.getEntries();
+                    entries.forEach(entry => {
+                        console.log('FID:', Math.round(entry.processingStart - entry.startTime), 'ms');
+                    });
+                });
+                fidObserver.observe({ entryTypes: ['first-input'] });
+
+                // Cumulative Layout Shift (CLS)
+                let clsValue = 0;
+                const clsObserver = new PerformanceObserver((list) => {
+                    const entries = list.getEntries();
+                    entries.forEach(entry => {
+                        if (!entry.hadRecentInput) {
+                            clsValue += entry.value;
+                        }
+                    });
+                    console.log('CLS:', clsValue.toFixed(4));
+                });
+                clsObserver.observe({ entryTypes: ['layout-shift'] });
+            }
+        },
+
+        // Resource loading monitoring
+        monitorResourceLoading: function() {
+            window.addEventListener('load', () => {
+                const resources = performance.getEntriesByType('resource');
+                const slowResources = resources.filter(resource => resource.duration > 1000);
+                
+                if (slowResources.length > 0) {
+                    console.warn('Slow loading resources:', slowResources.map(r => ({
+                        name: r.name,
+                        duration: Math.round(r.duration)
+                    })));
+                }
+            });
+        },
+
+        // Memory usage monitoring
+        monitorMemoryUsage: function() {
+            if ('memory' in performance) {
+                setInterval(() => {
+                    const memory = performance.memory;
+                    const memoryInfo = {
+                        used: Math.round(memory.usedJSHeapSize / 1048576), // MB
+                        total: Math.round(memory.totalJSHeapSize / 1048576), // MB
+                        limit: Math.round(memory.jsHeapSizeLimit / 1048576) // MB
+                    };
+                    
+                    // Warn if memory usage is high
+                    if (memoryInfo.used > 50) {
+                        console.warn('High memory usage:', memoryInfo);
+                    }
+                }, 30000); // Check every 30 seconds
+            }
+        }
+    };
+
+    // Performance optimization utilities
+    const performanceUtils = {
+        // Lazy loading implementation
+        initLazyLoading: function() {
+            const lazyElements = document.querySelectorAll('.lazy-load');
+            
+            if ('IntersectionObserver' in window) {
+                const lazyObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const element = entry.target;
+                            
+                            // Load images
+                            if (element.dataset.src) {
+                                element.src = element.dataset.src;
+                                element.removeAttribute('data-src');
+                            }
+                            
+                            // Load background images
+                            if (element.dataset.bg) {
+                                element.style.backgroundImage = `url(${element.dataset.bg})`;
+                                element.removeAttribute('data-bg');
+                            }
+                            
+                            element.classList.add('loaded');
+                            lazyObserver.unobserve(element);
+                        }
+                    });
+                });
+                
+                lazyElements.forEach(element => lazyObserver.observe(element));
+            } else {
+                // Fallback for older browsers
+                lazyElements.forEach(element => {
+                    if (element.dataset.src) {
+                        element.src = element.dataset.src;
+                    }
+                    if (element.dataset.bg) {
+                        element.style.backgroundImage = `url(${element.dataset.bg})`;
+                    }
+                    element.classList.add('loaded');
+                });
+            }
+        },
+
+        // Debounce function for performance
+        debounce: function(func, wait, immediate) {
+            let timeout;
+            return function executedFunction() {
+                const context = this;
+                const args = arguments;
+                const later = function() {
+                    timeout = null;
+                    if (!immediate) func.apply(context, args);
+                };
+                const callNow = immediate && !timeout;
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+                if (callNow) func.apply(context, args);
+            };
+        },
+
+        // Throttle function for performance
+        throttle: function(func, limit) {
+            let inThrottle;
+            return function() {
+                const args = arguments;
+                const context = this;
+                if (!inThrottle) {
+                    func.apply(context, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            };
+        },
+
+        // Preload critical resources
+        preloadResources: function() {
+            const criticalResources = [
+                { href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css', as: 'style' },
+                { href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css', as: 'style' }
+            ];
+
+            criticalResources.forEach(resource => {
+                const link = document.createElement('link');
+                link.rel = 'preload';
+                link.href = resource.href;
+                link.as = resource.as;
+                if (resource.as === 'style') {
+                    link.onload = function() {
+                        this.onload = null;
+                        this.rel = 'stylesheet';
+                    };
+                }
+                document.head.appendChild(link);
+            });
+        },
+
+        // Critical CSS inlining
+        inlineCriticalCSS: function() {
+            const criticalCSS = `
+                .hero-critical { min-height: 50vh; background: var(--hn-primary); color: white; display: flex; align-items: center; justify-content: center; }
+                .nav-critical { background: white; box-shadow: 0 2px 4px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+            `;
+            
+            const style = document.createElement('style');
+            style.textContent = criticalCSS;
+            document.head.insertBefore(style, document.head.firstChild);
+        },
+
+        // Service Worker registration for caching
+        registerServiceWorker: function() {
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                    navigator.serviceWorker.register('/sw.js')
+                        .then(registration => {
+                            console.log('SW registered: ', registration);
+                        })
+                        .catch(registrationError => {
+                            console.log('SW registration failed: ', registrationError);
+                        });
+                });
+            }
+        },
+
+        // Image optimization
+        optimizeImages: function() {
+            const images = document.querySelectorAll('img:not([loading])');
+            images.forEach(img => {
+                img.loading = 'lazy';
+                img.decoding = 'async';
+            });
+        },
+
+        // Font loading optimization
+        optimizeFontLoading: function() {
+            // Preload critical fonts
+            const fontPreloads = [
+                'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap',
+                'https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap'
+            ];
+
+            fontPreloads.forEach(fontUrl => {
+                const link = document.createElement('link');
+                link.rel = 'preload';
+                link.href = fontUrl;
+                link.as = 'style';
+                link.onload = function() {
+                    this.onload = null;
+                    this.rel = 'stylesheet';
+                };
+                document.head.appendChild(link);
+            });
+        }
+    };
+
+    // Resource hints for better performance
+    const resourceHints = {
+        init: function() {
+            this.addDNSPrefetch();
+            this.addPreconnect();
+        },
+
+        addDNSPrefetch: function() {
+            const domains = [
+                'fonts.googleapis.com',
+                'fonts.gstatic.com',
+                'cdn.jsdelivr.net',
+                'cdnjs.cloudflare.com'
+            ];
+
+            domains.forEach(domain => {
+                const link = document.createElement('link');
+                link.rel = 'dns-prefetch';
+                link.href = `//${domain}`;
+                document.head.appendChild(link);
+            });
+        },
+
+        addPreconnect: function() {
+            const origins = [
+                'https://fonts.googleapis.com',
+                'https://fonts.gstatic.com'
+            ];
+
+            origins.forEach(origin => {
+                const link = document.createElement('link');
+                link.rel = 'preconnect';
+                link.href = origin;
+                link.crossOrigin = 'anonymous';
+                document.head.appendChild(link);
+            });
+        }
+    };
+
+    // Theme API for external use
+    window.HoangNgoc.api = {
+        // Animation utilities
+        animate: function(element, animation, duration = 600) {
+            return new Promise((resolve) => {
+                element.classList.add(`animate-${animation}`);
+                setTimeout(() => {
+                    element.classList.remove(`animate-${animation}`);
+                    resolve();
+                }, duration);
+            });
+        },
+
+        // Notification system
+        notify: function(message, type = 'info', duration = 5000) {
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} position-fixed top-0 end-0 m-3 animate-slide-in-right`;
+            notification.style.zIndex = '9999';
+            notification.innerHTML = `
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <span>${message}</span>
+                    <button type="button" class="btn-close ms-auto" aria-label="Close"></button>
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Auto remove
+            setTimeout(() => {
+                notification.classList.add('animate-slide-out-right');
+                setTimeout(() => notification.remove(), 300);
+            }, duration);
+
+            // Manual close
+            notification.querySelector('.btn-close').addEventListener('click', () => {
+                notification.classList.add('animate-slide-out-right');
+                setTimeout(() => notification.remove(), 300);
+            });
+        }
+    };
+
     // Initialize all modules
     const init = function() {
         // Wait for DOM to be ready
@@ -552,7 +980,10 @@
             return;
         }
 
-        // Initialize all modules
+        console.log(`🚀 ${config.theme.name} v${config.theme.version} initialized`);
+        console.log(`📦 Bootstrap ${config.theme.bootstrap} compatible`);
+
+        // Initialize core modules
         mobileNav.init();
         userDropdown.init();
         smoothScroll.init();
@@ -563,11 +994,21 @@
         searchEnhancement.init();
         accessibility.init();
         performance.init();
+        
+        // Initialize advanced features
+        advancedFeatures.init();
+        
+        // Initialize performance optimizations
+        performanceUtils.initLazyLoading();
+        performanceUtils.optimizeImages();
+        performanceUtils.optimizeFontLoading();
+        resourceHints.init();
 
         // Add loaded class to body
         document.body.classList.add('theme-loaded');
         
-        console.log('HoangNgoc Theme initialized successfully');
+        console.log('✨ Advanced theme features loaded successfully!');
+        console.log('⚡ Performance optimizations enabled!');
     };
 
     // Expose public API
