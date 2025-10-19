@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="{{ Culture.Name }}" dir="{{ Culture.Dir }}">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% if Model.Title %}{{ Model.Title }} - {% endif %}{{ Site.SiteName }}</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="{{ Model.Description | default: Site.Description }}" />
+    <meta name="keywords" content="{{ Model.Keywords | default: Site.Keywords }}" />
+    <meta name="author" content="HoangNgoc Team" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ '~/favicon.ico' | href }}" />
+    
+    <!-- CSS Resources -->
+    {{ "hoangngoc-theme.css" | asset_url | stylesheet_tag }}
+    {{ "hoangngoc-responsive.css" | asset_url | stylesheet_tag }}
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Head Resources -->
+    {% render_section "HeadMeta", required: false %}
+    {% render_section "HeadLinks", required: false %}
+    {% render_section "HeadScripts", required: false %}
+</head>
+<body class="{% if User.Identity.IsAuthenticated %}authenticated{% else %}anonymous{% endif %} {{ Model.Classes | join: ' ' }}">
+    
+    <!-- Header -->
+    <header class="site-header">
+        <div class="container">
+            <div class="header-content">
+                <!-- Logo -->
+                <div class="site-logo">
+                    <a href="{{ '~/' | href }}" title="{{ Site.SiteName }}">
+                        <img src="{{ '~/images/logo.png' | href }}" alt="{{ Site.SiteName }}" class="logo-img" />
+                        <span class="logo-text">{{ Site.SiteName }}</span>
+                    </a>
+                </div>
+                
+                <!-- Main Navigation -->
+                <nav class="main-navigation">
+                    {% shape "Menu", Alias: "main-menu", Classes: ["nav", "navbar-nav"] %}
+                </nav>
+                
+                <!-- User Menu -->
+                <div class="user-menu">
+                    {% if User.Identity.IsAuthenticated %}
+                        <div class="user-dropdown">
+                            <button class="user-toggle" type="button">
+                                <i class="fas fa-user-circle"></i>
+                                <span>{{ User.Identity.Name }}</span>
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
+                            <div class="user-dropdown-menu">
+                                <a href="{{ '~/Account/Profile' | href }}" class="dropdown-item">
+                                    <i class="fas fa-user"></i> Hồ sơ
+                                </a>
+                                <a href="{{ '~/Wallet/Dashboard' | href }}" class="dropdown-item">
+                                    <i class="fas fa-wallet"></i> Ví điện tử
+                                </a>
+                                <a href="{{ '~/Training/MyCourses' | href }}" class="dropdown-item">
+                                    <i class="fas fa-graduation-cap"></i> Khóa học của tôi
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="{{ '~/Account/Logout' | href }}" class="dropdown-item">
+                                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                                </a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="auth-buttons">
+                            <a href="{{ '~/Account/Login' | href }}" class="btn btn-outline">Đăng nhập</a>
+                            <a href="{{ '~/Account/Register' | href }}" class="btn btn-primary">Đăng ký</a>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Mobile Menu Toggle -->
+                <button class="mobile-menu-toggle" type="button">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Content -->
+    <main class="site-main">
+        <!-- Hero Section -->
+        {% if Model.IsHomePage %}
+            <section class="hero-section">
+                <div class="container">
+                    <div class="hero-content">
+                        <h1 class="hero-title">{{ Site.SiteName }}</h1>
+                        <p class="hero-subtitle">{{ Site.Description }}</p>
+                        <div class="hero-actions">
+                            <a href="{{ '~/Training' | href }}" class="btn btn-primary btn-lg">Khám phá khóa học</a>
+                            <a href="{{ '~/About' | href }}" class="btn btn-outline btn-lg">Tìm hiểu thêm</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+        
+        <!-- Breadcrumb -->
+        {% unless Model.IsHomePage %}
+            <section class="breadcrumb-section">
+                <div class="container">
+                    {% shape "Breadcrumb" %}
+                </div>
+            </section>
+        {% endunless %}
+        
+        <!-- Page Content -->
+        <section class="page-content">
+            <div class="container">
+                <div class="row">
+                    <!-- Main Content Area -->
+                    <div class="col-main">
+                        <!-- Messages -->
+                        {% shape "Messages" %}
+                        
+                        <!-- Page Title -->
+                        {% if Model.Title and Model.IsHomePage == false %}
+                            <div class="page-header">
+                                <h1 class="page-title">{{ Model.Title }}</h1>
+                                {% if Model.Subtitle %}
+                                    <p class="page-subtitle">{{ Model.Subtitle }}</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Main Content -->
+                        <div class="main-content">
+                            {% render_body %}
+                        </div>
+                    </div>
+                    
+                    <!-- Sidebar -->
+                    {% assign sidebar_content = Model.Sidebar | shape_render %}
+                    {% if sidebar_content != blank %}
+                        <aside class="col-sidebar">
+                            <div class="sidebar-content">
+                                {{ sidebar_content }}
+                            </div>
+                        </aside>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="row">
+                    <!-- Company Info -->
+                    <div class="col-md-4">
+                        <div class="footer-section">
+                            <h3>{{ Site.SiteName }}</h3>
+                            <p>{{ Site.Description }}</p>
+                            <div class="social-links">
+                                <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div class="col-md-2">
+                        <div class="footer-section">
+                            <h4>Liên kết</h4>
+                            <ul class="footer-links">
+                                <li><a href="{{ '~/About' | href }}">Giới thiệu</a></li>
+                                <li><a href="{{ '~/Training' | href }}">Khóa học</a></li>
+                                <li><a href="{{ '~/News' | href }}">Tin tức</a></li>
+                                <li><a href="{{ '~/Contact' | href }}">Liên hệ</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Services -->
+                    <div class="col-md-2">
+                        <div class="footer-section">
+                            <h4>Dịch vụ</h4>
+                            <ul class="footer-links">
+                                <li><a href="{{ '~/Training' | href }}">Đào tạo</a></li>
+                                <li><a href="{{ '~/Application' | href }}">Ứng dụng</a></li>
+                                <li><a href="{{ '~/Payment' | href }}">Thanh toán</a></li>
+                                <li><a href="{{ '~/Support' | href }}">Hỗ trợ</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="col-md-4">
+                        <div class="footer-section">
+                            <h4>Liên hệ</h4>
+                            <div class="contact-info">
+                                <p><i class="fas fa-map-marker-alt"></i> Địa chỉ: 123 Đường ABC, Quận XYZ, TP.HCM</p>
+                                <p><i class="fas fa-phone"></i> Điện thoại: (028) 1234 5678</p>
+                                <p><i class="fas fa-envelope"></i> Email: info@hoangngoc.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>&copy; {{ "now" | date: "yyyy" }} {{ Site.SiteName }}. Tất cả quyền được bảo lưu.</p>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <ul class="footer-legal">
+                            <li><a href="{{ '~/Privacy' | href }}">Chính sách bảo mật</a></li>
+                            <li><a href="{{ '~/Terms' | href }}">Điều khoản sử dụng</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- JavaScript Resources -->
+    {{ "hoangngoc-theme.js" | asset_url | script_tag }}
+    
+    <!-- Footer Scripts -->
+    {% render_section "FooterScripts", required: false %}
+    
+    <!-- Analytics -->
+    {% render_section "Analytics", required: false %}
+</body>
+</html>

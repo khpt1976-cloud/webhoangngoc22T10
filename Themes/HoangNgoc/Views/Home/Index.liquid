@@ -1,0 +1,170 @@
+{% comment %}
+Home Page View - HoangNgoc Theme
+Modern homepage with hero section and feature highlights
+{% endcomment %}
+
+<div class="homepage" data-animate="fade-in">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="hero-text">
+                            <h1 class="hero-title">
+                                Nền tảng đào tạo và ứng dụng 
+                                <span class="highlight">HoangNgoc</span>
+                            </h1>
+                            <p class="hero-subtitle">
+                                Khám phá hệ sinh thái hoàn chỉnh với các khóa học chất lượng cao, 
+                                ứng dụng tiện ích và dịch vụ thanh toán an toàn.
+                            </p>
+                            <div class="hero-stats">
+                                <div class="stat-item">
+                                    <span class="stat-number">1000+</span>
+                                    <span class="stat-label">Học viên</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number">50+</span>
+                                    <span class="stat-label">Khóa học</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number">20+</span>
+                                    <span class="stat-label">Ứng dụng</span>
+                                </div>
+                            </div>
+                            <div class="hero-actions">
+                                <a href="{{ '~/Training' | href }}" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-graduation-cap"></i>
+                                    Khám phá khóa học
+                                </a>
+                                <a href="{{ '~/Application' | href }}" class="btn btn-outline btn-lg">
+                                    <i class="fas fa-mobile-alt"></i>
+                                    Xem ứng dụng
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="hero-image">
+                            <div class="hero-placeholder">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-background">
+            <div class="bg-shape shape-1"></div>
+            <div class="bg-shape shape-2"></div>
+            <div class="bg-shape shape-3"></div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-header text-center">
+                <h2 class="section-title">Tại sao chọn HoangNgoc?</h2>
+                <p class="section-subtitle">
+                    Chúng tôi cung cấp giải pháp toàn diện cho nhu cầu học tập và ứng dụng của bạn
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card" data-animate="slide-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="feature-title">Đào tạo chất lượng</h3>
+                    <p class="feature-description">
+                        Khóa học được thiết kế bởi chuyên gia với nội dung cập nhật và thực tiễn
+                    </p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Giảng viên kinh nghiệm</li>
+                        <li><i class="fas fa-check"></i> Nội dung thực tế</li>
+                        <li><i class="fas fa-check"></i> Chứng chỉ uy tín</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card" data-animate="slide-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Ứng dụng đa dạng</h3>
+                    <p class="feature-description">
+                        Thư viện ứng dụng phong phú phục vụ nhiều lĩnh vực khác nhau
+                    </p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Ứng dụng mobile & web</li>
+                        <li><i class="fas fa-check"></i> Giao diện thân thiện</li>
+                        <li><i class="fas fa-check"></i> Tích hợp dễ dàng</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card" data-animate="slide-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Bảo mật tuyệt đối</h3>
+                    <p class="feature-description">
+                        Hệ thống bảo mật đa lớp đảm bảo an toàn thông tin và giao dịch
+                    </p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> Mã hóa SSL 256-bit</li>
+                        <li><i class="fas fa-check"></i> Xác thực 2 lớp</li>
+                        <li><i class="fas fa-check"></i> Tuân thủ chuẩn quốc tế</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card" data-animate="slide-up">
+                    <div class="feature-icon">
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <h3 class="feature-title">Thanh toán linh hoạt</h3>
+                    <p class="feature-description">
+                        Đa dạng phương thức thanh toán với ví điện tử tích hợp
+                    </p>
+                    <ul class="feature-list">
+                        <li><i class="fas fa-check"></i> VNPay, MoMo</li>
+                        <li><i class="fas fa-check"></i> Ví điện tử HoangNgoc</li>
+                        <li><i class="fas fa-check"></i> Chuyển khoản ngân hàng</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content text-center">
+                <h2 class="cta-title">Sẵn sàng bắt đầu hành trình của bạn?</h2>
+                <p class="cta-subtitle">
+                    Tham gia cộng đồng HoangNgoc ngay hôm nay và khám phá những cơ hội mới
+                </p>
+                <div class="cta-actions">
+                    {% if User.Identity.IsAuthenticated %}
+                        <a href="{{ '~/Users/Dashboard' | href }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-tachometer-alt"></i>
+                            Vào Dashboard
+                        </a>
+                    {% else %}
+                        <a href="{{ '~/Account/Register' | href }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-user-plus"></i>
+                            Đăng ký ngay
+                        </a>
+                        <a href="{{ '~/Account/Login' | href }}" class="btn btn-outline btn-lg">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Đăng nhập
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="cta-background">
+            <div class="bg-pattern"></div>
+        </div>
+    </section>
+</div>
