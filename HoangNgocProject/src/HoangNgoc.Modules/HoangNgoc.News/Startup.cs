@@ -36,7 +36,8 @@ public class Startup : OrchardCore.Modules.StartupBase
         services.AddScoped<INewsSearchService, NewsSearchService>();
         
         // Register Index Provider
-        services.AddSingleton<IIndexProvider, NewsArticleIndexProvider>();
+        // TODO: Enable after implementing NewsArticlePart properly
+        // services.AddSingleton<IIndexProvider, NewsArticleIndexProvider>();
         
         // Register Admin Menu
         services.AddScoped<INavigationProvider, NewsAdminMenu>();

@@ -32,7 +32,8 @@ namespace HoangNgoc.Comment
             services.AddScoped<IDataMigration, Migrations.CommentMigrations>();
 
             // Register Indexes
-            services.AddSingleton<IIndexProvider, CommentIndexProvider>();
+            // TODO: Enable after implementing CommentPart properly
+            // services.AddSingleton<IIndexProvider, CommentIndexProvider>();
         }
     }
 }

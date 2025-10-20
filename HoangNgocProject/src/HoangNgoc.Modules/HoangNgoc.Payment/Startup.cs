@@ -30,7 +30,8 @@ namespace HoangNgoc.Payment
             services.AddScoped<IPaymentService, PaymentService>();
 
             // Register Indexes
-            services.AddSingleton<IIndexProvider, PaymentIndexProvider>();
+            // TODO: Enable after implementing PaymentPart properly
+            // services.AddSingleton<IIndexProvider, PaymentIndexProvider>();
 
             // Register Migrations
             services.AddScoped<IDataMigration, PaymentMigrations>();

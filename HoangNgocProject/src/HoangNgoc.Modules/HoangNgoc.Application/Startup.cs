@@ -20,22 +20,25 @@ namespace HoangNgoc.Application
         public override void ConfigureServices(IServiceCollection services)
         {
             // Register Content Parts
-            services.AddContentPart<JobApplicationPart>();
-            services.AddContentPart<JobPostingPart>();
-            services.AddContentPart<CandidatePart>();
+            // TODO: Enable after creating parts and display drivers
+            // services.AddContentPart<JobApplicationPart>();
+            // services.AddContentPart<JobPostingPart>();
+            // services.AddContentPart<CandidatePart>();
 
             // Register Display Drivers
-            services.AddScoped<IContentPartDisplayDriver, JobApplicationPartDisplayDriver>();
-            services.AddScoped<IContentPartDisplayDriver, JobPostingPartDisplayDriver>();
-            services.AddScoped<IContentPartDisplayDriver, CandidatePartDisplayDriver>();
+            // TODO: Enable after creating display drivers
+            // services.AddScoped<IContentPartDisplayDriver, JobApplicationPartDisplayDriver>();
+            // services.AddScoped<IContentPartDisplayDriver, JobPostingPartDisplayDriver>();
+            // services.AddScoped<IContentPartDisplayDriver, CandidatePartDisplayDriver>();
 
             // Register Services
             services.AddScoped<IApplicationService, ApplicationService>();
 
             // Register Indexes
-            services.AddSingleton<IIndexProvider, JobApplicationIndexProvider>();
-            services.AddSingleton<IIndexProvider, JobPostingIndexProvider>();
-            services.AddSingleton<IIndexProvider, CandidateIndexProvider>();
+            // TODO: Enable after creating content types and parts
+            // services.AddSingleton<IIndexProvider, JobApplicationIndexProvider>();
+            // services.AddSingleton<IIndexProvider, JobPostingIndexProvider>();
+            // services.AddSingleton<IIndexProvider, CandidateIndexProvider>();
 
             // Register Migrations
             services.AddDataMigration<ApplicationMigrations>();

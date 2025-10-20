@@ -1,5 +1,5 @@
 info: Microsoft.Hosting.Lifetime[14]
-      Now listening on: http://0.0.0.0:8080
+      Now listening on: http://0.0.0.0:45401
 info: Microsoft.Hosting.Lifetime[0]
       Application started. Press Ctrl+C to shut down.
 info: Microsoft.Hosting.Lifetime[0]
@@ -173,16 +173,86 @@ info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTempl
 info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
       Done discovering candidate views filenames
 info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
       Done discovering shapes
 info: OrchardCore.DisplayManagement.Descriptors.DefaultShapeTableManager[0]
-      Done building shape table for HoangNgoinfo: Microsoft.Hosting.Lifetime[0]
-      Application is shutting down...
-ininfo: OrchardCore.Modules.ModularBackgroundService[0]
-      'ModularBackgroundService' is stoppingininfo: OrchardCore.Environment.Shell.Distributed.DistributedShellHostedService[0]
-      'DistributedShellHostedService' is stopping.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     info: Microsoft.Hosting.Lifetime[0]
-      Application is shutting down...
-info: OrchardCore.Modules.ModularBackgroundService[0]
-      'ModularBackgroundService' is stopping.
-info: OrchardCore.Environment.Shell.Distributed.DistributedShellHostedService[0]
-      'DistributedShellHostedService' is stopping.
+      Done building shape table for HoangNgoc
+info: OrchardCore.Modules.ModularTenantRouterMiddleware[0]
+      Begin Routing Request
+info: OrchardCore.DisplayManagement.Descriptors.DefaultShapeTableManager[0]
+      Start building shape table for TheAdmin
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering shapes
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering shapes
+info: OrchardCore.DisplayManagement.Descriptors.DefaultShapeTableManager[0]
+      Done building shape table for TheAdmin
+info: OrchardCore.Modules.ModularTenantRouterMiddleware[0]
+      Begin Routing Request
+info: OrchardCore.Modules.ModularTenantRouterMiddleware[0]
+      Begin Routing Request
+info: OrchardCore.Modules.ModularTenantRouterMiddleware[0]
+      Begin Routing Request
+info: OrchardCore.Modules.ModularTenantRouterMiddleware[0]
+      Begin Routing Request
+info: OrchardCore.Modules.ModularTenantRouterMiddleware[0]
+      Begin Routing Request
+info: OrchardCore.Modules.ModularTenantRouterMiddleware[0]
+      Begin Routing Request
+info: OrchardCore.Modules.ModularTenantRouterMiddleware[0]
+      Begin Routing Request

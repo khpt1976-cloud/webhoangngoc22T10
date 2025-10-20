@@ -35,9 +35,10 @@ namespace HoangNgoc.Training
             services.AddScoped<ITrainingService, TrainingService>();
 
             // Register Indexes
-            services.AddSingleton<IIndexProvider, CourseIndexProvider>();
-            services.AddSingleton<IIndexProvider, LessonIndexProvider>();
-            services.AddSingleton<IIndexProvider, EnrollmentIndexProvider>();
+            // TODO: Enable after implementing Parts properly
+            // services.AddSingleton<IIndexProvider, CourseIndexProvider>();
+            // services.AddSingleton<IIndexProvider, LessonIndexProvider>();
+            // services.AddSingleton<IIndexProvider, EnrollmentIndexProvider>();
 
             // Register Admin Menu
             services.AddScoped<INavigationProvider, TrainingAdminMenu>();

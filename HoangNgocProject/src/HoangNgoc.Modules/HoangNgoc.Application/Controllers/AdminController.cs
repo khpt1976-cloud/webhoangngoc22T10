@@ -9,6 +9,8 @@ using OrchardCore.DisplayManagement.ModelBinding;
 using HoangNgoc.Application.ViewModels;
 using OrchardCore.Admin;
 using YesSql;
+using OrchardCore.Title.Models;
+using OrchardCore.Html.Models;
 
 namespace HoangNgoc.Application.Controllers
 {
@@ -36,6 +38,23 @@ namespace HoangNgoc.Application.Controllers
                 .Where(x => x.ContentType == "JobPosting" && x.Latest)
                 .OrderByDescending(x => x.ModifiedUtc)
                 .ListAsync();
+
+            // DEBUG: Create a test JobPosting if none exist
+            if (!jobPostings.Any())
+            {
+                var testJobPosting = await _contentManager.NewAsync("JobPosting");
+                testJobPosting.DisplayText = "Test Job - Senior Developer";
+                testJobPosting.Alter<TitlePart>(part => part.Title = "Test Job - Senior Developer");
+                testJobPosting.Alter<HtmlBodyPart>(part => part.Html = "<p>This is a test job posting created programmatically.</p>");
+                
+                await _contentManager.CreateAsync(testJobPosting, VersionOptions.Published);
+                
+                // Reload after creating test data
+                jobPostings = await _session.Query<ContentItem, ContentItemIndex>()
+                    .Where(x => x.ContentType == "JobPosting" && x.Latest)
+                    .OrderByDescending(x => x.ModifiedUtc)
+                    .ListAsync();
+            }
 
             // Create ViewModel following OrchardCore pattern
             var model = new AdminIndexViewModel
