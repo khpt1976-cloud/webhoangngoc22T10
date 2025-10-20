@@ -1,0 +1,61 @@
+@model HoangNgoc.Application.ViewModels.AdminIndexViewModel
+
+@{
+    ViewData["Title"] = "Job Postings Management";
+}
+
+<h1>Job Postings Management</h1>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <input asp-for="Options.Search" class="form-control" placeholder="Search job postings" type="search" />
+            </div>
+            <div class="col-auto">
+                <a href="@Url.Action("Create", "Admin", new { area = "OrchardCore.Contents", id = "JobPosting" })" 
+                   class="btn btn-primary">Add Job Posting</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.JobPostings.Any())
+{
+    <div class="list-group">
+        @foreach (var job in Model.JobPostings)
+        {
+            <div class="list-group-item">
+                <div class="row">
+                    <div class="col">
+                        <h5>@job.DisplayText</h5>
+                        <small class="text-muted">Created: @job.CreatedUtc?.ToString("dd/MM/yyyy")</small>
+                        @if (job.Published)
+                        {
+                            <span class="badge bg-success ms-2">Published</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary ms-2">Draft</span>
+                        }
+                    </div>
+                    <div class="col-auto">
+                        <a href="@Url.Action("Details", new { id = job.ContentItemId })" 
+                           class="btn btn-sm btn-secondary">View</a>
+                        <a href="@Url.Action("Edit", "Admin", new { area = "OrchardCore.Contents", contentItemId = job.ContentItemId })" 
+                           class="btn btn-sm btn-primary">Edit</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info">
+        <h4>No job postings found</h4>
+        <p>There are no job postings yet. 
+           <a href="@Url.Action("Create", "Admin", new { area = "OrchardCore.Contents", id = "JobPosting" })">Create the first one</a>.
+        </p>
+    </div>
+}

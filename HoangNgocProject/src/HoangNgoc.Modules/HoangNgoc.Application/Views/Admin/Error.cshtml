@@ -1,0 +1,20 @@
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="alert alert-danger">
+    <h4>Error in AdminController</h4>
+    <p><strong>Message:</strong> @ViewBag.Error</p>
+    <p><strong>Action:</strong> Index</p>
+    <p><strong>Controller:</strong> Admin</p>
+    <p><strong>Area:</strong> HoangNgoc.Application</p>
+</div>
+
+<div class="alert alert-info">
+    <h5>Debug Information:</h5>
+    <ul>
+        <li>URL: @Context.Request.Path</li>
+        <li>Method: @Context.Request.Method</li>
+        <li>Query: @Context.Request.QueryString</li>
+    </ul>
+</div>

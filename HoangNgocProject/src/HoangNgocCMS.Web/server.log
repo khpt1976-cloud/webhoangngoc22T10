@@ -175,4 +175,14 @@ info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTempl
 info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
       Done discovering shapes
 info: OrchardCore.DisplayManagement.Descriptors.DefaultShapeTableManager[0]
-      Done building shape table for HoangNgoc
+      Done building shape table for HoangNgoinfo: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+ininfo: OrchardCore.Modules.ModularBackgroundService[0]
+      'ModularBackgroundService' is stoppingininfo: OrchardCore.Environment.Shell.Distributed.DistributedShellHostedService[0]
+      'DistributedShellHostedService' is stopping.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+info: OrchardCore.Modules.ModularBackgroundService[0]
+      'ModularBackgroundService' is stopping.
+info: OrchardCore.Environment.Shell.Distributed.DistributedShellHostedService[0]
+      'DistributedShellHostedService' is stopping.

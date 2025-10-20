@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Display.ContentDisplay;
@@ -36,10 +38,23 @@ namespace HoangNgoc.Application
             services.AddSingleton<IIndexProvider, CandidateIndexProvider>();
 
             // Register Migrations
-            services.AddScoped<IDataMigration, ApplicationMigrations>();
+            services.AddDataMigration<ApplicationMigrations>();
 
             // Register Navigation
             services.AddScoped<INavigationProvider, AdminMenu>();
+        }
+
+        public override void Configure(IApplicationBuilder builder, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
+        {
+            // Public routes
+            routes.MapAreaControllerRoute(
+                name: "HoangNgoc.Application.Job",
+                areaName: "HoangNgoc.Application",
+                pattern: "Job/{action=Index}/{id?}",
+                defaults: new { controller = "Job" }
+            );
+
+            // Admin controllers use OrchardCore convention-based routing
         }
     }
 }

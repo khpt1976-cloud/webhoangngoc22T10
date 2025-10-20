@@ -42,7 +42,68 @@ namespace HoangNgoc.Application.Migrations
                 .Securable()
             );
 
-            return 1;
+            // Create JobApplication content type
+            await _contentDefinitionManager.AlterTypeDefinitionAsync("JobApplication", type => type
+                .WithPart("TitlePart", part => part
+                    .WithPosition("0")
+                )
+                .WithPart("CommonPart", part => part
+                    .WithPosition("1")
+                )
+                .Creatable()
+                .Listable()
+                .Draftable()
+                .Versionable()
+                .Securable()
+            );
+
+            // Create Candidate content type
+            await _contentDefinitionManager.AlterTypeDefinitionAsync("Candidate", type => type
+                .WithPart("TitlePart", part => part
+                    .WithPosition("0")
+                )
+                .WithPart("AutoroutePart", part => part
+                    .WithPosition("1")
+                    .WithSettings(new AutoroutePartSettings
+                    {
+                        Pattern = "candidates/{{ Model.ContentItem | display_text | slugify }}",
+                        AllowCustomPath = true
+                    })
+                )
+                .WithPart("CommonPart", part => part
+                    .WithPosition("2")
+                )
+                .Creatable()
+                .Listable()
+                .Draftable()
+                .Versionable()
+                .Securable()
+            );
+
+            // Create JobCategory content type
+            await _contentDefinitionManager.AlterTypeDefinitionAsync("JobCategory", type => type
+                .WithPart("TitlePart", part => part
+                    .WithPosition("0")
+                )
+                .WithPart("AutoroutePart", part => part
+                    .WithPosition("1")
+                    .WithSettings(new AutoroutePartSettings
+                    {
+                        Pattern = "job-categories/{{ Model.ContentItem | display_text | slugify }}",
+                        AllowCustomPath = true
+                    })
+                )
+                .WithPart("CommonPart", part => part
+                    .WithPosition("2")
+                )
+                .Creatable()
+                .Listable()
+                .Draftable()
+                .Versionable()
+            );
+
+            // Shortcut other migration steps on new installations - OrchardCore pattern
+            return 4;
         }
 
         public async Task<int> UpdateFrom1Async()

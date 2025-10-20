@@ -1,6 +1,8 @@
 using Microsoft.Extensions.Localization;
 using OrchardCore.Navigation;
 using OrchardCore.Security;
+using OrchardCore.Mvc.Core.Utilities;
+using HoangNgoc.Application.Controllers;
 
 namespace HoangNgoc.Application
 {
@@ -28,7 +30,7 @@ namespace HoangNgoc.Application
                         .Permission(StandardPermissions.SiteOwner)
                         .LocalNav())
                     .Add(S["Job Postings"], "2", jobs => jobs
-                        .Action("Index", "Job", "HoangNgoc.Application")
+                        .Action(nameof(AdminController.Index), typeof(AdminController).ControllerName(), "HoangNgoc.Application")
                         .Permission(StandardPermissions.SiteOwner)
                         .LocalNav())
                     .Add(S["Candidates"], "3", candidates => candidates
@@ -36,11 +38,11 @@ namespace HoangNgoc.Application
                         .Permission(StandardPermissions.SiteOwner)
                         .LocalNav())
                     .Add(S["Active Jobs"], "4", activeJobs => activeJobs
-                        .Action("Active", "Job", "HoangNgoc.Application")
+                        .Action(nameof(AdminController.Active), typeof(AdminController).ControllerName(), "HoangNgoc.Application")
                         .Permission(StandardPermissions.SiteOwner)
                         .LocalNav())
-                    .Add(S["Featured Jobs"], "5", featuredJobs => featuredJobs
-                        .Action("Featured", "Job", "HoangNgoc.Application")
+                    .Add(S["Draft Jobs"], "5", draftJobs => draftJobs
+                        .Action(nameof(AdminController.Draft), typeof(AdminController).ControllerName(), "HoangNgoc.Application")
                         .Permission(StandardPermissions.SiteOwner)
                         .LocalNav())
                     .Add(S["Available Candidates"], "6", availableCandidates => availableCandidates

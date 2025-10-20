@@ -18,12 +18,28 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = /workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Application
 build_property._RazorSourceGeneratorDebug = 
 
+[/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Application/Views/Admin/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vRGV0YWlscy5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Application/Views/Admin/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vRXJyb3IuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Application/Views/Admin/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWRtaW4vSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Application/Views/Application/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQXBwbGljYXRpb24vSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Application/Views/Candidate/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2FuZGlkYXRlL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Application/Views/Job/Details.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSm9iL0RldGFpbHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Application/Views/Job/Index.cshtml]

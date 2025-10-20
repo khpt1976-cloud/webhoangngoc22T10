@@ -1,7 +1,12 @@
+@inherits OrchardCore.DisplayManagement.Razor.RazorPage<TModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, OrchardCore.DisplayManagement
+@addTagHelper *, OrchardCore.ResourceManagement
+@using Microsoft.Extensions.Localization
+@using Microsoft.AspNetCore.Mvc.Localization
+@using OrchardCore.Localization
 @using OrchardCore.ContentManagement
 @using OrchardCore.DisplayManagement.ModelBinding
 @using HoangNgoc.Application.Models
 @using HoangNgoc.Application.ViewModels
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@addTagHelper *, OrchardCore.DisplayManagement
-@inject Microsoft.Extensions.Localization.IStringLocalizer T
+@using OrchardCore.DisplayManagement.Views
