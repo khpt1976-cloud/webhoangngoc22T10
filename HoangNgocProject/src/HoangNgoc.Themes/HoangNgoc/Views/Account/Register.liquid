@@ -1,0 +1,861 @@
+{% comment %}
+Account Register Page - HoangNgoc Professional Theme
+User Registration Form with Email Verification and Terms Acceptance
+{% endcomment %}
+
+{% zone "Header" %}
+    <!-- Register Header -->
+    <header class="register-header bg-gradient-success text-white">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-lg-8 col-xl-6 text-center py-4">
+                    <h1 class="display-6 fw-bold mb-3">Join HoangNgoc</h1>
+                    <p class="lead text-white-75 mb-0">Create your account and start your career journey</p>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endzone %}
+
+<!-- Register Form Section -->
+<section class="register-section py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-8 col-xl-7">
+                <!-- Register Card -->
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-white text-center py-4">
+                        <h3 class="mb-0 text-success">
+                            <i class="fas fa-user-plus me-2"></i>Create Account
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Social Register Options -->
+                        <div class="social-register mb-4">
+                            <div class="row g-2">
+                                <div class="col-md-4">
+                                    <button class="btn btn-outline-danger w-100" onclick="registerWithGoogle()">
+                                        <i class="fab fa-google me-2"></i>Google
+                                    </button>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-outline-primary w-100" onclick="registerWithFacebook()">
+                                        <i class="fab fa-facebook-f me-2"></i>Facebook
+                                    </button>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-outline-dark w-100" onclick="registerWithGitHub()">
+                                        <i class="fab fa-github me-2"></i>GitHub
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="divider my-4">
+                                <span class="divider-text">or register with email</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Registration Form -->
+                        <form id="register-form" method="post" action="/account/register" novalidate>
+                            <input type="hidden" name="__RequestVerificationToken" value="{{ Model.AntiForgeryToken }}" />
+                            <input type="hidden" name="ReturnUrl" value="{{ Model.ReturnUrl }}" />
+                            
+                            <!-- Progress Indicator -->
+                            <div class="registration-progress mb-4">
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 0%" id="form-progress"></div>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">Personal Info</small>
+                                    <small class="text-muted">Account Details</small>
+                                    <small class="text-muted">Verification</small>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 1: Personal Information -->
+                            <div class="form-step active" id="step-1">
+                                <h5 class="step-title mb-4">
+                                    <span class="step-number">1</span>Personal Information
+                                </h5>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="firstName" name="FirstName" 
+                                                   placeholder="First Name" value="{{ Model.FirstName }}" required>
+                                            <label for="firstName">
+                                                <i class="fas fa-user me-2"></i>First Name
+                                            </label>
+                                            <div class="invalid-feedback">Please provide your first name.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="lastName" name="LastName" 
+                                                   placeholder="Last Name" value="{{ Model.LastName }}" required>
+                                            <label for="lastName">
+                                                <i class="fas fa-user me-2"></i>Last Name
+                                            </label>
+                                            <div class="invalid-feedback">Please provide your last name.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="email" class="form-control" id="email" name="Email" 
+                                                   placeholder="name@example.com" value="{{ Model.Email }}" required>
+                                            <label for="email">
+                                                <i class="fas fa-envelope me-2"></i>Email Address
+                                            </label>
+                                            <div class="invalid-feedback">Please provide a valid email address.</div>
+                                            <div class="valid-feedback">Email is available!</div>
+                                        </div>
+                                        <div class="form-text">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            We'll send a verification email to this address
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="tel" class="form-control" id="phone" name="Phone" 
+                                                   placeholder="Phone Number" value="{{ Model.Phone }}">
+                                            <label for="phone">
+                                                <i class="fas fa-phone me-2"></i>Phone Number (Optional)
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <select class="form-select" id="country" name="Country">
+                                                <option value="">Select Country</option>
+                                                <option value="VN" {% if Model.Country == "VN" %}selected{% endif %}>Vietnam</option>
+                                                <option value="US" {% if Model.Country == "US" %}selected{% endif %}>United States</option>
+                                                <option value="SG" {% if Model.Country == "SG" %}selected{% endif %}>Singapore</option>
+                                                <option value="JP" {% if Model.Country == "JP" %}selected{% endif %}>Japan</option>
+                                                <option value="KR" {% if Model.Country == "KR" %}selected{% endif %}>South Korea</option>
+                                            </select>
+                                            <label for="country">
+                                                <i class="fas fa-globe me-2"></i>Country
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="step-actions mt-4">
+                                    <button type="button" class="btn btn-success" onclick="nextStep()">
+                                        Next: Account Details <i class="fas fa-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 2: Account Details -->
+                            <div class="form-step" id="step-2">
+                                <h5 class="step-title mb-4">
+                                    <span class="step-number">2</span>Account Details
+                                </h5>
+                                
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="password" class="form-control" id="password" name="Password" 
+                                                   placeholder="Password" required>
+                                            <label for="password">
+                                                <i class="fas fa-lock me-2"></i>Password
+                                            </label>
+                                            <div class="invalid-feedback">Password must be at least 8 characters long.</div>
+                                            <div class="password-toggle">
+                                                <button type="button" class="btn btn-link p-0" onclick="togglePassword('password')">
+                                                    <i class="fas fa-eye" id="password-toggle-icon"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Password Strength Indicator -->
+                                        <div class="password-strength mt-2">
+                                            <div class="progress" style="height: 4px;">
+                                                <div class="progress-bar" id="password-strength-bar" style="width: 0%"></div>
+                                            </div>
+                                            <small class="text-muted" id="password-strength-text">Password strength</small>
+                                        </div>
+                                        
+                                        <!-- Password Requirements -->
+                                        <div class="password-requirements mt-2">
+                                            <small class="text-muted">Password must contain:</small>
+                                            <ul class="list-unstyled small">
+                                                <li id="req-length"><i class="fas fa-times text-danger me-1"></i>At least 8 characters</li>
+                                                <li id="req-uppercase"><i class="fas fa-times text-danger me-1"></i>One uppercase letter</li>
+                                                <li id="req-lowercase"><i class="fas fa-times text-danger me-1"></i>One lowercase letter</li>
+                                                <li id="req-number"><i class="fas fa-times text-danger me-1"></i>One number</li>
+                                                <li id="req-special"><i class="fas fa-times text-danger me-1"></i>One special character</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="col-12">
+                                        <div class="form-floating">
+                                            <input type="password" class="form-control" id="confirmPassword" name="ConfirmPassword" 
+                                                   placeholder="Confirm Password" required>
+                                            <label for="confirmPassword">
+                                                <i class="fas fa-lock me-2"></i>Confirm Password
+                                            </label>
+                                            <div class="invalid-feedback">Passwords do not match.</div>
+                                            <div class="valid-feedback">Passwords match!</div>
+                                            <div class="password-toggle">
+                                                <button type="button" class="btn btn-link p-0" onclick="togglePassword('confirmPassword')">
+                                                    <i class="fas fa-eye" id="confirmPassword-toggle-icon"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Account Type -->
+                                    <div class="col-12">
+                                        <label class="form-label">
+                                            <i class="fas fa-user-tag me-2"></i>I am a:
+                                        </label>
+                                        <div class="row g-2">
+                                            <div class="col-md-4">
+                                                <div class="form-check form-check-card">
+                                                    <input class="form-check-input" type="radio" name="UserType" value="JobSeeker" id="jobSeeker" checked>
+                                                    <label class="form-check-label" for="jobSeeker">
+                                                        <i class="fas fa-user-tie fa-2x mb-2"></i>
+                                                        <div>Job Seeker</div>
+                                                        <small class="text-muted">Looking for opportunities</small>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check form-check-card">
+                                                    <input class="form-check-input" type="radio" name="UserType" value="Employer" id="employer">
+                                                    <label class="form-check-label" for="employer">
+                                                        <i class="fas fa-building fa-2x mb-2"></i>
+                                                        <div>Employer</div>
+                                                        <small class="text-muted">Hiring talent</small>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-check form-check-card">
+                                                    <input class="form-check-input" type="radio" name="UserType" value="Student" id="student">
+                                                    <label class="form-check-label" for="student">
+                                                        <i class="fas fa-graduation-cap fa-2x mb-2"></i>
+                                                        <div>Student</div>
+                                                        <small class="text-muted">Learning & growing</small>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="step-actions mt-4">
+                                    <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">
+                                        <i class="fas fa-arrow-left me-2"></i>Previous
+                                    </button>
+                                    <button type="button" class="btn btn-success" onclick="nextStep()">
+                                        Next: Terms & Verification <i class="fas fa-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 3: Terms & Verification -->
+                            <div class="form-step" id="step-3">
+                                <h5 class="step-title mb-4">
+                                    <span class="step-number">3</span>Terms & Verification
+                                </h5>
+                                
+                                <!-- Terms & Conditions -->
+                                <div class="terms-section mb-4">
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="agreeTerms" name="AgreeTerms" required>
+                                        <label class="form-check-label" for="agreeTerms">
+                                            I agree to the <a href="/terms" target="_blank" class="text-decoration-none">Terms of Service</a> 
+                                            and <a href="/privacy" target="_blank" class="text-decoration-none">Privacy Policy</a>
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="invalid-feedback">You must agree to the terms and conditions.</div>
+                                    </div>
+                                    
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="allowMarketing" name="AllowMarketing">
+                                        <label class="form-check-label" for="allowMarketing">
+                                            I would like to receive job alerts, career tips, and promotional emails
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="allowDataProcessing" name="AllowDataProcessing" required>
+                                        <label class="form-check-label" for="allowDataProcessing">
+                                            I consent to the processing of my personal data for account creation and job matching
+                                            <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="invalid-feedback">Data processing consent is required.</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- CAPTCHA -->
+                                <div class="captcha-section mb-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="captcha" name="Captcha" required>
+                                        <label class="form-check-label" for="captcha">
+                                            <i class="fas fa-robot me-2"></i>I'm not a robot
+                                        </label>
+                                        <div class="invalid-feedback">Please verify that you're not a robot.</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Error Messages -->
+                                {% if Model.ErrorMessage %}
+                                <div class="alert alert-danger" role="alert">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    {{ Model.ErrorMessage }}
+                                </div>
+                                {% endif %}
+                                
+                                <div class="step-actions">
+                                    <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">
+                                        <i class="fas fa-arrow-left me-2"></i>Previous
+                                    </button>
+                                    <button type="submit" class="btn btn-success btn-lg">
+                                        <i class="fas fa-user-plus me-2"></i>Create Account
+                                        <span class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                        
+                        <!-- Login Link -->
+                        <div class="text-center mt-4">
+                            <p class="mb-0">Already have an account? 
+                                <a href="/account/login{% if Model.ReturnUrl %}?returnUrl={{ Model.ReturnUrl | url_encode }}{% endif %}" 
+                                   class="text-decoration-none fw-bold">
+                                    Sign in here
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Registration Benefits Sidebar -->
+            <div class="col-lg-4">
+                <div class="registration-benefits mt-5 mt-lg-0">
+                    <h4 class="mb-4">Join Our Community</h4>
+                    
+                    <div class="benefit-card mb-3">
+                        <div class="benefit-icon bg-primary">
+                            <i class="fas fa-search text-white"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h6>Find Your Dream Job</h6>
+                            <p class="text-muted mb-0">Access thousands of job opportunities from top companies</p>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-card mb-3">
+                        <div class="benefit-icon bg-success">
+                            <i class="fas fa-graduation-cap text-white"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h6>Learn New Skills</h6>
+                            <p class="text-muted mb-0">Enroll in professional courses and certifications</p>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-card mb-3">
+                        <div class="benefit-icon bg-info">
+                            <i class="fas fa-users text-white"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h6>Network & Connect</h6>
+                            <p class="text-muted mb-0">Build professional relationships and grow your network</p>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-card mb-3">
+                        <div class="benefit-icon bg-warning">
+                            <i class="fas fa-chart-line text-white"></i>
+                        </div>
+                        <div class="benefit-content">
+                            <h6>Track Your Progress</h6>
+                            <p class="text-muted mb-0">Monitor applications and career development</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Statistics -->
+                    <div class="stats-card mt-4 p-3 bg-light rounded">
+                        <h6 class="text-center mb-3">Join 10,000+ Professionals</h6>
+                        <div class="row text-center">
+                            <div class="col-4">
+                                <div class="stat-number text-primary fw-bold">5K+</div>
+                                <div class="stat-label small text-muted">Jobs Posted</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-number text-success fw-bold">2K+</div>
+                                <div class="stat-label small text-muted">Companies</div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-number text-info fw-bold">95%</div>
+                                <div class="stat-label small text-muted">Success Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Custom Styles -->
+<style>
+.register-header {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.form-step {
+    display: none;
+}
+
+.form-step.active {
+    display: block;
+    animation: fadeInRight 0.5s ease-out;
+}
+
+.step-title {
+    color: #495057;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.step-number {
+    width: 35px;
+    height: 35px;
+    background: #28a745;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 1rem;
+    font-size: 0.9rem;
+}
+
+.form-check-card {
+    text-align: center;
+    padding: 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.form-check-card:hover {
+    border-color: #28a745;
+    background: #f8f9fa;
+}
+
+.form-check-card input:checked + label {
+    color: #28a745;
+}
+
+.form-check-card input:checked ~ .form-check-card {
+    border-color: #28a745;
+    background: #d4edda;
+}
+
+.password-strength .progress-bar {
+    transition: all 0.3s ease;
+}
+
+.password-requirements li {
+    transition: all 0.3s ease;
+}
+
+.password-requirements li.valid i {
+    color: #28a745 !important;
+}
+
+.password-requirements li.valid i::before {
+    content: '\f00c';
+}
+
+.benefit-card {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border-radius: 10px;
+    background: white;
+    border: 1px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.benefit-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.benefit-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.benefit-content h6 {
+    margin-bottom: 0.5rem;
+    color: #495057;
+    font-weight: 600;
+}
+
+.stats-card {
+    border: 1px solid #dee2e6;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .step-actions {
+        text-align: center;
+    }
+    
+    .step-actions .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .benefit-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .benefit-icon {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+}
+
+/* Animation */
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+</style>
+
+<!-- JavaScript -->
+<script>
+let currentStep = 1;
+const totalSteps = 3;
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeRegistrationForm();
+    setupPasswordValidation();
+    setupEmailValidation();
+    updateProgress();
+});
+
+function initializeRegistrationForm() {
+    const form = document.getElementById('register-form');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (validateCurrentStep()) {
+            submitRegistration();
+        }
+    });
+    
+    // Auto-focus first field
+    document.getElementById('firstName').focus();
+}
+
+function setupPasswordValidation() {
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    
+    passwordInput.addEventListener('input', function() {
+        validatePasswordStrength(this.value);
+        validatePasswordMatch();
+    });
+    
+    confirmPasswordInput.addEventListener('input', function() {
+        validatePasswordMatch();
+    });
+}
+
+function setupEmailValidation() {
+    const emailInput = document.getElementById('email');
+    let emailTimeout;
+    
+    emailInput.addEventListener('input', function() {
+        clearTimeout(emailTimeout);
+        emailTimeout = setTimeout(() => {
+            checkEmailAvailability(this.value);
+        }, 500);
+    });
+}
+
+function validatePasswordStrength(password) {
+    const requirements = {
+        length: password.length >= 8,
+        uppercase: /[A-Z]/.test(password),
+        lowercase: /[a-z]/.test(password),
+        number: /\d/.test(password),
+        special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
+    };
+    
+    // Update requirement indicators
+    Object.keys(requirements).forEach(req => {
+        const element = document.getElementById(`req-${req}`);
+        const icon = element.querySelector('i');
+        
+        if (requirements[req]) {
+            element.classList.add('valid');
+            icon.className = 'fas fa-check text-success me-1';
+        } else {
+            element.classList.remove('valid');
+            icon.className = 'fas fa-times text-danger me-1';
+        }
+    });
+    
+    // Calculate strength
+    const validCount = Object.values(requirements).filter(Boolean).length;
+    const strengthPercentage = (validCount / 5) * 100;
+    
+    const strengthBar = document.getElementById('password-strength-bar');
+    const strengthText = document.getElementById('password-strength-text');
+    
+    strengthBar.style.width = `${strengthPercentage}%`;
+    
+    if (strengthPercentage < 40) {
+        strengthBar.className = 'progress-bar bg-danger';
+        strengthText.textContent = 'Weak password';
+        strengthText.className = 'text-danger';
+    } else if (strengthPercentage < 80) {
+        strengthBar.className = 'progress-bar bg-warning';
+        strengthText.textContent = 'Medium password';
+        strengthText.className = 'text-warning';
+    } else {
+        strengthBar.className = 'progress-bar bg-success';
+        strengthText.textContent = 'Strong password';
+        strengthText.className = 'text-success';
+    }
+    
+    return validCount === 5;
+}
+
+function validatePasswordMatch() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const confirmInput = document.getElementById('confirmPassword');
+    
+    if (confirmPassword === '') {
+        confirmInput.classList.remove('is-valid', 'is-invalid');
+        return false;
+    }
+    
+    if (password === confirmPassword) {
+        confirmInput.classList.remove('is-invalid');
+        confirmInput.classList.add('is-valid');
+        return true;
+    } else {
+        confirmInput.classList.remove('is-valid');
+        confirmInput.classList.add('is-invalid');
+        return false;
+    }
+}
+
+function checkEmailAvailability(email) {
+    if (!email || !isValidEmail(email)) return;
+    
+    const emailInput = document.getElementById('email');
+    
+    fetch('/account/check-email', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: email })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.available) {
+            emailInput.classList.remove('is-invalid');
+            emailInput.classList.add('is-valid');
+        } else {
+            emailInput.classList.remove('is-valid');
+            emailInput.classList.add('is-invalid');
+            emailInput.setCustomValidity('Email is already registered');
+        }
+    })
+    .catch(error => {
+        console.error('Email check error:', error);
+    });
+}
+
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+function nextStep() {
+    if (validateCurrentStep()) {
+        if (currentStep < totalSteps) {
+            document.getElementById(`step-${currentStep}`).classList.remove('active');
+            currentStep++;
+            document.getElementById(`step-${currentStep}`).classList.add('active');
+            updateProgress();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+}
+
+function prevStep() {
+    if (currentStep > 1) {
+        document.getElementById(`step-${currentStep}`).classList.remove('active');
+        currentStep--;
+        document.getElementById(`step-${currentStep}`).classList.add('active');
+        updateProgress();
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function validateCurrentStep() {
+    const currentStepElement = document.getElementById(`step-${currentStep}`);
+    const requiredFields = currentStepElement.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.checkValidity()) {
+            field.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            field.classList.remove('is-invalid');
+            field.classList.add('is-valid');
+        }
+    });
+    
+    // Additional validation for step 2
+    if (currentStep === 2) {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (!validatePasswordStrength(password)) {
+            document.getElementById('password').classList.add('is-invalid');
+            isValid = false;
+        }
+        
+        if (!validatePasswordMatch()) {
+            isValid = false;
+        }
+    }
+    
+    return isValid;
+}
+
+function updateProgress() {
+    const progress = (currentStep / totalSteps) * 100;
+    document.getElementById('form-progress').style.width = `${progress}%`;
+}
+
+function togglePassword(fieldId) {
+    const passwordInput = document.getElementById(fieldId);
+    const toggleIcon = document.getElementById(`${fieldId}-toggle-icon`);
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.className = 'fas fa-eye-slash';
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.className = 'fas fa-eye';
+    }
+}
+
+function submitRegistration() {
+    const form = document.getElementById('register-form');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const spinner = submitBtn.querySelector('.spinner-border');
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    spinner.classList.remove('d-none');
+    
+    // Create FormData
+    const formData = new FormData(form);
+    
+    // Submit registration
+    fetch('/account/register', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Redirect to email verification page
+            window.location.href = '/account/verify-email?email=' + encodeURIComponent(data.email);
+        } else {
+            throw new Error(data.message || 'Registration failed');
+        }
+    })
+    .catch(error => {
+        console.error('Registration error:', error);
+        showError('Registration failed. Please try again.');
+    })
+    .finally(() => {
+        submitBtn.disabled = false;
+        spinner.classList.add('d-none');
+    });
+}
+
+function showError(message) {
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-danger';
+    alert.innerHTML = `
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        ${message}
+    `;
+    
+    const submitBtn = document.querySelector('button[type="submit"]');
+    submitBtn.parentNode.insertBefore(alert, submitBtn);
+    
+    setTimeout(() => alert.remove(), 5000);
+}
+
+// Social Registration Functions
+function registerWithGoogle() {
+    window.location.href = '/account/external-login?provider=Google&returnUrl=' + 
+                          encodeURIComponent(getReturnUrl());
+}
+
+function registerWithFacebook() {
+    window.location.href = '/account/external-login?provider=Facebook&returnUrl=' + 
+                          encodeURIComponent(getReturnUrl());
+}
+
+function registerWithGitHub() {
+    window.location.href = '/account/external-login?provider=GitHub&returnUrl=' + 
+                          encodeURIComponent(getReturnUrl());
+}
+
+function getReturnUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('returnUrl') || '/';
+}
+</script>

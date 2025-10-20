@@ -1,0 +1,717 @@
+{% comment %}
+Jobs Details Page - HoangNgoc Professional Theme
+Individual Job Details Page with Apply Integration
+{% endcomment %}
+
+{% assign job = Model.ContentItem %}
+
+{% zone "Header" %}
+    <!-- Job Details Header -->
+    <header class="job-details-header bg-gradient-primary text-white">
+        <div class="container px-4 px-lg-5">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="pt-3">
+                <ol class="breadcrumb breadcrumb-light">
+                    <li class="breadcrumb-item"><a href="/" class="text-white-75">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/jobs" class="text-white-75">Jobs</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ job.DisplayText | truncate: 50 }}</li>
+                </ol>
+            </nav>
+            
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-lg-10 col-xl-8">
+                    <div class="job-header py-5">
+                        <!-- Company Logo -->
+                        <div class="company-logo-container text-center mb-4">
+                            {% if job.Content.JobPosting.CompanyLogo.Paths.first %}
+                                <img src="{{ job.Content.JobPosting.CompanyLogo.Paths.first | asset_url | resize_url: width: 120, height: 120 }}" 
+                                     alt="{{ job.Content.JobPosting.Company.Text }}" 
+                                     class="company-logo rounded-circle bg-white p-3 shadow">
+                            {% else %}
+                                <div class="company-logo-placeholder rounded-circle bg-white d-inline-flex align-items-center justify-content-center shadow">
+                                    <i class="fas fa-building fa-2x text-primary"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Job Title & Company -->
+                        <div class="text-center mb-4">
+                            <h1 class="display-5 fw-bold mb-3">{{ job.DisplayText }}</h1>
+                            <h2 class="h4 text-white-75 mb-3">
+                                <i class="fas fa-building me-2"></i>{{ job.Content.JobPosting.Company.Text | default: "Company Name" }}
+                            </h2>
+                            
+                            <!-- Job Meta -->
+                            <div class="job-meta d-flex flex-wrap justify-content-center gap-3 mb-4">
+                                <span class="badge bg-light text-primary fs-6 px-3 py-2">
+                                    <i class="fas fa-map-marker-alt me-2"></i>{{ job.Content.JobPosting.Location.Text | default: "Location" }}
+                                </span>
+                                <span class="badge bg-light text-success fs-6 px-3 py-2">
+                                    <i class="fas fa-dollar-sign me-2"></i>{{ job.Content.JobPosting.Salary.Text | default: "Competitive" }}
+                                </span>
+                                <span class="badge bg-light text-info fs-6 px-3 py-2">
+                                    <i class="fas fa-clock me-2"></i>{{ job.Content.JobPosting.JobType.Text | default: "Full-time" }}
+                                </span>
+                                {% if job.Content.JobPosting.ExperienceLevel.Text %}
+                                <span class="badge bg-light text-warning fs-6 px-3 py-2">
+                                    <i class="fas fa-star me-2"></i>{{ job.Content.JobPosting.ExperienceLevel.Text }}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div class="job-actions text-center">
+                            <div class="d-flex flex-wrap justify-content-center gap-3">
+                                <a href="/jobs/apply/{{ job.ContentItemId }}" class="btn btn-warning btn-lg px-4 py-2">
+                                    <i class="fas fa-paper-plane me-2"></i>Apply Now
+                                </a>
+                                <button class="btn btn-outline-light btn-lg px-4 py-2" onclick="saveJob('{{ job.ContentItemId }}')">
+                                    <i class="fas fa-bookmark me-2"></i>Save Job
+                                </button>
+                                <button class="btn btn-outline-light btn-lg px-4 py-2" onclick="shareJob()">
+                                    <i class="fas fa-share-alt me-2"></i>Share
+                                </button>
+                            </div>
+                            
+                            <!-- Application Deadline -->
+                            {% if job.Content.JobPosting.ApplicationDeadline.Value %}
+                            <div class="deadline-notice mt-3">
+                                <small class="text-warning">
+                                    <i class="fas fa-hourglass-half me-1"></i>
+                                    Application deadline: {{ job.Content.JobPosting.ApplicationDeadline.Value | date: "MMMM dd, yyyy" }}
+                                </small>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endzone %}
+
+<!-- Job Details Content -->
+<section class="job-details-content py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <!-- Job Overview -->
+                <div class="job-section mb-5">
+                    <h3 class="section-title">
+                        <i class="fas fa-info-circle text-primary me-2"></i>Job Overview
+                    </h3>
+                    <div class="section-content">
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="overview-item">
+                                    <strong>Job ID:</strong>
+                                    <span class="text-muted font-monospace">{{ job.ContentItemId | slice: 0, 8 | upcase }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="overview-item">
+                                    <strong>Posted Date:</strong>
+                                    <span class="text-muted">{{ job.CreatedUtc | date: "MMMM dd, yyyy" }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="overview-item">
+                                    <strong>Employment Type:</strong>
+                                    <span class="text-muted">{{ job.Content.JobPosting.JobType.Text | default: "Full-time" }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="overview-item">
+                                    <strong>Experience Level:</strong>
+                                    <span class="text-muted">{{ job.Content.JobPosting.ExperienceLevel.Text | default: "Not specified" }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="overview-item">
+                                    <strong>Category:</strong>
+                                    <span class="text-muted">{{ job.Content.JobPosting.Category.Text | default: "General" }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="overview-item">
+                                    <strong>Remote Work:</strong>
+                                    <span class="text-muted">
+                                        {% if job.Content.JobPosting.RemoteWork.Value %}
+                                            <i class="fas fa-check text-success me-1"></i>Available
+                                        {% else %}
+                                            <i class="fas fa-times text-danger me-1"></i>Not Available
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Job Description -->
+                <div class="job-section mb-5">
+                    <h3 class="section-title">
+                        <i class="fas fa-file-alt text-primary me-2"></i>Job Description
+                    </h3>
+                    <div class="section-content">
+                        {{ job.Content.JobPosting.Description.Text | default: "Job description not available." | newline_to_br }}
+                    </div>
+                </div>
+                
+                <!-- Requirements -->
+                <div class="job-section mb-5">
+                    <h3 class="section-title">
+                        <i class="fas fa-list-check text-primary me-2"></i>Requirements
+                    </h3>
+                    <div class="section-content">
+                        {{ job.Content.JobPosting.Requirements.Text | default: "Requirements not specified." | newline_to_br }}
+                    </div>
+                </div>
+                
+                <!-- Benefits -->
+                <div class="job-section mb-5">
+                    <h3 class="section-title">
+                        <i class="fas fa-gift text-primary me-2"></i>Benefits & Perks
+                    </h3>
+                    <div class="section-content">
+                        {{ job.Content.JobPosting.Benefits.Text | default: "Benefits information not available." | newline_to_br }}
+                    </div>
+                </div>
+                
+                <!-- Skills & Technologies -->
+                {% if job.Content.JobPosting.Skills.Text %}
+                <div class="job-section mb-5">
+                    <h3 class="section-title">
+                        <i class="fas fa-code text-primary me-2"></i>Skills & Technologies
+                    </h3>
+                    <div class="section-content">
+                        <div class="skills-tags">
+                            {% assign skills = job.Content.JobPosting.Skills.Text | split: ',' %}
+                            {% for skill in skills %}
+                                <span class="badge bg-primary me-2 mb-2 px-3 py-2">{{ skill | strip }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Application Process -->
+                <div class="job-section mb-5">
+                    <h3 class="section-title">
+                        <i class="fas fa-clipboard-list text-primary me-2"></i>Application Process
+                    </h3>
+                    <div class="section-content">
+                        <div class="application-steps">
+                            <div class="step">
+                                <div class="step-number">1</div>
+                                <div class="step-content">
+                                    <h5>Submit Application</h5>
+                                    <p>Click "Apply Now" and fill out the application form with your details.</p>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">2</div>
+                                <div class="step-content">
+                                    <h5>Initial Review</h5>
+                                    <p>Our HR team will review your application within 3-5 business days.</p>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">3</div>
+                                <div class="step-content">
+                                    <h5>Interview Process</h5>
+                                    <p>Qualified candidates will be contacted for phone/video interviews.</p>
+                                </div>
+                            </div>
+                            <div class="step">
+                                <div class="step-number">4</div>
+                                <div class="step-content">
+                                    <h5>Final Decision</h5>
+                                    <p>We'll notify you of our decision and next steps within one week.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Quick Apply Card -->
+                <div class="card shadow-sm mb-4 sticky-top" style="top: 20px;">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-rocket me-2"></i>Quick Apply
+                        </h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <div class="mb-3">
+                            <div class="salary-highlight">
+                                <div class="h4 text-success mb-1">{{ job.Content.JobPosting.Salary.Text | default: "Competitive Salary" }}</div>
+                                <small class="text-muted">{{ job.Content.JobPosting.JobType.Text | default: "Full-time" }} Position</small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted d-block mb-2">
+                                <i class="fas fa-users me-1"></i>{{ job.Content.JobPosting.ApplicationCount.Value | default: "0" }} applications so far
+                            </small>
+                            {% if job.Content.JobPosting.ApplicationDeadline.Value %}
+                            <small class="text-danger d-block">
+                                <i class="fas fa-clock me-1"></i>Deadline: {{ job.Content.JobPosting.ApplicationDeadline.Value | date: "MMM dd, yyyy" }}
+                            </small>
+                            {% endif %}
+                        </div>
+                        
+                        <a href="/jobs/apply/{{ job.ContentItemId }}" class="btn btn-success btn-lg w-100 mb-3">
+                            <i class="fas fa-paper-plane me-2"></i>Apply for This Job
+                        </a>
+                        
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-primary btn-sm" onclick="saveJob('{{ job.ContentItemId }}')">
+                                <i class="fas fa-bookmark me-2"></i>Save for Later
+                            </button>
+                            <button class="btn btn-outline-secondary btn-sm" onclick="shareJob()">
+                                <i class="fas fa-share-alt me-2"></i>Share with Friends
+                            </button>
+                        </div>
+                        
+                        <small class="text-muted mt-3 d-block">
+                            <i class="fas fa-shield-alt me-1"></i>Your information is secure and confidential
+                        </small>
+                    </div>
+                </div>
+                
+                <!-- Company Information -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-building me-2"></i>About {{ job.Content.JobPosting.Company.Text | default: "Company" }}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% if job.Content.JobPosting.CompanyLogo.Paths.first %}
+                        <div class="text-center mb-3">
+                            <img src="{{ job.Content.JobPosting.CompanyLogo.Paths.first | asset_url | resize_url: width: 80, height: 80 }}" 
+                                 alt="{{ job.Content.JobPosting.Company.Text }}" 
+                                 class="rounded">
+                        </div>
+                        {% endif %}
+                        
+                        <h6 class="card-title">{{ job.Content.JobPosting.Company.Text | default: "Company Name" }}</h6>
+                        <p class="card-text text-muted">
+                            {{ job.Content.JobPosting.CompanyDescription.Text | default: "Company description not available." | truncate: 200 }}
+                        </p>
+                        
+                        <div class="company-stats mb-3">
+                            <div class="row g-2 text-center">
+                                <div class="col-6">
+                                    <div class="stat-item">
+                                        <div class="h6 mb-0 text-primary">{{ job.Content.JobPosting.CompanySize.Text | default: "50-100" }}</div>
+                                        <small class="text-muted">Employees</small>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="stat-item">
+                                        <div class="h6 mb-0 text-primary">{{ job.Content.JobPosting.CompanyIndustry.Text | default: "Technology" }}</div>
+                                        <small class="text-muted">Industry</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <a href="/companies/{{ job.Content.JobPosting.Company.Text | slugify }}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-external-link-alt me-1"></i>View Company Profile
+                            </a>
+                            <a href="/jobs?company={{ job.Content.JobPosting.Company.Text | url_encode }}" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-briefcase me-1"></i>More Jobs from This Company
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Similar Jobs -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-lightbulb me-2"></i>Similar Jobs
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="similar-jobs-container">
+                            <div class="text-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading similar jobs...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Custom Styles -->
+<style>
+.job-details-header {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+}
+
+.company-logo,
+.company-logo-placeholder {
+    width: 120px;
+    height: 120px;
+    border: 4px solid rgba(255,255,255,0.2);
+}
+
+.job-meta .badge {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.job-actions .btn {
+    min-width: 150px;
+}
+
+.section-title {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.section-content {
+    line-height: 1.7;
+    font-size: 1.05rem;
+}
+
+.section-content ul,
+.section-content ol {
+    padding-left: 1.5rem;
+}
+
+.section-content li {
+    margin-bottom: 0.5rem;
+}
+
+.overview-item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.overview-item:last-child {
+    border-bottom: none;
+}
+
+.skills-tags .badge {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.application-steps {
+    position: relative;
+}
+
+.application-steps::before {
+    content: '';
+    position: absolute;
+    left: 20px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.step:last-child {
+    margin-bottom: 0;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 1rem;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.step-content h5 {
+    margin-bottom: 0.5rem;
+    color: #495057;
+}
+
+.step-content p {
+    margin-bottom: 0;
+    color: #6c757d;
+}
+
+.salary-highlight {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.company-stats .stat-item {
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .job-actions .d-flex {
+        flex-direction: column;
+        gap: 1rem !important;
+    }
+    
+    .job-actions .btn {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .job-meta {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .overview-item {
+        text-align: center;
+    }
+    
+    .application-steps::before {
+        display: none;
+    }
+    
+    .step {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .step-number {
+        margin: 0 auto 1rem auto;
+    }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.job-section {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.job-section:nth-child(1) { animation-delay: 0.1s; }
+.job-section:nth-child(2) { animation-delay: 0.2s; }
+.job-section:nth-child(3) { animation-delay: 0.3s; }
+.job-section:nth-child(4) { animation-delay: 0.4s; }
+.job-section:nth-child(5) { animation-delay: 0.5s; }
+</style>
+
+<!-- JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadSimilarJobs();
+    initializeJobActions();
+});
+
+function loadSimilarJobs() {
+    const container = document.getElementById('similar-jobs-container');
+    const jobId = '{{ job.ContentItemId }}';
+    const category = '{{ job.Content.JobPosting.Category.Text }}';
+    
+    // Simulate API call to load similar jobs
+    setTimeout(() => {
+        container.innerHTML = `
+            <div class="similar-job-item mb-3 pb-3 border-bottom">
+                <h6 class="mb-1"><a href="#" class="text-decoration-none">Senior Frontend Developer</a></h6>
+                <small class="text-muted">TechCorp • Hanoi • $2000-3000</small>
+            </div>
+            <div class="similar-job-item mb-3 pb-3 border-bottom">
+                <h6 class="mb-1"><a href="#" class="text-decoration-none">Full Stack Developer</a></h6>
+                <small class="text-muted">StartupXYZ • Remote • $1800-2500</small>
+            </div>
+            <div class="similar-job-item mb-3">
+                <h6 class="mb-1"><a href="#" class="text-decoration-none">React Developer</a></h6>
+                <small class="text-muted">WebAgency • Ho Chi Minh • $1500-2200</small>
+            </div>
+            <div class="text-center mt-3">
+                <a href="/jobs?category=${encodeURIComponent(category)}" class="btn btn-outline-info btn-sm">
+                    <i class="fas fa-search me-1"></i>View More Similar Jobs
+                </a>
+            </div>
+        `;
+    }, 1000);
+}
+
+function initializeJobActions() {
+    // Track job view
+    trackJobView('{{ job.ContentItemId }}');
+    
+    // Initialize scroll spy for sections
+    const sections = document.querySelectorAll('.job-section');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    sections.forEach(section => observer.observe(section));
+}
+
+function saveJob(jobId) {
+    if (!isUserLoggedIn()) {
+        showLoginModal();
+        return;
+    }
+    
+    fetch(`/api/jobs/${jobId}/save`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': getAntiForgeryToken()
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const buttons = document.querySelectorAll('[onclick*="saveJob"]');
+            buttons.forEach(button => {
+                const icon = button.querySelector('i');
+                const text = button.querySelector('.btn-text') || button.childNodes[button.childNodes.length - 1];
+                
+                if (data.saved) {
+                    icon.className = 'fas fa-bookmark me-2';
+                    if (text.textContent) text.textContent = 'Saved';
+                    button.classList.remove('btn-outline-primary');
+                    button.classList.add('btn-primary');
+                    showToast('Job saved successfully!', 'success');
+                } else {
+                    icon.className = 'far fa-bookmark me-2';
+                    if (text.textContent) text.textContent = 'Save for Later';
+                    button.classList.remove('btn-primary');
+                    button.classList.add('btn-outline-primary');
+                    showToast('Job removed from saved list', 'info');
+                }
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error saving job:', error);
+        showToast('Error saving job. Please try again.', 'error');
+    });
+}
+
+function shareJob() {
+    const jobTitle = '{{ job.DisplayText }}';
+    const companyName = '{{ job.Content.JobPosting.Company.Text }}';
+    const jobUrl = window.location.href;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: `${jobTitle} at ${companyName}`,
+            text: `Check out this job opportunity: ${jobTitle} at ${companyName}`,
+            url: jobUrl
+        });
+    } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(jobUrl).then(() => {
+            showToast('Job link copied to clipboard!', 'success');
+        });
+    }
+}
+
+function trackJobView(jobId) {
+    fetch(`/api/jobs/${jobId}/view`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).catch(error => {
+        console.error('Error tracking job view:', error);
+    });
+}
+
+function isUserLoggedIn() {
+    return document.body.classList.contains('authenticated') || 
+           document.querySelector('.user-menu') !== null;
+}
+
+function showLoginModal() {
+    const loginUrl = '/login?returnUrl=' + encodeURIComponent(window.location.href);
+    window.location.href = loginUrl;
+}
+
+function getAntiForgeryToken() {
+    return document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast-notification toast-${type}`;
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+</script>
+
+<!-- Toast Styles -->
+<style>
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    z-index: 1050;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+}
+
+.toast-notification.show {
+    transform: translateX(0);
+}
+
+.toast-success { background-color: #28a745; }
+.toast-error { background-color: #dc3545; }
+.toast-info { background-color: #17a2b8; }
+.toast-warning { background-color: #ffc107; color: #212529; }
+</style>

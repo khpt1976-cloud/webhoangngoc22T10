@@ -1,0 +1,643 @@
+{% comment %}
+Account Login Page - HoangNgoc Professional Theme
+User Authentication Login Form with Social Login Options
+{% endcomment %}
+
+{% zone "Header" %}
+    <!-- Login Header -->
+    <header class="login-header bg-gradient-primary text-white">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-lg-8 col-xl-6 text-center py-4">
+                    <h1 class="display-6 fw-bold mb-3">Welcome Back</h1>
+                    <p class="lead text-white-75 mb-0">Sign in to your account to continue</p>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endzone %}
+
+<!-- Login Form Section -->
+<section class="login-section py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-lg-6 col-xl-5">
+                <!-- Login Card -->
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-white text-center py-4">
+                        <h3 class="mb-0 text-primary">
+                            <i class="fas fa-user-circle me-2"></i>Sign In
+                        </h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Social Login Options -->
+                        <div class="social-login mb-4">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-outline-danger" onclick="loginWithGoogle()">
+                                    <i class="fab fa-google me-2"></i>Continue with Google
+                                </button>
+                                <button class="btn btn-outline-primary" onclick="loginWithFacebook()">
+                                    <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
+                                </button>
+                                <button class="btn btn-outline-dark" onclick="loginWithGitHub()">
+                                    <i class="fab fa-github me-2"></i>Continue with GitHub
+                                </button>
+                            </div>
+                            
+                            <div class="divider my-4">
+                                <span class="divider-text">or sign in with email</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Login Form -->
+                        <form id="login-form" method="post" action="/account/login" novalidate>
+                            <input type="hidden" name="__RequestVerificationToken" value="{{ Model.AntiForgeryToken }}" />
+                            <input type="hidden" name="ReturnUrl" value="{{ Model.ReturnUrl }}" />
+                            
+                            <!-- Email Field -->
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control" id="email" name="Email" 
+                                       placeholder="name@example.com" value="{{ Model.Email }}" required>
+                                <label for="email">
+                                    <i class="fas fa-envelope me-2"></i>Email Address
+                                </label>
+                                <div class="invalid-feedback">Please provide a valid email address.</div>
+                            </div>
+                            
+                            <!-- Password Field -->
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="password" name="Password" 
+                                       placeholder="Password" required>
+                                <label for="password">
+                                    <i class="fas fa-lock me-2"></i>Password
+                                </label>
+                                <div class="invalid-feedback">Please enter your password.</div>
+                                <div class="password-toggle">
+                                    <button type="button" class="btn btn-link p-0" onclick="togglePassword()">
+                                        <i class="fas fa-eye" id="password-toggle-icon"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Remember Me & Forgot Password -->
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="rememberMe" name="RememberMe" 
+                                           {% if Model.RememberMe %}checked{% endif %}>
+                                    <label class="form-check-label" for="rememberMe">
+                                        Remember me
+                                    </label>
+                                </div>
+                                <a href="/account/forgot-password" class="text-decoration-none">
+                                    Forgot password?
+                                </a>
+                            </div>
+                            
+                            <!-- Error Messages -->
+                            {% if Model.ErrorMessage %}
+                            <div class="alert alert-danger" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                {{ Model.ErrorMessage }}
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Success Messages -->
+                            {% if Model.SuccessMessage %}
+                            <div class="alert alert-success" role="alert">
+                                <i class="fas fa-check-circle me-2"></i>
+                                {{ Model.SuccessMessage }}
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Submit Button -->
+                            <div class="d-grid mb-3">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                                    <span class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- Register Link -->
+                        <div class="text-center">
+                            <p class="mb-0">Don't have an account? 
+                                <a href="/account/register{% if Model.ReturnUrl %}?returnUrl={{ Model.ReturnUrl | url_encode }}{% endif %}" 
+                                   class="text-decoration-none fw-bold">
+                                    Create one here
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Additional Links -->
+                <div class="text-center mt-4">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <a href="/account/resend-confirmation" class="btn btn-outline-secondary btn-sm w-100">
+                                <i class="fas fa-envelope me-1"></i>Resend Confirmation
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="/support" class="btn btn-outline-info btn-sm w-100">
+                                <i class="fas fa-question-circle me-1"></i>Need Help?
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Login Benefits Sidebar -->
+            <div class="col-lg-4 col-xl-3 offset-xl-1">
+                <div class="login-benefits mt-5 mt-lg-0">
+                    <h4 class="mb-4">Why Sign In?</h4>
+                    
+                    <div class="benefit-item mb-3">
+                        <div class="d-flex align-items-start">
+                            <div class="benefit-icon">
+                                <i class="fas fa-briefcase text-primary"></i>
+                            </div>
+                            <div class="benefit-content">
+                                <h6 class="mb-1">Apply to Jobs</h6>
+                                <p class="text-muted mb-0">Quick apply to multiple positions with saved profile</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-item mb-3">
+                        <div class="d-flex align-items-start">
+                            <div class="benefit-icon">
+                                <i class="fas fa-bookmark text-success"></i>
+                            </div>
+                            <div class="benefit-content">
+                                <h6 class="mb-1">Save Jobs</h6>
+                                <p class="text-muted mb-0">Bookmark interesting positions for later</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-item mb-3">
+                        <div class="d-flex align-items-start">
+                            <div class="benefit-icon">
+                                <i class="fas fa-bell text-warning"></i>
+                            </div>
+                            <div class="benefit-content">
+                                <h6 class="mb-1">Job Alerts</h6>
+                                <p class="text-muted mb-0">Get notified about new opportunities</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-item mb-3">
+                        <div class="d-flex align-items-start">
+                            <div class="benefit-icon">
+                                <i class="fas fa-chart-line text-info"></i>
+                            </div>
+                            <div class="benefit-content">
+                                <h6 class="mb-1">Track Applications</h6>
+                                <p class="text-muted mb-0">Monitor your application status and progress</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-item mb-3">
+                        <div class="d-flex align-items-start">
+                            <div class="benefit-icon">
+                                <i class="fas fa-graduation-cap text-purple"></i>
+                            </div>
+                            <div class="benefit-content">
+                                <h6 class="mb-1">Access Courses</h6>
+                                <p class="text-muted mb-0">Enroll in professional development courses</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="benefit-item">
+                        <div class="d-flex align-items-start">
+                            <div class="benefit-icon">
+                                <i class="fas fa-users text-secondary"></i>
+                            </div>
+                            <div class="benefit-content">
+                                <h6 class="mb-1">Join Community</h6>
+                                <p class="text-muted mb-0">Connect with other professionals</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Security Notice -->
+                <div class="security-notice mt-4 p-3 bg-light rounded">
+                    <div class="text-center">
+                        <i class="fas fa-shield-alt fa-2x text-success mb-2"></i>
+                        <h6 class="mb-2">Your Data is Secure</h6>
+                        <p class="small text-muted mb-0">
+                            We use industry-standard encryption to protect your personal information.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Custom Styles -->
+<style>
+.login-header {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+}
+
+.login-section {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+}
+
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-header {
+    border-bottom: 1px solid #e9ecef;
+}
+
+.social-login .btn {
+    padding: 12px 20px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.social-login .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.divider {
+    position: relative;
+    text-align: center;
+}
+
+.divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #dee2e6;
+}
+
+.divider-text {
+    background: white;
+    padding: 0 1rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.form-floating {
+    position: relative;
+}
+
+.form-floating .form-control {
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.form-floating .form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}
+
+.password-toggle {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+
+.password-toggle .btn {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.password-toggle .btn:hover {
+    color: #007bff;
+}
+
+.benefit-item {
+    padding: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.benefit-item:hover {
+    background: #f8f9fa;
+    transform: translateX(5px);
+}
+
+.benefit-icon {
+    width: 40px;
+    height: 40px;
+    background: #f8f9fa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.benefit-content h6 {
+    color: #495057;
+    font-weight: 600;
+}
+
+.security-notice {
+    border: 1px solid #e9ecef;
+}
+
+.text-purple {
+    color: #6f42c1 !important;
+}
+
+/* Loading State */
+.btn.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+/* Form Validation */
+.was-validated .form-control:valid {
+    border-color: #28a745;
+}
+
+.was-validated .form-control:invalid {
+    border-color: #dc3545;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .login-section {
+        min-height: auto;
+        padding: 2rem 0;
+    }
+    
+    .benefit-item {
+        padding: 0.75rem;
+    }
+    
+    .benefit-icon {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .social-login .btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.benefit-item {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.benefit-item:nth-child(1) { animation-delay: 0.1s; }
+.benefit-item:nth-child(2) { animation-delay: 0.2s; }
+.benefit-item:nth-child(3) { animation-delay: 0.3s; }
+.benefit-item:nth-child(4) { animation-delay: 0.4s; }
+.benefit-item:nth-child(5) { animation-delay: 0.5s; }
+.benefit-item:nth-child(6) { animation-delay: 0.6s; }
+</style>
+
+<!-- JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    initializeLoginForm();
+    setupFormValidation();
+});
+
+function initializeLoginForm() {
+    const form = document.getElementById('login-form');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    
+    // Auto-focus email field
+    emailInput.focus();
+    
+    // Real-time validation
+    emailInput.addEventListener('blur', function() {
+        validateEmail(this);
+    });
+    
+    passwordInput.addEventListener('blur', function() {
+        validatePassword(this);
+    });
+    
+    // Enter key handling
+    form.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            form.querySelector('button[type="submit"]').click();
+        }
+    });
+}
+
+function setupFormValidation() {
+    const form = document.getElementById('login-form');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (validateForm()) {
+            submitLogin();
+        }
+    });
+}
+
+function validateForm() {
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    let isValid = true;
+    
+    // Validate email
+    if (!validateEmail(email)) {
+        isValid = false;
+    }
+    
+    // Validate password
+    if (!validatePassword(password)) {
+        isValid = false;
+    }
+    
+    return isValid;
+}
+
+function validateEmail(input) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const isValid = emailRegex.test(input.value.trim());
+    
+    if (isValid) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+    }
+    
+    return isValid;
+}
+
+function validatePassword(input) {
+    const isValid = input.value.length >= 6;
+    
+    if (isValid) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+    } else {
+        input.classList.remove('is-valid');
+        input.classList.add('is-invalid');
+    }
+    
+    return isValid;
+}
+
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.getElementById('password-toggle-icon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.className = 'fas fa-eye-slash';
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.className = 'fas fa-eye';
+    }
+}
+
+function submitLogin() {
+    const form = document.getElementById('login-form');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const spinner = submitBtn.querySelector('.spinner-border');
+    
+    // Show loading state
+    submitBtn.classList.add('loading');
+    submitBtn.disabled = true;
+    spinner.classList.remove('d-none');
+    
+    // Create FormData
+    const formData = new FormData(form);
+    
+    // Submit login
+    fetch('/account/login', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (response.ok) {
+            // Check if it's a redirect response
+            if (response.redirected) {
+                window.location.href = response.url;
+            } else {
+                return response.json();
+            }
+        } else {
+            throw new Error('Login failed');
+        }
+    })
+    .then(data => {
+        if (data && data.success) {
+            // Redirect on success
+            window.location.href = data.returnUrl || '/';
+        } else if (data && data.error) {
+            showError(data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Login error:', error);
+        showError('Login failed. Please check your credentials and try again.');
+    })
+    .finally(() => {
+        submitBtn.classList.remove('loading');
+        submitBtn.disabled = false;
+        spinner.classList.add('d-none');
+    });
+}
+
+function showError(message) {
+    // Remove existing alerts
+    const existingAlerts = document.querySelectorAll('.alert');
+    existingAlerts.forEach(alert => alert.remove());
+    
+    // Create error alert
+    const alert = document.createElement('div');
+    alert.className = 'alert alert-danger';
+    alert.innerHTML = `
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        ${message}
+    `;
+    
+    // Insert before submit button
+    const submitBtn = document.querySelector('button[type="submit"]');
+    submitBtn.parentNode.insertBefore(alert, submitBtn);
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        alert.remove();
+    }, 5000);
+}
+
+// Social Login Functions
+function loginWithGoogle() {
+    window.location.href = '/account/external-login?provider=Google&returnUrl=' + 
+                          encodeURIComponent(getReturnUrl());
+}
+
+function loginWithFacebook() {
+    window.location.href = '/account/external-login?provider=Facebook&returnUrl=' + 
+                          encodeURIComponent(getReturnUrl());
+}
+
+function loginWithGitHub() {
+    window.location.href = '/account/external-login?provider=GitHub&returnUrl=' + 
+                          encodeURIComponent(getReturnUrl());
+}
+
+function getReturnUrl() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('returnUrl') || '/';
+}
+
+// Auto-fill demo credentials (for development)
+function fillDemoCredentials() {
+    document.getElementById('email').value = 'demo@hoangngoc.com';
+    document.getElementById('password').value = 'Demo123!';
+}
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    // Ctrl+D for demo credentials (development only)
+    if (e.ctrlKey && e.key === 'd') {
+        e.preventDefault();
+        fillDemoCredentials();
+    }
+});
+</script>

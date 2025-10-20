@@ -1,0 +1,1133 @@
+{% comment %}
+Course Display Template - HoangNgoc Professional Theme
+OrchardCore Content Display Pattern for Course ContentType
+{% endcomment %}
+
+{% assign course = Model.ContentItem %}
+
+{% zone "Header" %}
+    <!-- Course Header -->
+    <header class="course-header bg-gradient-success text-white">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 align-items-center py-5">
+                <div class="col-lg-8">
+                    <!-- Course Title & Info -->
+                    <div class="course-info">
+                        <div class="course-category mb-2">
+                            <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+                                <i class="fas fa-tag me-2"></i>{{ course.Content.Course.Category.Text | default: "Professional Development" }}
+                            </span>
+                        </div>
+                        
+                        <h1 class="display-5 fw-bold mb-3">{{ course.DisplayText }}</h1>
+                        
+                        <p class="lead text-white-75 mb-4">
+                            {{ course.Content.Course.ShortDescription.Text | default: "Enhance your skills with this comprehensive course." }}
+                        </p>
+                        
+                        <!-- Course Meta -->
+                        <div class="course-meta d-flex flex-wrap gap-4 mb-4">
+                            <div class="meta-item">
+                                <i class="fas fa-clock me-2"></i>
+                                <span>{{ course.Content.Course.Duration.Text | default: "8 weeks" }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-signal me-2"></i>
+                                <span>{{ course.Content.Course.Level.Text | default: "Intermediate" }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-users me-2"></i>
+                                <span>{{ course.Content.Course.EnrolledCount.Value | default: 0 }} enrolled</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-star me-2"></i>
+                                <span>{{ course.Content.Course.Rating.Value | default: 4.5 }} ({{ course.Content.Course.ReviewsCount.Value | default: 0 }} reviews)</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Instructor Info -->
+                        <div class="instructor-info d-flex align-items-center">
+                            {% if course.Content.Course.InstructorAvatar.Paths.first %}
+                                <img src="{{ course.Content.Course.InstructorAvatar.Paths.first | asset_url | resize_url: width: 50, height: 50 }}" 
+                                     alt="{{ course.Content.Course.InstructorName.Text }}" 
+                                     class="instructor-avatar rounded-circle me-3">
+                            {% else %}
+                                <div class="instructor-avatar-placeholder rounded-circle me-3">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                            {% endif %}
+                            <div>
+                                <div class="instructor-name fw-bold">{{ course.Content.Course.InstructorName.Text | default: "Expert Instructor" }}</div>
+                                <div class="instructor-title text-white-75">{{ course.Content.Course.InstructorTitle.Text | default: "Professional Trainer" }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <!-- Course Preview Card -->
+                    <div class="course-preview-card">
+                        <div class="card shadow-lg">
+                            {% if course.Content.Course.PreviewImage.Paths.first %}
+                                <img src="{{ course.Content.Course.PreviewImage.Paths.first | asset_url | resize_url: width: 400, height: 225 }}" 
+                                     class="card-img-top" alt="{{ course.DisplayText }}">
+                            {% else %}
+                                <div class="course-preview-placeholder">
+                                    <i class="fas fa-play-circle fa-4x text-primary"></i>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="card-body text-center">
+                                <div class="course-price mb-3">
+                                    {% if course.Content.Course.IsFree.Value %}
+                                        <span class="price-free h3 text-success mb-0">FREE</span>
+                                    {% else %}
+                                        <span class="price-current h3 text-primary mb-0">
+                                            ${{ course.Content.Course.Price.Value | default: 99 }}
+                                        </span>
+                                        {% if course.Content.Course.OriginalPrice.Value %}
+                                            <span class="price-original text-muted text-decoration-line-through ms-2">
+                                                ${{ course.Content.Course.OriginalPrice.Value }}
+                                            </span>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="d-grid gap-2">
+                                    {% if Model.User.IsEnrolled %}
+                                        <a href="/courses/{{ course.ContentItemId }}/learn" class="btn btn-success btn-lg">
+                                            <i class="fas fa-play me-2"></i>Continue Learning
+                                        </a>
+                                        <div class="progress mt-2">
+                                            <div class="progress-bar bg-success" style="width: {{ Model.User.Progress }}%"></div>
+                                        </div>
+                                        <small class="text-muted">{{ Model.User.Progress }}% Complete</small>
+                                    {% else %}
+                                        <button class="btn btn-primary btn-lg" onclick="enrollCourse('{{ course.ContentItemId }}')">
+                                            <i class="fas fa-graduation-cap me-2"></i>Enroll Now
+                                        </button>
+                                        <button class="btn btn-outline-secondary" onclick="addToWishlist('{{ course.ContentItemId }}')">
+                                            <i class="fas fa-heart me-2"></i>Add to Wishlist
+                                        </button>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="course-features mt-3">
+                                    <small class="text-muted d-block">
+                                        <i class="fas fa-certificate me-1"></i>Certificate of completion
+                                    </small>
+                                    <small class="text-muted d-block">
+                                        <i class="fas fa-mobile-alt me-1"></i>Mobile & desktop access
+                                    </small>
+                                    <small class="text-muted d-block">
+                                        <i class="fas fa-infinity me-1"></i>Lifetime access
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endzone %}
+
+<!-- Course Content Section -->
+<section class="course-content py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <!-- Course Navigation Tabs -->
+                <div class="course-nav mb-4">
+                    <ul class="nav nav-pills nav-fill" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#overview" type="button">
+                                <i class="fas fa-info-circle me-2"></i>Overview
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#curriculum" type="button">
+                                <i class="fas fa-list me-2"></i>Curriculum
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#instructor" type="button">
+                                <i class="fas fa-user-tie me-2"></i>Instructor
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#reviews" type="button">
+                                <i class="fas fa-star me-2"></i>Reviews
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- Overview Tab -->
+                    <div class="tab-pane fade show active" id="overview">
+                        <div class="course-overview">
+                            <!-- Course Description -->
+                            <div class="section mb-5">
+                                <h3 class="section-title">
+                                    <i class="fas fa-book-open text-primary me-2"></i>Course Description
+                                </h3>
+                                <div class="section-content">
+                                    {{ course.Content.Course.Description.Text | default: "This comprehensive course will provide you with the knowledge and skills needed to excel in your field." | newline_to_br }}
+                                </div>
+                            </div>
+                            
+                            <!-- What You'll Learn -->
+                            <div class="section mb-5">
+                                <h3 class="section-title">
+                                    <i class="fas fa-check-circle text-success me-2"></i>What You'll Learn
+                                </h3>
+                                <div class="section-content">
+                                    {% if course.Content.Course.LearningObjectives.Text %}
+                                        {% assign objectives = course.Content.Course.LearningObjectives.Text | split: '\n' %}
+                                        <div class="row g-3">
+                                            {% for objective in objectives %}
+                                                {% if objective != blank %}
+                                                <div class="col-md-6">
+                                                    <div class="learning-objective">
+                                                        <i class="fas fa-check text-success me-2"></i>
+                                                        {{ objective | strip }}
+                                                    </div>
+                                                </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <div class="learning-objective">
+                                                    <i class="fas fa-check text-success me-2"></i>
+                                                    Master fundamental concepts and principles
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="learning-objective">
+                                                    <i class="fas fa-check text-success me-2"></i>
+                                                    Apply knowledge to real-world scenarios
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="learning-objective">
+                                                    <i class="fas fa-check text-success me-2"></i>
+                                                    Develop practical skills and expertise
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="learning-objective">
+                                                    <i class="fas fa-check text-success me-2"></i>
+                                                    Build confidence in your abilities
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- Prerequisites -->
+                            <div class="section mb-5">
+                                <h3 class="section-title">
+                                    <i class="fas fa-clipboard-list text-warning me-2"></i>Prerequisites
+                                </h3>
+                                <div class="section-content">
+                                    {{ course.Content.Course.Prerequisites.Text | default: "No prior experience required. Basic computer skills are helpful." | newline_to_br }}
+                                </div>
+                            </div>
+                            
+                            <!-- Course Features -->
+                            <div class="section">
+                                <h3 class="section-title">
+                                    <i class="fas fa-star text-info me-2"></i>Course Features
+                                </h3>
+                                <div class="section-content">
+                                    <div class="row g-4">
+                                        <div class="col-md-6">
+                                            <div class="feature-item">
+                                                <div class="feature-icon">
+                                                    <i class="fas fa-video text-primary"></i>
+                                                </div>
+                                                <div class="feature-content">
+                                                    <h6>Video Lectures</h6>
+                                                    <p class="text-muted mb-0">High-quality video content with clear explanations</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="feature-item">
+                                                <div class="feature-icon">
+                                                    <i class="fas fa-tasks text-success"></i>
+                                                </div>
+                                                <div class="feature-content">
+                                                    <h6>Practical Exercises</h6>
+                                                    <p class="text-muted mb-0">Hands-on assignments to reinforce learning</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="feature-item">
+                                                <div class="feature-icon">
+                                                    <i class="fas fa-users text-info"></i>
+                                                </div>
+                                                <div class="feature-content">
+                                                    <h6>Community Support</h6>
+                                                    <p class="text-muted mb-0">Connect with fellow learners and instructors</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="feature-item">
+                                                <div class="feature-icon">
+                                                    <i class="fas fa-certificate text-warning"></i>
+                                                </div>
+                                                <div class="feature-content">
+                                                    <h6>Certificate</h6>
+                                                    <p class="text-muted mb-0">Earn a certificate upon successful completion</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Curriculum Tab -->
+                    <div class="tab-pane fade" id="curriculum">
+                        <div class="course-curriculum">
+                            <div class="curriculum-header mb-4">
+                                <h3 class="section-title">
+                                    <i class="fas fa-list text-primary me-2"></i>Course Curriculum
+                                </h3>
+                                <p class="text-muted">
+                                    {{ course.Content.Course.LessonsCount.Value | default: 12 }} lessons • 
+                                    {{ course.Content.Course.Duration.Text | default: "8 weeks" }} • 
+                                    {{ course.Content.Course.TotalHours.Value | default: 24 }} hours total
+                                </p>
+                            </div>
+                            
+                            <div class="curriculum-content">
+                                {% if course.Content.Course.Curriculum.Text %}
+                                    <!-- Parse curriculum from content -->
+                                    {% assign modules = course.Content.Course.Curriculum.Text | split: '---' %}
+                                    {% for module in modules %}
+                                        {% if module != blank %}
+                                            {% assign moduleLines = module | split: '\n' %}
+                                            {% assign moduleTitle = moduleLines[0] | strip %}
+                                            <div class="curriculum-module mb-4">
+                                                <div class="module-header">
+                                                    <h5 class="module-title">
+                                                        <i class="fas fa-folder text-primary me-2"></i>{{ moduleTitle }}
+                                                    </h5>
+                                                </div>
+                                                <div class="module-lessons">
+                                                    {% for line in moduleLines offset: 1 %}
+                                                        {% if line != blank %}
+                                                        <div class="lesson-item">
+                                                            <div class="lesson-info">
+                                                                <i class="fas fa-play-circle text-muted me-2"></i>
+                                                                <span class="lesson-title">{{ line | strip }}</span>
+                                                            </div>
+                                                            <div class="lesson-meta">
+                                                                <span class="lesson-duration text-muted">15 min</span>
+                                                                {% unless Model.User.IsEnrolled %}
+                                                                    <i class="fas fa-lock text-warning ms-2"></i>
+                                                                {% endunless %}
+                                                            </div>
+                                                        </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <!-- Default curriculum structure -->
+                                    <div class="curriculum-module mb-4">
+                                        <div class="module-header">
+                                            <h5 class="module-title">
+                                                <i class="fas fa-folder text-primary me-2"></i>Module 1: Introduction
+                                            </h5>
+                                        </div>
+                                        <div class="module-lessons">
+                                            <div class="lesson-item">
+                                                <div class="lesson-info">
+                                                    <i class="fas fa-play-circle text-muted me-2"></i>
+                                                    <span class="lesson-title">Welcome & Course Overview</span>
+                                                </div>
+                                                <div class="lesson-meta">
+                                                    <span class="lesson-duration text-muted">10 min</span>
+                                                    <span class="badge bg-success ms-2">Free</span>
+                                                </div>
+                                            </div>
+                                            <div class="lesson-item">
+                                                <div class="lesson-info">
+                                                    <i class="fas fa-play-circle text-muted me-2"></i>
+                                                    <span class="lesson-title">Getting Started</span>
+                                                </div>
+                                                <div class="lesson-meta">
+                                                    <span class="lesson-duration text-muted">15 min</span>
+                                                    {% unless Model.User.IsEnrolled %}
+                                                        <i class="fas fa-lock text-warning ms-2"></i>
+                                                    {% endunless %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="curriculum-module mb-4">
+                                        <div class="module-header">
+                                            <h5 class="module-title">
+                                                <i class="fas fa-folder text-primary me-2"></i>Module 2: Fundamentals
+                                            </h5>
+                                        </div>
+                                        <div class="module-lessons">
+                                            <div class="lesson-item">
+                                                <div class="lesson-info">
+                                                    <i class="fas fa-play-circle text-muted me-2"></i>
+                                                    <span class="lesson-title">Core Concepts</span>
+                                                </div>
+                                                <div class="lesson-meta">
+                                                    <span class="lesson-duration text-muted">20 min</span>
+                                                    {% unless Model.User.IsEnrolled %}
+                                                        <i class="fas fa-lock text-warning ms-2"></i>
+                                                    {% endunless %}
+                                                </div>
+                                            </div>
+                                            <div class="lesson-item">
+                                                <div class="lesson-info">
+                                                    <i class="fas fa-file-alt text-muted me-2"></i>
+                                                    <span class="lesson-title">Practice Exercise</span>
+                                                </div>
+                                                <div class="lesson-meta">
+                                                    <span class="lesson-duration text-muted">30 min</span>
+                                                    {% unless Model.User.IsEnrolled %}
+                                                        <i class="fas fa-lock text-warning ms-2"></i>
+                                                    {% endunless %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Instructor Tab -->
+                    <div class="tab-pane fade" id="instructor">
+                        <div class="instructor-profile">
+                            <div class="row gx-4 gx-lg-5">
+                                <div class="col-md-4 text-center">
+                                    {% if course.Content.Course.InstructorAvatar.Paths.first %}
+                                        <img src="{{ course.Content.Course.InstructorAvatar.Paths.first | asset_url | resize_url: width: 200, height: 200 }}" 
+                                             alt="{{ course.Content.Course.InstructorName.Text }}" 
+                                             class="instructor-photo rounded-circle mb-3">
+                                    {% else %}
+                                        <div class="instructor-photo-placeholder rounded-circle mb-3">
+                                            <i class="fas fa-user fa-4x text-muted"></i>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <h4>{{ course.Content.Course.InstructorName.Text | default: "Expert Instructor" }}</h4>
+                                    <p class="text-muted">{{ course.Content.Course.InstructorTitle.Text | default: "Professional Trainer & Consultant" }}</p>
+                                    
+                                    <div class="instructor-stats mb-3">
+                                        <div class="stat-item">
+                                            <div class="stat-number">{{ course.Content.Course.InstructorExperience.Value | default: 10 }}+</div>
+                                            <div class="stat-label">Years Experience</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-number">{{ course.Content.Course.InstructorStudents.Value | default: 5000 }}+</div>
+                                            <div class="stat-label">Students Taught</div>
+                                        </div>
+                                        <div class="stat-item">
+                                            <div class="stat-number">{{ course.Content.Course.InstructorCourses.Value | default: 15 }}</div>
+                                            <div class="stat-label">Courses Created</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-8">
+                                    <h5 class="mb-3">About the Instructor</h5>
+                                    <div class="instructor-bio">
+                                        {{ course.Content.Course.InstructorBio.Text | default: "Our expert instructor brings years of industry experience and a passion for teaching. With a proven track record of helping students achieve their goals, they provide practical insights and real-world knowledge that you can apply immediately." | newline_to_br }}
+                                    </div>
+                                    
+                                    {% if course.Content.Course.InstructorSpecialties.Text %}
+                                    <h6 class="mt-4 mb-3">Specialties</h6>
+                                    <div class="instructor-specialties">
+                                        {% assign specialties = course.Content.Course.InstructorSpecialties.Text | split: ',' %}
+                                        {% for specialty in specialties %}
+                                            <span class="badge bg-primary me-2 mb-2">{{ specialty | strip }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <h6 class="mt-4 mb-3">Connect with the Instructor</h6>
+                                    <div class="instructor-social">
+                                        <a href="#" class="btn btn-outline-primary btn-sm me-2">
+                                            <i class="fab fa-linkedin me-1"></i>LinkedIn
+                                        </a>
+                                        <a href="#" class="btn btn-outline-info btn-sm me-2">
+                                            <i class="fab fa-twitter me-1"></i>Twitter
+                                        </a>
+                                        <a href="#" class="btn btn-outline-secondary btn-sm">
+                                            <i class="fas fa-globe me-1"></i>Website
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reviews Tab -->
+                    <div class="tab-pane fade" id="reviews">
+                        <div class="course-reviews">
+                            <div class="reviews-summary mb-4">
+                                <div class="row align-items-center">
+                                    <div class="col-md-4 text-center">
+                                        <div class="overall-rating">
+                                            <div class="rating-number display-4 fw-bold text-warning">
+                                                {{ course.Content.Course.Rating.Value | default: 4.5 }}
+                                            </div>
+                                            <div class="rating-stars mb-2">
+                                                {% assign rating = course.Content.Course.Rating.Value | default: 4.5 %}
+                                                {% for i in (1..5) %}
+                                                    {% if i <= rating %}
+                                                        <i class="fas fa-star text-warning"></i>
+                                                    {% else %}
+                                                        <i class="far fa-star text-warning"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <div class="rating-count text-muted">
+                                                {{ course.Content.Course.ReviewsCount.Value | default: 0 }} reviews
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="rating-breakdown">
+                                            {% for i in (5..1) %}
+                                            <div class="rating-bar-item d-flex align-items-center mb-2">
+                                                <span class="rating-label me-2">{{ i }} star</span>
+                                                <div class="progress flex-grow-1 me-2">
+                                                    <div class="progress-bar bg-warning" style="width: {% if i == 5 %}60{% elsif i == 4 %}25{% elsif i == 3 %}10{% elsif i == 2 %}3{% else %}2{% endif %}%"></div>
+                                                </div>
+                                                <span class="rating-percentage text-muted">{% if i == 5 %}60{% elsif i == 4 %}25{% elsif i == 3 %}10{% elsif i == 2 %}3{% else %}2{% endif %}%</span>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="reviews-list">
+                                {% if Model.Reviews and Model.Reviews.size > 0 %}
+                                    {% for review in Model.Reviews %}
+                                    <div class="review-item">
+                                        <div class="review-header d-flex align-items-center mb-2">
+                                            <div class="reviewer-avatar me-3">
+                                                {% if review.UserAvatar %}
+                                                    <img src="{{ review.UserAvatar | asset_url | resize_url: width: 40, height: 40 }}" 
+                                                         alt="{{ review.UserName }}" class="rounded-circle">
+                                                {% else %}
+                                                    <div class="avatar-placeholder rounded-circle">
+                                                        <i class="fas fa-user"></i>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="reviewer-info flex-grow-1">
+                                                <div class="reviewer-name fw-bold">{{ review.UserName }}</div>
+                                                <div class="review-meta">
+                                                    <div class="review-rating">
+                                                        {% for i in (1..5) %}
+                                                            {% if i <= review.Rating %}
+                                                                <i class="fas fa-star text-warning"></i>
+                                                            {% else %}
+                                                                <i class="far fa-star text-warning"></i>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </div>
+                                                    <span class="review-date text-muted ms-2">{{ review.CreatedDate | date: "MMM dd, yyyy" }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="review-content">
+                                            {{ review.Content }}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <!-- Sample reviews for demonstration -->
+                                    <div class="review-item">
+                                        <div class="review-header d-flex align-items-center mb-2">
+                                            <div class="reviewer-avatar me-3">
+                                                <div class="avatar-placeholder rounded-circle">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                            </div>
+                                            <div class="reviewer-info flex-grow-1">
+                                                <div class="reviewer-name fw-bold">Sarah Johnson</div>
+                                                <div class="review-meta">
+                                                    <div class="review-rating">
+                                                        <i class="fas fa-star text-warning"></i>
+                                                        <i class="fas fa-star text-warning"></i>
+                                                        <i class="fas fa-star text-warning"></i>
+                                                        <i class="fas fa-star text-warning"></i>
+                                                        <i class="fas fa-star text-warning"></i>
+                                                    </div>
+                                                    <span class="review-date text-muted ms-2">Dec 15, 2023</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="review-content">
+                                            Excellent course! The instructor explains complex concepts in a very clear and understandable way. The practical exercises really helped me apply what I learned.
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="review-item">
+                                        <div class="review-header d-flex align-items-center mb-2">
+                                            <div class="reviewer-avatar me-3">
+                                                <div class="avatar-placeholder rounded-circle">
+                                                    <i class="fas fa-user"></i>
+                                                </div>
+                                            </div>
+                                            <div class="reviewer-info flex-grow-1">
+                                                <div class="reviewer-name fw-bold">Michael Chen</div>
+                                                <div class="review-meta">
+                                                    <div class="review-rating">
+                                                        <i class="fas fa-star text-warning"></i>
+                                                        <i class="fas fa-star text-warning"></i>
+                                                        <i class="fas fa-star text-warning"></i>
+                                                        <i class="fas fa-star text-warning"></i>
+                                                        <i class="far fa-star text-warning"></i>
+                                                    </div>
+                                                    <span class="review-date text-muted ms-2">Dec 10, 2023</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="review-content">
+                                            Great content and well-structured curriculum. I've learned a lot and feel much more confident in my skills now. Highly recommended!
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            
+                            {% unless Model.User.IsEnrolled %}
+                            <div class="text-center mt-4">
+                                <p class="text-muted">Enroll in this course to leave a review</p>
+                            </div>
+                            {% endunless %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Related Courses -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-graduation-cap me-2"></i>Related Courses
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="related-courses" id="related-courses-container">
+                            <div class="text-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading related courses...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course Stats -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-secondary text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-chart-bar me-2"></i>Course Statistics
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-list">
+                            <div class="stat-item d-flex justify-content-between mb-2">
+                                <span>Total Enrolled:</span>
+                                <strong>{{ course.Content.Course.EnrolledCount.Value | default: 1250 }}</strong>
+                            </div>
+                            <div class="stat-item d-flex justify-content-between mb-2">
+                                <span>Completion Rate:</span>
+                                <strong>{{ course.Content.Course.CompletionRate.Value | default: 85 }}%</strong>
+                            </div>
+                            <div class="stat-item d-flex justify-content-between mb-2">
+                                <span>Average Rating:</span>
+                                <strong>{{ course.Content.Course.Rating.Value | default: 4.5 }}/5</strong>
+                            </div>
+                            <div class="stat-item d-flex justify-content-between">
+                                <span>Last Updated:</span>
+                                <strong>{{ course.ModifiedUtc | date: "MMM yyyy" }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Custom Styles -->
+<style>
+.course-header {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.course-preview-card .card {
+    border: none;
+    border-radius: 15px;
+}
+
+.course-preview-placeholder {
+    height: 225px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px 15px 0 0;
+}
+
+.instructor-avatar,
+.instructor-avatar-placeholder {
+    width: 50px;
+    height: 50px;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.course-nav .nav-pills .nav-link {
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.course-nav .nav-pills .nav-link.active {
+    background: #007bff;
+}
+
+.section-title {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.learning-objective {
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.feature-icon {
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    font-size: 1.2rem;
+}
+
+.curriculum-module {
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.module-header {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.module-title {
+    margin-bottom: 0;
+    color: #495057;
+}
+
+.lesson-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f8f9fa;
+    transition: all 0.3s ease;
+}
+
+.lesson-item:hover {
+    background: #f8f9fa;
+}
+
+.lesson-item:last-child {
+    border-bottom: none;
+}
+
+.instructor-photo,
+.instructor-photo-placeholder {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.instructor-stats {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.stat-item {
+    padding: 0.5rem;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.review-item {
+    padding: 1.5rem;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.review-item:hover {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.reviewer-avatar .avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    background: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+}
+
+.rating-bar-item .progress {
+    height: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .course-meta {
+        flex-direction: column;
+        gap: 0.5rem !important;
+    }
+    
+    .instructor-info {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .instructor-avatar {
+        margin-bottom: 1rem;
+    }
+    
+    .feature-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .feature-icon {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .instructor-stats {
+        flex-direction: column;
+        gap: 1rem;
+    }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section {
+    animation: fadeInUp 0.6s ease-out;
+}
+</style>
+
+<!-- JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadRelatedCourses();
+    initializeCourseInteractions();
+});
+
+function loadRelatedCourses() {
+    const container = document.getElementById('related-courses-container');
+    const courseId = '{{ course.ContentItemId }}';
+    const category = '{{ course.Content.Course.Category.Text }}';
+    
+    // Simulate API call to load related courses
+    setTimeout(() => {
+        container.innerHTML = `
+            <div class="related-course-item mb-3">
+                <div class="d-flex">
+                    <img src="/images/course-thumb-1.jpg" alt="Course" class="course-thumb me-3" style="width: 60px; height: 40px; object-fit: cover; border-radius: 5px;">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1"><a href="#" class="text-decoration-none">Advanced Web Development</a></h6>
+                        <small class="text-muted">$79 • 4.8 ⭐</small>
+                    </div>
+                </div>
+            </div>
+            <div class="related-course-item mb-3">
+                <div class="d-flex">
+                    <img src="/images/course-thumb-2.jpg" alt="Course" class="course-thumb me-3" style="width: 60px; height: 40px; object-fit: cover; border-radius: 5px;">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1"><a href="#" class="text-decoration-none">JavaScript Fundamentals</a></h6>
+                        <small class="text-muted">$59 • 4.6 ⭐</small>
+                    </div>
+                </div>
+            </div>
+            <div class="related-course-item">
+                <div class="d-flex">
+                    <img src="/images/course-thumb-3.jpg" alt="Course" class="course-thumb me-3" style="width: 60px; height: 40px; object-fit: cover; border-radius: 5px;">
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1"><a href="#" class="text-decoration-none">React for Beginners</a></h6>
+                        <small class="text-muted">$69 • 4.7 ⭐</small>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <a href="/courses?category=${encodeURIComponent(category)}" class="btn btn-outline-info btn-sm">
+                    <i class="fas fa-search me-1"></i>View More Courses
+                </a>
+            </div>
+        `;
+    }, 1000);
+}
+
+function initializeCourseInteractions() {
+    // Track course view
+    trackCourseView('{{ course.ContentItemId }}');
+    
+    // Initialize tab switching
+    const tabButtons = document.querySelectorAll('[data-bs-toggle="pill"]');
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetTab = this.getAttribute('data-bs-target').substring(1);
+            trackTabView(targetTab);
+        });
+    });
+}
+
+function enrollCourse(courseId) {
+    if (!isUserLoggedIn()) {
+        showLoginModal();
+        return;
+    }
+    
+    const enrollBtn = event.target;
+    const originalText = enrollBtn.innerHTML;
+    
+    // Show loading state
+    enrollBtn.disabled = true;
+    enrollBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Enrolling...';
+    
+    fetch(`/api/courses/${courseId}/enroll`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': getAntiForgeryToken()
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (data.requiresPayment) {
+                // Redirect to payment page
+                window.location.href = `/courses/${courseId}/checkout`;
+            } else {
+                // Free course - redirect to learning page
+                window.location.href = `/courses/${courseId}/learn`;
+            }
+        } else {
+            throw new Error(data.message || 'Enrollment failed');
+        }
+    })
+    .catch(error => {
+        console.error('Enrollment error:', error);
+        showToast('Enrollment failed. Please try again.', 'error');
+        
+        enrollBtn.disabled = false;
+        enrollBtn.innerHTML = originalText;
+    });
+}
+
+function addToWishlist(courseId) {
+    if (!isUserLoggedIn()) {
+        showLoginModal();
+        return;
+    }
+    
+    fetch(`/api/courses/${courseId}/wishlist`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': getAntiForgeryToken()
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const button = event.target.closest('button');
+            const icon = button.querySelector('i');
+            
+            if (data.added) {
+                icon.className = 'fas fa-heart me-2';
+                button.classList.remove('btn-outline-secondary');
+                button.classList.add('btn-secondary');
+                showToast('Course added to wishlist!', 'success');
+            } else {
+                icon.className = 'far fa-heart me-2';
+                button.classList.remove('btn-secondary');
+                button.classList.add('btn-outline-secondary');
+                showToast('Course removed from wishlist', 'info');
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Wishlist error:', error);
+        showToast('Error updating wishlist. Please try again.', 'error');
+    });
+}
+
+function trackCourseView(courseId) {
+    fetch(`/api/courses/${courseId}/view`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).catch(error => {
+        console.error('Error tracking course view:', error);
+    });
+}
+
+function trackTabView(tabName) {
+    fetch('/api/analytics/tab-view', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            page: 'course',
+            tab: tabName,
+            courseId: '{{ course.ContentItemId }}'
+        })
+    }).catch(error => {
+        console.error('Error tracking tab view:', error);
+    });
+}
+
+function isUserLoggedIn() {
+    return document.body.classList.contains('authenticated') || 
+           document.querySelector('.user-menu') !== null;
+}
+
+function showLoginModal() {
+    const loginUrl = '/account/login?returnUrl=' + encodeURIComponent(window.location.href);
+    window.location.href = loginUrl;
+}
+
+function getAntiForgeryToken() {
+    return document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast-notification toast-${type}`;
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+</script>
+
+<!-- Toast Styles -->
+<style>
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    z-index: 1050;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+}
+
+.toast-notification.show {
+    transform: translateX(0);
+}
+
+.toast-success { background-color: #28a745; }
+.toast-error { background-color: #dc3545; }
+.toast-info { background-color: #17a2b8; }
+.toast-warning { background-color: #ffc107; color: #212529; }
+</style>

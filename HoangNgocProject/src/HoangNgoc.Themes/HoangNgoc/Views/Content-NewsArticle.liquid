@@ -1,0 +1,1094 @@
+{% comment %}
+NewsArticle Display Template - HoangNgoc Professional Theme
+OrchardCore Content Display Pattern for NewsArticle ContentType
+{% endcomment %}
+
+{% assign article = Model.ContentItem %}
+
+{% zone "Header" %}
+    <!-- Article Header -->
+    <header class="article-header bg-gradient-primary text-white">
+        <div class="container px-4 px-lg-5">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="pt-3">
+                <ol class="breadcrumb breadcrumb-light">
+                    <li class="breadcrumb-item"><a href="/" class="text-white-75">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/news" class="text-white-75">News</a></li>
+                    {% if article.Content.NewsArticle.Category.Text %}
+                    <li class="breadcrumb-item"><a href="/news/category/{{ article.Content.NewsArticle.Category.Text | slugify }}" class="text-white-75">{{ article.Content.NewsArticle.Category.Text }}</a></li>
+                    {% endif %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ article.DisplayText | truncate: 50 }}</li>
+                </ol>
+            </nav>
+            
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-lg-10 col-xl-8">
+                    <div class="article-info py-5 text-center">
+                        <!-- Article Category -->
+                        {% if article.Content.NewsArticle.Category.Text %}
+                        <div class="article-category mb-3">
+                            <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+                                <i class="fas fa-tag me-2"></i>{{ article.Content.NewsArticle.Category.Text }}
+                            </span>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Article Title -->
+                        <h1 class="display-5 fw-bold mb-4">{{ article.DisplayText }}</h1>
+                        
+                        <!-- Article Subtitle -->
+                        {% if article.Content.NewsArticle.Subtitle.Text %}
+                        <p class="lead text-white-75 mb-4">
+                            {{ article.Content.NewsArticle.Subtitle.Text }}
+                        </p>
+                        {% endif %}
+                        
+                        <!-- Article Meta -->
+                        <div class="article-meta d-flex flex-wrap justify-content-center gap-4 mb-4">
+                            <div class="meta-item">
+                                <i class="fas fa-user me-2"></i>
+                                <span>{{ article.Author | default: "HoangNgoc Team" }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-calendar me-2"></i>
+                                <span>{{ article.PublishedUtc | date: "MMMM dd, yyyy" }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock me-2"></i>
+                                <span>{{ article.Content.NewsArticle.ReadTime.Value | default: 5 }} min read</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-eye me-2"></i>
+                                <span>{{ article.Content.NewsArticle.ViewCount.Value | default: 0 }} views</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Social Share Buttons -->
+                        <div class="social-share">
+                            <button class="btn btn-outline-light btn-sm me-2" onclick="shareOnFacebook()">
+                                <i class="fab fa-facebook-f me-2"></i>Share
+                            </button>
+                            <button class="btn btn-outline-light btn-sm me-2" onclick="shareOnTwitter()">
+                                <i class="fab fa-twitter me-2"></i>Tweet
+                            </button>
+                            <button class="btn btn-outline-light btn-sm me-2" onclick="shareOnLinkedIn()">
+                                <i class="fab fa-linkedin-in me-2"></i>Share
+                            </button>
+                            <button class="btn btn-outline-light btn-sm" onclick="copyArticleLink()">
+                                <i class="fas fa-link me-2"></i>Copy Link
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endzone %}
+
+<!-- Article Content Section -->
+<section class="article-content py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5">
+            <!-- Main Article Content -->
+            <div class="col-lg-8">
+                <article class="article-body">
+                    <!-- Featured Image -->
+                    {% if article.Content.NewsArticle.FeaturedImage.Paths.first %}
+                    <div class="featured-image mb-5">
+                        <img src="{{ article.Content.NewsArticle.FeaturedImage.Paths.first | asset_url | resize_url: width: 800, height: 450 }}" 
+                             alt="{{ article.DisplayText }}" 
+                             class="img-fluid rounded shadow">
+                        {% if article.Content.NewsArticle.ImageCaption.Text %}
+                        <figcaption class="figure-caption text-center mt-2">
+                            {{ article.Content.NewsArticle.ImageCaption.Text }}
+                        </figcaption>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Article Summary -->
+                    {% if article.Content.NewsArticle.Summary.Text %}
+                    <div class="article-summary mb-4">
+                        <div class="alert alert-info border-start border-4 border-primary">
+                            <h6 class="alert-heading">
+                                <i class="fas fa-info-circle me-2"></i>Article Summary
+                            </h6>
+                            {{ article.Content.NewsArticle.Summary.Text }}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Article Content -->
+                    <div class="article-text">
+                        {{ article.Content.NewsArticle.Content.Text | default: "Article content will be displayed here." | newline_to_br }}
+                    </div>
+                    
+                    <!-- Additional Content Parts -->
+                    <div class="additional-content mt-4">
+                        {{ article.Content | shape_render }}
+                    </div>
+                    
+                    <!-- Article Tags -->
+                    {% if article.Content.NewsArticle.Tags.Text %}
+                    <div class="article-tags mt-5 pt-4 border-top">
+                        <h6 class="mb-3">
+                            <i class="fas fa-tags me-2"></i>Tags
+                        </h6>
+                        <div class="tags-list">
+                            {% assign tags = article.Content.NewsArticle.Tags.Text | split: ',' %}
+                            {% for tag in tags %}
+                                <a href="/news/tag/{{ tag | strip | slugify }}" class="badge bg-secondary text-decoration-none me-2 mb-2 px-3 py-2">
+                                    {{ tag | strip }}
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Author Bio -->
+                    <div class="author-bio mt-5 pt-4 border-top">
+                        <div class="row align-items-center">
+                            <div class="col-md-3 text-center text-md-start">
+                                {% if article.Content.NewsArticle.AuthorAvatar.Paths.first %}
+                                    <img src="{{ article.Content.NewsArticle.AuthorAvatar.Paths.first | asset_url | resize_url: width: 100, height: 100 }}" 
+                                         alt="{{ article.Author }}" 
+                                         class="author-avatar rounded-circle">
+                                {% else %}
+                                    <div class="author-avatar-placeholder rounded-circle">
+                                        <i class="fas fa-user fa-2x text-muted"></i>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-9">
+                                <h6 class="author-name mb-2">{{ article.Author | default: "HoangNgoc Team" }}</h6>
+                                <p class="author-description text-muted mb-3">
+                                    {{ article.Content.NewsArticle.AuthorBio.Text | default: "Professional writer and industry expert with years of experience in delivering insightful content." }}
+                                </p>
+                                <div class="author-social">
+                                    <a href="#" class="btn btn-outline-primary btn-sm me-2">
+                                        <i class="fab fa-twitter me-1"></i>Follow
+                                    </a>
+                                    <a href="#" class="btn btn-outline-secondary btn-sm">
+                                        <i class="fas fa-envelope me-1"></i>Contact
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Article Actions -->
+                    <div class="article-actions mt-5 pt-4 border-top">
+                        <div class="row align-items-center">
+                            <div class="col-md-6">
+                                <div class="article-rating">
+                                    <h6 class="mb-2">Was this article helpful?</h6>
+                                    <div class="rating-buttons">
+                                        <button class="btn btn-outline-success btn-sm me-2" onclick="rateArticle('{{ article.ContentItemId }}', 'helpful')">
+                                            <i class="fas fa-thumbs-up me-1"></i>Yes
+                                            <span class="badge bg-success ms-1" id="helpful-count">{{ article.Content.NewsArticle.HelpfulCount.Value | default: 0 }}</span>
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm" onclick="rateArticle('{{ article.ContentItemId }}', 'not-helpful')">
+                                            <i class="fas fa-thumbs-down me-1"></i>No
+                                            <span class="badge bg-danger ms-1" id="not-helpful-count">{{ article.Content.NewsArticle.NotHelpfulCount.Value | default: 0 }}</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-md-end">
+                                <div class="article-share">
+                                    <h6 class="mb-2">Share this article</h6>
+                                    <div class="share-buttons">
+                                        <button class="btn btn-primary btn-sm me-1" onclick="shareOnFacebook()">
+                                            <i class="fab fa-facebook-f"></i>
+                                        </button>
+                                        <button class="btn btn-info btn-sm me-1" onclick="shareOnTwitter()">
+                                            <i class="fab fa-twitter"></i>
+                                        </button>
+                                        <button class="btn btn-primary btn-sm me-1" onclick="shareOnLinkedIn()">
+                                            <i class="fab fa-linkedin-in"></i>
+                                        </button>
+                                        <button class="btn btn-success btn-sm me-1" onclick="shareOnWhatsApp()">
+                                            <i class="fab fa-whatsapp"></i>
+                                        </button>
+                                        <button class="btn btn-secondary btn-sm" onclick="copyArticleLink()">
+                                            <i class="fas fa-link"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                
+                <!-- Comments Section -->
+                <div class="comments-section mt-5 pt-4 border-top">
+                    <div class="comments-header mb-4">
+                        <h4 class="mb-3">
+                            <i class="fas fa-comments me-2"></i>Comments
+                            <span class="badge bg-primary ms-2">{{ Model.CommentsCount | default: 0 }}</span>
+                        </h4>
+                        
+                        <!-- Comment Form -->
+                        {% if Model.User.IsAuthenticated %}
+                        <div class="comment-form mb-4">
+                            <form id="comment-form" method="post" action="/api/comments">
+                                <input type="hidden" name="ContentItemId" value="{{ article.ContentItemId }}" />
+                                <input type="hidden" name="__RequestVerificationToken" value="{{ Model.AntiForgeryToken }}" />
+                                
+                                <div class="mb-3">
+                                    <textarea class="form-control" id="commentText" name="CommentText" rows="3" 
+                                              placeholder="Share your thoughts about this article..." required></textarea>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle me-1"></i>
+                                        Please be respectful and constructive in your comments.
+                                    </small>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane me-2"></i>Post Comment
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        {% else %}
+                        <div class="comment-login-prompt mb-4">
+                            <div class="alert alert-info">
+                                <i class="fas fa-sign-in-alt me-2"></i>
+                                <a href="/account/login?returnUrl={{ request.url | url_encode }}" class="alert-link">Login</a> 
+                                or <a href="/account/register?returnUrl={{ request.url | url_encode }}" class="alert-link">register</a> 
+                                to leave a comment.
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Comments List -->
+                    <div class="comments-list" id="comments-container">
+                        {% if Model.Comments and Model.Comments.size > 0 %}
+                            {% for comment in Model.Comments %}
+                            <div class="comment-item" data-comment-id="{{ comment.Id }}">
+                                <div class="comment-header d-flex align-items-center mb-2">
+                                    <div class="commenter-avatar me-3">
+                                        {% if comment.UserAvatar %}
+                                            <img src="{{ comment.UserAvatar | asset_url | resize_url: width: 40, height: 40 }}" 
+                                                 alt="{{ comment.UserName }}" class="rounded-circle">
+                                        {% else %}
+                                            <div class="avatar-placeholder rounded-circle">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <div class="comment-meta flex-grow-1">
+                                        <div class="commenter-name fw-bold">{{ comment.UserName }}</div>
+                                        <div class="comment-date text-muted">{{ comment.CreatedDate | date: "MMM dd, yyyy 'at' HH:mm" }}</div>
+                                    </div>
+                                    {% if Model.User.IsAuthenticated %}
+                                    <div class="comment-actions">
+                                        <button class="btn btn-link btn-sm text-muted" onclick="likeComment('{{ comment.Id }}')">
+                                            <i class="fas fa-heart me-1"></i>
+                                            <span class="like-count">{{ comment.LikesCount | default: 0 }}</span>
+                                        </button>
+                                        <button class="btn btn-link btn-sm text-muted" onclick="replyToComment('{{ comment.Id }}')">
+                                            <i class="fas fa-reply me-1"></i>Reply
+                                        </button>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="comment-content">
+                                    {{ comment.Content | newline_to_br }}
+                                </div>
+                                
+                                <!-- Comment Replies -->
+                                {% if comment.Replies and comment.Replies.size > 0 %}
+                                <div class="comment-replies mt-3 ms-4">
+                                    {% for reply in comment.Replies %}
+                                    <div class="reply-item">
+                                        <div class="reply-header d-flex align-items-center mb-2">
+                                            <div class="replier-avatar me-2">
+                                                {% if reply.UserAvatar %}
+                                                    <img src="{{ reply.UserAvatar | asset_url | resize_url: width: 30, height: 30 }}" 
+                                                         alt="{{ reply.UserName }}" class="rounded-circle">
+                                                {% else %}
+                                                    <div class="avatar-placeholder-small rounded-circle">
+                                                        <i class="fas fa-user"></i>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="reply-meta">
+                                                <span class="replier-name fw-bold">{{ reply.UserName }}</span>
+                                                <span class="reply-date text-muted ms-2">{{ reply.CreatedDate | date: "MMM dd, HH:mm" }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="reply-content">
+                                            {{ reply.Content | newline_to_br }}
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                
+                                <!-- Reply Form (Hidden by default) -->
+                                <div class="reply-form mt-3 ms-4 d-none" id="reply-form-{{ comment.Id }}">
+                                    <form class="reply-form-inner" method="post" action="/api/comments/reply">
+                                        <input type="hidden" name="ParentCommentId" value="{{ comment.Id }}" />
+                                        <input type="hidden" name="ContentItemId" value="{{ article.ContentItemId }}" />
+                                        <input type="hidden" name="__RequestVerificationToken" value="{{ Model.AntiForgeryToken }}" />
+                                        
+                                        <div class="mb-2">
+                                            <textarea class="form-control form-control-sm" name="ReplyText" rows="2" 
+                                                      placeholder="Write a reply..." required></textarea>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                <i class="fas fa-paper-plane me-1"></i>Reply
+                                            </button>
+                                            <button type="button" class="btn btn-secondary btn-sm" onclick="cancelReply('{{ comment.Id }}')">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                        <div class="no-comments text-center py-5">
+                            <i class="fas fa-comments fa-4x text-muted mb-3"></i>
+                            <h5>No Comments Yet</h5>
+                            <p class="text-muted">Be the first to share your thoughts about this article!</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Load More Comments -->
+                    {% if Model.HasMoreComments %}
+                    <div class="text-center mt-4">
+                        <button class="btn btn-outline-primary" id="load-more-comments" onclick="loadMoreComments()">
+                            <i class="fas fa-plus me-2"></i>Load More Comments
+                            <span class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
+                        </button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Table of Contents -->
+                {% if article.Content.NewsArticle.ShowTableOfContents.Value %}
+                <div class="card shadow-sm mb-4 sticky-top" style="top: 20px;">
+                    <div class="card-header bg-primary text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-list me-2"></i>Table of Contents
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-of-contents" id="toc-container">
+                            <div class="text-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Generating table of contents...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Related Articles -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-newspaper me-2"></i>Related Articles
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="related-articles" id="related-articles-container">
+                            <div class="text-center">
+                                <div class="spinner-border text-success" role="status">
+                                    <span class="visually-hidden">Loading related articles...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Newsletter Signup -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-warning text-dark">
+                        <h6 class="mb-0">
+                            <i class="fas fa-envelope me-2"></i>Stay Updated
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Get the latest news and insights delivered to your inbox.</p>
+                        <form id="newsletter-form" method="post" action="/api/newsletter/subscribe">
+                            <div class="mb-3">
+                                <input type="email" class="form-control" name="Email" placeholder="Your email address" required>
+                            </div>
+                            <button type="submit" class="btn btn-warning w-100">
+                                <i class="fas fa-paper-plane me-2"></i>Subscribe
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Popular Articles -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-fire me-2"></i>Popular Articles
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="popular-articles" id="popular-articles-container">
+                            <div class="text-center">
+                                <div class="spinner-border text-info" role="status">
+                                    <span class="visually-hidden">Loading popular articles...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Custom Styles -->
+<style>
+.article-header {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+}
+
+.article-meta .meta-item {
+    font-size: 0.9rem;
+}
+
+.featured-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.article-text {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #495057;
+}
+
+.article-text h2,
+.article-text h3,
+.article-text h4 {
+    color: #212529;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+
+.article-text p {
+    margin-bottom: 1.5rem;
+}
+
+.article-text blockquote {
+    border-left: 4px solid #007bff;
+    padding-left: 1rem;
+    margin: 2rem 0;
+    font-style: italic;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0 5px 5px 0;
+}
+
+.author-avatar,
+.author-avatar-placeholder {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comment-item {
+    padding: 1.5rem;
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.comment-item:hover {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.commenter-avatar .avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    background: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 0.8rem;
+}
+
+.replier-avatar .avatar-placeholder-small {
+    width: 30px;
+    height: 30px;
+    background: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 0.7rem;
+}
+
+.reply-item {
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.rating-buttons .btn {
+    transition: all 0.3s ease;
+}
+
+.rating-buttons .btn:hover {
+    transform: scale(1.05);
+}
+
+.share-buttons .btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.share-buttons .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.table-of-contents ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.table-of-contents li {
+    padding: 0.25rem 0;
+}
+
+.table-of-contents a {
+    text-decoration: none;
+    color: #6c757d;
+    transition: color 0.3s ease;
+}
+
+.table-of-contents a:hover,
+.table-of-contents a.active {
+    color: #007bff;
+}
+
+.no-comments {
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin: 2rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .article-meta {
+        flex-direction: column;
+        gap: 0.5rem !important;
+    }
+    
+    .social-share {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .social-share .btn {
+        width: 100%;
+    }
+    
+    .article-actions .row > div {
+        margin-bottom: 1rem;
+        text-align: center !important;
+    }
+    
+    .share-buttons {
+        justify-content: center;
+    }
+    
+    .author-bio .row {
+        text-align: center;
+    }
+    
+    .author-avatar {
+        margin: 0 auto 1rem auto;
+    }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.comment-item {
+    animation: fadeInUp 0.6s ease-out;
+}
+</style>
+
+<!-- JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    initializeArticle();
+    loadSidebarContent();
+    generateTableOfContents();
+    setupCommentForms();
+});
+
+function initializeArticle() {
+    // Track article view
+    trackArticleView('{{ article.ContentItemId }}');
+    
+    // Initialize scroll spy for table of contents
+    if (document.getElementById('toc-container')) {
+        initializeScrollSpy();
+    }
+    
+    // Auto-resize comment textareas
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach(textarea => {
+        textarea.addEventListener('input', autoResize);
+    });
+}
+
+function loadSidebarContent() {
+    loadRelatedArticles();
+    loadPopularArticles();
+}
+
+function loadRelatedArticles() {
+    const container = document.getElementById('related-articles-container');
+    const articleId = '{{ article.ContentItemId }}';
+    const category = '{{ article.Content.NewsArticle.Category.Text }}';
+    
+    setTimeout(() => {
+        container.innerHTML = `
+            <div class="related-article-item mb-3">
+                <h6 class="mb-1">
+                    <a href="#" class="text-decoration-none">How to Build a Successful Career in Tech</a>
+                </h6>
+                <small class="text-muted">Dec 15, 2023 • 3 min read</small>
+            </div>
+            <div class="related-article-item mb-3">
+                <h6 class="mb-1">
+                    <a href="#" class="text-decoration-none">The Future of Remote Work</a>
+                </h6>
+                <small class="text-muted">Dec 12, 2023 • 5 min read</small>
+            </div>
+            <div class="related-article-item">
+                <h6 class="mb-1">
+                    <a href="#" class="text-decoration-none">Industry Trends to Watch in 2024</a>
+                </h6>
+                <small class="text-muted">Dec 10, 2023 • 4 min read</small>
+            </div>
+            <div class="text-center mt-3">
+                <a href="/news?category=${encodeURIComponent(category)}" class="btn btn-outline-success btn-sm">
+                    <i class="fas fa-arrow-right me-1"></i>More in ${category || 'News'}
+                </a>
+            </div>
+        `;
+    }, 1000);
+}
+
+function loadPopularArticles() {
+    const container = document.getElementById('popular-articles-container');
+    
+    setTimeout(() => {
+        container.innerHTML = `
+            <div class="popular-article-item mb-3">
+                <div class="d-flex">
+                    <div class="article-rank me-3">
+                        <span class="badge bg-primary rounded-pill">1</span>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1">
+                            <a href="#" class="text-decoration-none">Top 10 Skills for 2024</a>
+                        </h6>
+                        <small class="text-muted">1.2k views</small>
+                    </div>
+                </div>
+            </div>
+            <div class="popular-article-item mb-3">
+                <div class="d-flex">
+                    <div class="article-rank me-3">
+                        <span class="badge bg-secondary rounded-pill">2</span>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1">
+                            <a href="#" class="text-decoration-none">Remote Work Best Practices</a>
+                        </h6>
+                        <small class="text-muted">980 views</small>
+                    </div>
+                </div>
+            </div>
+            <div class="popular-article-item">
+                <div class="d-flex">
+                    <div class="article-rank me-3">
+                        <span class="badge bg-secondary rounded-pill">3</span>
+                    </div>
+                    <div class="flex-grow-1">
+                        <h6 class="mb-1">
+                            <a href="#" class="text-decoration-none">Career Development Guide</a>
+                        </h6>
+                        <small class="text-muted">756 views</small>
+                    </div>
+                </div>
+            </div>
+        `;
+    }, 1200);
+}
+
+function generateTableOfContents() {
+    const tocContainer = document.getElementById('toc-container');
+    if (!tocContainer) return;
+    
+    const headings = document.querySelectorAll('.article-text h2, .article-text h3, .article-text h4');
+    
+    if (headings.length === 0) {
+        tocContainer.innerHTML = '<p class="text-muted">No headings found in this article.</p>';
+        return;
+    }
+    
+    let tocHTML = '<ul class="toc-list">';
+    headings.forEach((heading, index) => {
+        const id = `heading-${index}`;
+        heading.id = id;
+        
+        const level = parseInt(heading.tagName.substring(1));
+        const indent = level > 2 ? 'ms-3' : '';
+        
+        tocHTML += `
+            <li class="${indent}">
+                <a href="#${id}" class="toc-link" onclick="scrollToHeading('${id}')">
+                    ${heading.textContent}
+                </a>
+            </li>
+        `;
+    });
+    tocHTML += '</ul>';
+    
+    tocContainer.innerHTML = tocHTML;
+}
+
+function scrollToHeading(headingId) {
+    const heading = document.getElementById(headingId);
+    if (heading) {
+        heading.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        
+        // Update active link
+        document.querySelectorAll('.toc-link').forEach(link => link.classList.remove('active'));
+        document.querySelector(`a[href="#${headingId}"]`).classList.add('active');
+    }
+}
+
+function initializeScrollSpy() {
+    const headings = document.querySelectorAll('.article-text h2, .article-text h3, .article-text h4');
+    const tocLinks = document.querySelectorAll('.toc-link');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.id;
+                tocLinks.forEach(link => link.classList.remove('active'));
+                const activeLink = document.querySelector(`a[href="#${id}"]`);
+                if (activeLink) activeLink.classList.add('active');
+            }
+        });
+    }, { threshold: 0.5 });
+    
+    headings.forEach(heading => observer.observe(heading));
+}
+
+function setupCommentForms() {
+    // Main comment form
+    const commentForm = document.getElementById('comment-form');
+    if (commentForm) {
+        commentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitComment();
+        });
+    }
+    
+    // Reply forms
+    const replyForms = document.querySelectorAll('.reply-form-inner');
+    replyForms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            submitReply(this);
+        });
+    });
+    
+    // Newsletter form
+    const newsletterForm = document.getElementById('newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            subscribeNewsletter();
+        });
+    }
+}
+
+function submitComment() {
+    const form = document.getElementById('comment-form');
+    const formData = new FormData(form);
+    
+    fetch('/api/comments', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Comment posted successfully!', 'success');
+            form.reset();
+            // Reload comments or add new comment to DOM
+            location.reload();
+        } else {
+            showToast(data.message || 'Failed to post comment', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Comment submission error:', error);
+        showToast('Error posting comment. Please try again.', 'error');
+    });
+}
+
+function submitReply(form) {
+    const formData = new FormData(form);
+    
+    fetch('/api/comments/reply', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Reply posted successfully!', 'success');
+            form.reset();
+            // Hide reply form and reload comments
+            const parentId = formData.get('ParentCommentId');
+            cancelReply(parentId);
+            location.reload();
+        } else {
+            showToast(data.message || 'Failed to post reply', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Reply submission error:', error);
+        showToast('Error posting reply. Please try again.', 'error');
+    });
+}
+
+function replyToComment(commentId) {
+    const replyForm = document.getElementById(`reply-form-${commentId}`);
+    if (replyForm) {
+        replyForm.classList.remove('d-none');
+        replyForm.querySelector('textarea').focus();
+    }
+}
+
+function cancelReply(commentId) {
+    const replyForm = document.getElementById(`reply-form-${commentId}`);
+    if (replyForm) {
+        replyForm.classList.add('d-none');
+        replyForm.querySelector('form').reset();
+    }
+}
+
+function likeComment(commentId) {
+    fetch(`/api/comments/${commentId}/like`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': getAntiForgeryToken()
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const likeCount = document.querySelector(`[data-comment-id="${commentId}"] .like-count`);
+            if (likeCount) {
+                likeCount.textContent = data.likesCount;
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Like comment error:', error);
+    });
+}
+
+function rateArticle(articleId, rating) {
+    fetch(`/api/articles/${articleId}/rate`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': getAntiForgeryToken()
+        },
+        body: JSON.stringify({ rating: rating })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('helpful-count').textContent = data.helpfulCount;
+            document.getElementById('not-helpful-count').textContent = data.notHelpfulCount;
+            showToast('Thank you for your feedback!', 'success');
+        }
+    })
+    .catch(error => {
+        console.error('Rate article error:', error);
+        showToast('Error submitting rating. Please try again.', 'error');
+    });
+}
+
+function subscribeNewsletter() {
+    const form = document.getElementById('newsletter-form');
+    const formData = new FormData(form);
+    
+    fetch('/api/newsletter/subscribe', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Successfully subscribed to newsletter!', 'success');
+            form.reset();
+        } else {
+            showToast(data.message || 'Subscription failed', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Newsletter subscription error:', error);
+        showToast('Error subscribing. Please try again.', 'error');
+    });
+}
+
+function loadMoreComments() {
+    const loadMoreBtn = document.getElementById('load-more-comments');
+    const spinner = loadMoreBtn.querySelector('.spinner-border');
+    
+    loadMoreBtn.disabled = true;
+    spinner.classList.remove('d-none');
+    
+    // Simulate loading more comments
+    setTimeout(() => {
+        showToast('No more comments to load', 'info');
+        loadMoreBtn.style.display = 'none';
+    }, 1000);
+}
+
+// Social sharing functions
+function shareOnFacebook() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent('{{ article.DisplayText }}');
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${title}`, '_blank');
+}
+
+function shareOnTwitter() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent('{{ article.DisplayText }}');
+    window.open(`https://twitter.com/intent/tweet?url=${url}&text=${title}`, '_blank');
+}
+
+function shareOnLinkedIn() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent('{{ article.DisplayText }}');
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}`, '_blank');
+}
+
+function shareOnWhatsApp() {
+    const url = encodeURIComponent(window.location.href);
+    const title = encodeURIComponent('{{ article.DisplayText }}');
+    window.open(`https://wa.me/?text=${title} ${url}`, '_blank');
+}
+
+function copyArticleLink() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+        showToast('Article link copied to clipboard!', 'success');
+    });
+}
+
+function autoResize(event) {
+    const textarea = event.target;
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+}
+
+function trackArticleView(articleId) {
+    fetch(`/api/articles/${articleId}/view`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).catch(error => {
+        console.error('Error tracking article view:', error);
+    });
+}
+
+function getAntiForgeryToken() {
+    return document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast-notification toast-${type}`;
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+</script>
+
+<!-- Toast Styles -->
+<style>
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    z-index: 1050;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+}
+
+.toast-notification.show {
+    transform: translateX(0);
+}
+
+.toast-success { background-color: #28a745; }
+.toast-error { background-color: #dc3545; }
+.toast-info { background-color: #17a2b8; }
+.toast-warning { background-color: #ffc107; color: #212529; }
+</style>

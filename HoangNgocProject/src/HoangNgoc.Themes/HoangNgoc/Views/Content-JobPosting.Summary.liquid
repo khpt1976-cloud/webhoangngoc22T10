@@ -1,0 +1,363 @@
+{% comment %}
+JobPosting Summary Template - HoangNgoc Professional Theme
+OrchardCore Content Summary Display for Job Listing Pages
+{% endcomment %}
+
+<div class="job-preview card h-100 shadow-sm hover-lift" data-job-id="{{ Model.ContentItem.ContentItemId }}">
+    <div class="card-body d-flex flex-column">
+        <!-- Job Title & Company -->
+        <div class="job-header mb-3">
+            {% a display_for:Model.ContentItem, classes:"text-decoration-none" %}
+                <h4 class="job-title card-title mb-2 text-primary">{{ Model.ContentItem.DisplayText }}</h4>
+            {% enda %}
+            <h6 class="company-name card-subtitle text-muted mb-0">
+                <i class="fas fa-building me-2"></i>{{ Model.ContentItem.Content.JobPosting.Company.Text | default: "Company Name" }}
+            </h6>
+        </div>
+
+        <!-- Job Description Preview -->
+        <div class="job-description mb-3 flex-grow-1">
+            <p class="card-text text-muted">
+                {{ Model.ContentItem.Content.JobPosting.Description.Text | default: "Job description not available." | strip_html | truncate: 120 }}
+            </p>
+        </div>
+
+        <!-- Job Meta Information -->
+        <div class="job-meta mb-3">
+            <div class="row g-2">
+                <div class="col-12">
+                    <span class="badge bg-secondary me-2 mb-1">
+                        <i class="fas fa-map-marker-alt me-1"></i>{{ Model.ContentItem.Content.JobPosting.Location.Text | default: "Remote" }}
+                    </span>
+                    <span class="badge bg-success me-2 mb-1">
+                        <i class="fas fa-dollar-sign me-1"></i>{{ Model.ContentItem.Content.JobPosting.Salary.Text | default: "Competitive" }}
+                    </span>
+                    <span class="badge bg-info me-2 mb-1">
+                        <i class="fas fa-clock me-1"></i>{{ Model.ContentItem.Content.JobPosting.JobType.Text | default: "Full-time" }}
+                    </span>
+                </div>
+                {% if Model.ContentItem.Content.JobPosting.ExperienceLevel.Text %}
+                <div class="col-12">
+                    <span class="badge bg-warning text-dark me-2 mb-1">
+                        <i class="fas fa-star me-1"></i>{{ Model.ContentItem.Content.JobPosting.ExperienceLevel.Text }}
+                    </span>
+                    {% if Model.ContentItem.Content.JobPosting.Category.Text %}
+                    <span class="badge bg-primary me-2 mb-1">
+                        <i class="fas fa-tag me-1"></i>{{ Model.ContentItem.Content.JobPosting.Category.Text }}
+                    </span>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Job Footer -->
+        <div class="job-footer mt-auto">
+            <div class="d-flex justify-content-between align-items-center">
+                <!-- Posted Date -->
+                <small class="text-muted">
+                    <i class="fas fa-calendar-alt me-1"></i>
+                    {% assign format = "MMM dd" %}
+                    Posted {{ Model.ContentItem.CreatedUtc | date: format }}
+                </small>
+                
+                <!-- Deadline Badge -->
+                {% if Model.ContentItem.Content.JobPosting.ApplicationDeadline.Value %}
+                <small class="badge bg-danger">
+                    <i class="fas fa-hourglass-half me-1"></i>
+                    {% assign deadline = Model.ContentItem.Content.JobPosting.ApplicationDeadline.Value | date: "MMM dd" %}
+                    Deadline: {{ deadline }}
+                </small>
+                {% endif %}
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="job-actions mt-3 d-flex gap-2">
+                {% a display_for:Model.ContentItem, classes:"btn btn-primary flex-fill" %}
+                    <i class="fas fa-eye me-2"></i>View Details
+                {% enda %}
+                <button class="btn btn-outline-success" onclick="quickApply('{{ Model.ContentItem.ContentItemId }}')" title="Quick Apply">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+                <button class="btn btn-outline-secondary" onclick="saveJob('{{ Model.ContentItem.ContentItemId }}')" title="Save Job">
+                    <i class="fas fa-bookmark"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hover Overlay for Quick Actions -->
+    <div class="job-overlay">
+        <div class="overlay-content">
+            <div class="quick-actions">
+                <button class="btn btn-light btn-sm me-2" onclick="quickApply('{{ Model.ContentItem.ContentItemId }}')">
+                    <i class="fas fa-paper-plane me-1"></i>Quick Apply
+                </button>
+                <button class="btn btn-light btn-sm" onclick="shareJob('{{ Model.ContentItem.ContentItemId }}')">
+                    <i class="fas fa-share-alt me-1"></i>Share
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Custom Styles for Job Summary Card -->
+<style>
+.job-preview {
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+    position: relative;
+    overflow: hidden;
+}
+
+.job-preview:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+    border-color: #007bff;
+}
+
+.job-preview .job-title {
+    transition: color 0.3s ease;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.job-preview:hover .job-title {
+    color: #0056b3 !important;
+}
+
+.job-preview .company-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.job-preview .job-description {
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.job-preview .badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.4em 0.6em;
+}
+
+.job-preview .job-actions .btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
+.job-preview .job-actions .btn-outline-success:hover,
+.job-preview .job-actions .btn-outline-secondary:hover {
+    transform: scale(1.05);
+}
+
+/* Hover Overlay */
+.job-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 123, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+.job-preview:hover .job-overlay {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.overlay-content {
+    text-align: center;
+    color: white;
+}
+
+.quick-actions .btn {
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .job-preview .job-actions {
+        flex-direction: column;
+    }
+    
+    .job-preview .job-actions .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .job-preview .job-actions .btn:last-child {
+        margin-bottom: 0;
+    }
+    
+    .job-meta .badge {
+        font-size: 0.7rem;
+        margin-bottom: 0.25rem;
+    }
+}
+
+/* Animation for new job cards */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.job-preview {
+    animation: slideInUp 0.6s ease-out;
+}
+
+/* Stagger animation for multiple cards */
+.job-preview:nth-child(1) { animation-delay: 0.1s; }
+.job-preview:nth-child(2) { animation-delay: 0.2s; }
+.job-preview:nth-child(3) { animation-delay: 0.3s; }
+.job-preview:nth-child(4) { animation-delay: 0.4s; }
+.job-preview:nth-child(5) { animation-delay: 0.5s; }
+.job-preview:nth-child(6) { animation-delay: 0.6s; }
+</style>
+
+<!-- JavaScript for Job Card Interactions -->
+<script>
+function quickApply(jobId) {
+    // Check if user is logged in
+    if (!isUserLoggedIn()) {
+        showLoginModal();
+        return;
+    }
+    
+    // Redirect to quick apply form
+    window.location.href = `/jobs/apply/${jobId}?quick=true`;
+}
+
+function saveJob(jobId) {
+    // Check if user is logged in
+    if (!isUserLoggedIn()) {
+        showLoginModal();
+        return;
+    }
+    
+    // Toggle save job status
+    fetch(`/api/jobs/${jobId}/save`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': getAntiForgeryToken()
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            const button = event.target.closest('button');
+            const icon = button.querySelector('i');
+            
+            if (data.saved) {
+                icon.className = 'fas fa-bookmark';
+                button.classList.remove('btn-outline-secondary');
+                button.classList.add('btn-secondary');
+                showToast('Job saved successfully!', 'success');
+            } else {
+                icon.className = 'far fa-bookmark';
+                button.classList.remove('btn-secondary');
+                button.classList.add('btn-outline-secondary');
+                showToast('Job removed from saved list', 'info');
+            }
+        }
+    })
+    .catch(error => {
+        console.error('Error saving job:', error);
+        showToast('Error saving job. Please try again.', 'error');
+    });
+}
+
+function shareJob(jobId) {
+    const jobCard = document.querySelector(`[data-job-id="${jobId}"]`);
+    const jobTitle = jobCard.querySelector('.job-title').textContent;
+    const jobUrl = `${window.location.origin}/jobs/${jobId}`;
+    
+    if (navigator.share) {
+        navigator.share({
+            title: jobTitle,
+            text: `Check out this job opportunity: ${jobTitle}`,
+            url: jobUrl
+        });
+    } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(jobUrl).then(() => {
+            showToast('Job link copied to clipboard!', 'success');
+        });
+    }
+}
+
+function isUserLoggedIn() {
+    // Check if user is authenticated
+    return document.body.classList.contains('authenticated') || 
+           document.querySelector('.user-menu') !== null;
+}
+
+function showLoginModal() {
+    // Show login modal or redirect to login page
+    const loginUrl = '/login?returnUrl=' + encodeURIComponent(window.location.href);
+    window.location.href = loginUrl;
+}
+
+function getAntiForgeryToken() {
+    return document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast-notification toast-${type}`;
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.classList.add('show');
+    }, 100);
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+</script>
+
+<!-- Toast Notification Styles -->
+<style>
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    z-index: 1050;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+}
+
+.toast-notification.show {
+    transform: translateX(0);
+}
+
+.toast-success { background-color: #28a745; }
+.toast-error { background-color: #dc3545; }
+.toast-info { background-color: #17a2b8; }
+.toast-warning { background-color: #ffc107; color: #212529; }
+</style>

@@ -1,0 +1,1257 @@
+{% comment %}
+Account Profile Page - HoangNgoc Professional Theme
+User Profile Management with Tabs, Settings, and Application History
+{% endcomment %}
+
+{% assign user = Model.User %}
+
+{% zone "Header" %}
+    <!-- Profile Header -->
+    <header class="profile-header bg-gradient-info text-white">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 align-items-center py-4">
+                <div class="col-md-3 text-center text-md-start">
+                    <!-- Profile Avatar -->
+                    <div class="profile-avatar-container">
+                        {% if user.Avatar %}
+                            <img src="{{ user.Avatar | asset_url | resize_url: width: 120, height: 120 }}" 
+                                 alt="{{ user.FullName }}" class="profile-avatar">
+                        {% else %}
+                            <div class="profile-avatar-placeholder">
+                                <i class="fas fa-user fa-3x"></i>
+                            </div>
+                        {% endif %}
+                        <button class="btn btn-sm btn-light avatar-edit-btn" onclick="editAvatar()">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h1 class="h3 mb-2">{{ user.FullName | default: "User Name" }}</h1>
+                    <p class="mb-2">
+                        <i class="fas fa-envelope me-2"></i>{{ user.Email }}
+                    </p>
+                    <p class="mb-2">
+                        <i class="fas fa-user-tag me-2"></i>{{ user.UserType | default: "Job Seeker" }}
+                    </p>
+                    {% if user.Location %}
+                    <p class="mb-0">
+                        <i class="fas fa-map-marker-alt me-2"></i>{{ user.Location }}
+                    </p>
+                    {% endif %}
+                </div>
+                <div class="col-md-3 text-center text-md-end">
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">{{ user.ApplicationsCount | default: 0 }}</div>
+                            <div class="stat-label">Applications</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">{{ user.SavedJobsCount | default: 0 }}</div>
+                            <div class="stat-label">Saved Jobs</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">{{ user.ProfileViews | default: 0 }}</div>
+                            <div class="stat-label">Profile Views</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endzone %}
+
+<!-- Profile Content Section -->
+<section class="profile-content py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5">
+            <!-- Profile Navigation -->
+            <div class="col-lg-3 mb-4">
+                <div class="profile-nav sticky-top" style="top: 20px;">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-user-cog me-2"></i>Account Menu
+                            </h6>
+                        </div>
+                        <div class="list-group list-group-flush">
+                            <a href="#profile-info" class="list-group-item list-group-item-action active" data-tab="profile-info">
+                                <i class="fas fa-user me-2"></i>Profile Information
+                            </a>
+                            <a href="#job-applications" class="list-group-item list-group-item-action" data-tab="job-applications">
+                                <i class="fas fa-briefcase me-2"></i>Job Applications
+                                <span class="badge bg-primary ms-auto">{{ user.ApplicationsCount | default: 0 }}</span>
+                            </a>
+                            <a href="#saved-jobs" class="list-group-item list-group-item-action" data-tab="saved-jobs">
+                                <i class="fas fa-bookmark me-2"></i>Saved Jobs
+                                <span class="badge bg-success ms-auto">{{ user.SavedJobsCount | default: 0 }}</span>
+                            </a>
+                            <a href="#job-alerts" class="list-group-item list-group-item-action" data-tab="job-alerts">
+                                <i class="fas fa-bell me-2"></i>Job Alerts
+                                <span class="badge bg-warning ms-auto">{{ user.JobAlertsCount | default: 0 }}</span>
+                            </a>
+                            <a href="#courses" class="list-group-item list-group-item-action" data-tab="courses">
+                                <i class="fas fa-graduation-cap me-2"></i>My Courses
+                                <span class="badge bg-info ms-auto">{{ user.CoursesCount | default: 0 }}</span>
+                            </a>
+                            <a href="#account-settings" class="list-group-item list-group-item-action" data-tab="account-settings">
+                                <i class="fas fa-cog me-2"></i>Account Settings
+                            </a>
+                            <a href="#privacy-security" class="list-group-item list-group-item-action" data-tab="privacy-security">
+                                <i class="fas fa-shield-alt me-2"></i>Privacy & Security
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="card mt-3">
+                        <div class="card-header bg-success text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-rocket me-2"></i>Quick Actions
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <a href="/jobs" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-search me-2"></i>Browse Jobs
+                                </a>
+                                <a href="/courses" class="btn btn-outline-success btn-sm">
+                                    <i class="fas fa-graduation-cap me-2"></i>View Courses
+                                </a>
+                                <button class="btn btn-outline-info btn-sm" onclick="downloadCV()">
+                                    <i class="fas fa-download me-2"></i>Download CV
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Profile Content -->
+            <div class="col-lg-9">
+                <!-- Profile Information Tab -->
+                <div class="tab-content active" id="profile-info">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="fas fa-user me-2"></i>Profile Information
+                            </h5>
+                            <button class="btn btn-primary btn-sm" onclick="editProfile()">
+                                <i class="fas fa-edit me-2"></i>Edit Profile
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <form id="profile-form" method="post" action="/account/update-profile">
+                                <input type="hidden" name="__RequestVerificationToken" value="{{ Model.AntiForgeryToken }}" />
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" name="FirstName" 
+                                               value="{{ user.FirstName }}" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" name="LastName" 
+                                               value="{{ user.LastName }}" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label">Email Address</label>
+                                        <input type="email" class="form-control" id="email" name="Email" 
+                                               value="{{ user.Email }}" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label">Phone Number</label>
+                                        <input type="tel" class="form-control" id="phone" name="Phone" 
+                                               value="{{ user.Phone }}" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="location" class="form-label">Location</label>
+                                        <input type="text" class="form-control" id="location" name="Location" 
+                                               value="{{ user.Location }}" readonly>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="website" class="form-label">Website/Portfolio</label>
+                                        <input type="url" class="form-control" id="website" name="Website" 
+                                               value="{{ user.Website }}" readonly>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="bio" class="form-label">Professional Summary</label>
+                                        <textarea class="form-control" id="bio" name="Bio" rows="4" readonly>{{ user.Bio }}</textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="skills" class="form-label">Skills</label>
+                                        <textarea class="form-control" id="skills" name="Skills" rows="3" readonly>{{ user.Skills }}</textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="profile-actions mt-4 d-none">
+                                    <button type="submit" class="btn btn-success me-2">
+                                        <i class="fas fa-save me-2"></i>Save Changes
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" onclick="cancelEdit()">
+                                        <i class="fas fa-times me-2"></i>Cancel
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Job Applications Tab -->
+                <div class="tab-content" id="job-applications">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="fas fa-briefcase me-2"></i>Job Applications
+                            </h5>
+                            <div class="application-filters">
+                                <select class="form-select form-select-sm" onchange="filterApplications(this.value)">
+                                    <option value="all">All Applications</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="reviewed">Reviewed</option>
+                                    <option value="interview">Interview</option>
+                                    <option value="accepted">Accepted</option>
+                                    <option value="rejected">Rejected</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="applications-list" id="applications-container">
+                                {% if Model.Applications and Model.Applications.size > 0 %}
+                                    {% for application in Model.Applications %}
+                                    <div class="application-item" data-status="{{ application.Status }}">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6">
+                                                <h6 class="mb-1">
+                                                    <a href="/jobs/{{ application.JobId }}" class="text-decoration-none">
+                                                        {{ application.JobTitle }}
+                                                    </a>
+                                                </h6>
+                                                <p class="text-muted mb-1">{{ application.CompanyName }}</p>
+                                                <small class="text-muted">
+                                                    Applied on {{ application.AppliedDate | date: "MMM dd, yyyy" }}
+                                                </small>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="badge bg-{{ application.StatusColor }} application-status">
+                                                    {{ application.Status }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3 text-end">
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-outline-primary" onclick="viewApplication('{{ application.Id }}')">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-secondary" onclick="downloadApplication('{{ application.Id }}')">
+                                                        <i class="fas fa-download"></i>
+                                                    </button>
+                                                    {% if application.Status == "pending" %}
+                                                    <button class="btn btn-outline-danger" onclick="withdrawApplication('{{ application.Id }}')">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="empty-state text-center py-5">
+                                        <i class="fas fa-briefcase fa-4x text-muted mb-3"></i>
+                                        <h5>No Applications Yet</h5>
+                                        <p class="text-muted mb-4">You haven't applied to any jobs yet. Start exploring opportunities!</p>
+                                        <a href="/jobs" class="btn btn-primary">
+                                            <i class="fas fa-search me-2"></i>Browse Jobs
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Saved Jobs Tab -->
+                <div class="tab-content" id="saved-jobs">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-bookmark me-2"></i>Saved Jobs
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="saved-jobs-list" id="saved-jobs-container">
+                                {% if Model.SavedJobs and Model.SavedJobs.size > 0 %}
+                                    <div class="row g-3">
+                                        {% for job in Model.SavedJobs %}
+                                        <div class="col-md-6">
+                                            <div class="saved-job-card">
+                                                <div class="card h-100">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">
+                                                            <a href="/jobs/{{ job.Id }}" class="text-decoration-none">
+                                                                {{ job.Title }}
+                                                            </a>
+                                                        </h6>
+                                                        <p class="card-text text-muted">{{ job.Company }}</p>
+                                                        <div class="job-meta mb-2">
+                                                            <small class="text-muted">
+                                                                <i class="fas fa-map-marker-alt me-1"></i>{{ job.Location }}
+                                                                <span class="mx-2">|</span>
+                                                                <i class="fas fa-dollar-sign me-1"></i>{{ job.Salary }}
+                                                            </small>
+                                                        </div>
+                                                        <div class="card-actions">
+                                                            <a href="/jobs/apply/{{ job.Id }}" class="btn btn-primary btn-sm">
+                                                                <i class="fas fa-paper-plane me-1"></i>Apply
+                                                            </a>
+                                                            <button class="btn btn-outline-danger btn-sm" onclick="unsaveJob('{{ job.Id }}')">
+                                                                <i class="fas fa-trash me-1"></i>Remove
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="empty-state text-center py-5">
+                                        <i class="fas fa-bookmark fa-4x text-muted mb-3"></i>
+                                        <h5>No Saved Jobs</h5>
+                                        <p class="text-muted mb-4">Save interesting jobs to apply later!</p>
+                                        <a href="/jobs" class="btn btn-success">
+                                            <i class="fas fa-search me-2"></i>Find Jobs to Save
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Job Alerts Tab -->
+                <div class="tab-content" id="job-alerts">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">
+                                <i class="fas fa-bell me-2"></i>Job Alerts
+                            </h5>
+                            <button class="btn btn-primary btn-sm" onclick="createJobAlert()">
+                                <i class="fas fa-plus me-2"></i>Create Alert
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="job-alerts-list">
+                                {% if Model.JobAlerts and Model.JobAlerts.size > 0 %}
+                                    {% for alert in Model.JobAlerts %}
+                                    <div class="alert-item">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6">
+                                                <h6 class="mb-1">{{ alert.Name }}</h6>
+                                                <p class="text-muted mb-1">{{ alert.Keywords }}</p>
+                                                <small class="text-muted">
+                                                    Created {{ alert.CreatedDate | date: "MMM dd, yyyy" }}
+                                                </small>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <span class="badge bg-{{ alert.IsActive | default: true | ? 'success' : 'secondary' }}">
+                                                    {{ alert.IsActive | default: true | ? 'Active' : 'Inactive' }}
+                                                </span>
+                                            </div>
+                                            <div class="col-md-3 text-end">
+                                                <div class="btn-group btn-group-sm">
+                                                    <button class="btn btn-outline-primary" onclick="editJobAlert('{{ alert.Id }}')">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-outline-danger" onclick="deleteJobAlert('{{ alert.Id }}')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <div class="empty-state text-center py-5">
+                                        <i class="fas fa-bell fa-4x text-muted mb-3"></i>
+                                        <h5>No Job Alerts</h5>
+                                        <p class="text-muted mb-4">Create job alerts to get notified about new opportunities!</p>
+                                        <button class="btn btn-warning" onclick="createJobAlert()">
+                                            <i class="fas fa-plus me-2"></i>Create Your First Alert
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- My Courses Tab -->
+                <div class="tab-content" id="courses">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-graduation-cap me-2"></i>My Courses
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="courses-list">
+                                {% if Model.Courses and Model.Courses.size > 0 %}
+                                    <div class="row g-3">
+                                        {% for course in Model.Courses %}
+                                        <div class="col-md-6">
+                                            <div class="course-card">
+                                                <div class="card h-100">
+                                                    <div class="card-body">
+                                                        <h6 class="card-title">{{ course.Title }}</h6>
+                                                        <p class="card-text text-muted">{{ course.Description | truncate: 100 }}</p>
+                                                        <div class="progress mb-2">
+                                                            <div class="progress-bar" style="width: {{ course.Progress }}%"></div>
+                                                        </div>
+                                                        <small class="text-muted">{{ course.Progress }}% Complete</small>
+                                                        <div class="course-actions mt-3">
+                                                            <a href="/courses/{{ course.Id }}" class="btn btn-primary btn-sm">
+                                                                <i class="fas fa-play me-1"></i>Continue
+                                                            </a>
+                                                            {% if course.Progress == 100 %}
+                                                            <button class="btn btn-success btn-sm" onclick="downloadCertificate('{{ course.Id }}')">
+                                                                <i class="fas fa-certificate me-1"></i>Certificate
+                                                            </button>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="empty-state text-center py-5">
+                                        <i class="fas fa-graduation-cap fa-4x text-muted mb-3"></i>
+                                        <h5>No Enrolled Courses</h5>
+                                        <p class="text-muted mb-4">Start learning new skills with our professional courses!</p>
+                                        <a href="/courses" class="btn btn-info">
+                                            <i class="fas fa-search me-2"></i>Browse Courses
+                                        </a>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Account Settings Tab -->
+                <div class="tab-content" id="account-settings">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-cog me-2"></i>Account Settings
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="settings-form" method="post" action="/account/update-settings">
+                                <input type="hidden" name="__RequestVerificationToken" value="{{ Model.AntiForgeryToken }}" />
+                                
+                                <div class="settings-section mb-4">
+                                    <h6 class="text-primary mb-3">Email Notifications</h6>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="emailJobAlerts" name="EmailJobAlerts" 
+                                               {% if user.Settings.EmailJobAlerts %}checked{% endif %}>
+                                        <label class="form-check-label" for="emailJobAlerts">
+                                            Job alerts and new opportunities
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="emailApplicationUpdates" name="EmailApplicationUpdates" 
+                                               {% if user.Settings.EmailApplicationUpdates %}checked{% endif %}>
+                                        <label class="form-check-label" for="emailApplicationUpdates">
+                                            Application status updates
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="emailMarketing" name="EmailMarketing" 
+                                               {% if user.Settings.EmailMarketing %}checked{% endif %}>
+                                        <label class="form-check-label" for="emailMarketing">
+                                            Marketing and promotional emails
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="settings-section mb-4">
+                                    <h6 class="text-primary mb-3">Privacy Settings</h6>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="profilePublic" name="ProfilePublic" 
+                                               {% if user.Settings.ProfilePublic %}checked{% endif %}>
+                                        <label class="form-check-label" for="profilePublic">
+                                            Make my profile visible to employers
+                                        </label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="showOnlineStatus" name="ShowOnlineStatus" 
+                                               {% if user.Settings.ShowOnlineStatus %}checked{% endif %}>
+                                        <label class="form-check-label" for="showOnlineStatus">
+                                            Show when I'm online
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="settings-section mb-4">
+                                    <h6 class="text-primary mb-3">Language & Region</h6>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="language" class="form-label">Language</label>
+                                            <select class="form-select" id="language" name="Language">
+                                                <option value="en" {% if user.Settings.Language == "en" %}selected{% endif %}>English</option>
+                                                <option value="vi" {% if user.Settings.Language == "vi" %}selected{% endif %}>Tiếng Việt</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="timezone" class="form-label">Timezone</label>
+                                            <select class="form-select" id="timezone" name="Timezone">
+                                                <option value="Asia/Ho_Chi_Minh" {% if user.Settings.Timezone == "Asia/Ho_Chi_Minh" %}selected{% endif %}>Vietnam (GMT+7)</option>
+                                                <option value="Asia/Singapore" {% if user.Settings.Timezone == "Asia/Singapore" %}selected{% endif %}>Singapore (GMT+8)</option>
+                                                <option value="UTC" {% if user.Settings.Timezone == "UTC" %}selected{% endif %}>UTC (GMT+0)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save me-2"></i>Save Settings
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Privacy & Security Tab -->
+                <div class="tab-content" id="privacy-security">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">
+                                <i class="fas fa-shield-alt me-2"></i>Privacy & Security
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="security-section mb-4">
+                                <h6 class="text-primary mb-3">Change Password</h6>
+                                <form id="password-form" method="post" action="/account/change-password">
+                                    <input type="hidden" name="__RequestVerificationToken" value="{{ Model.AntiForgeryToken }}" />
+                                    
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label for="currentPassword" class="form-label">Current Password</label>
+                                            <input type="password" class="form-control" id="currentPassword" name="CurrentPassword" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="newPassword" class="form-label">New Password</label>
+                                            <input type="password" class="form-control" id="newPassword" name="NewPassword" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="confirmNewPassword" class="form-label">Confirm New Password</label>
+                                            <input type="password" class="form-control" id="confirmNewPassword" name="ConfirmNewPassword" required>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-warning mt-3">
+                                        <i class="fas fa-key me-2"></i>Change Password
+                                    </button>
+                                </form>
+                            </div>
+                            
+                            <div class="security-section mb-4">
+                                <h6 class="text-primary mb-3">Two-Factor Authentication</h6>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="mb-1">Add an extra layer of security to your account</p>
+                                        <small class="text-muted">Status: {% if user.TwoFactorEnabled %}Enabled{% else %}Disabled{% endif %}</small>
+                                    </div>
+                                    <button class="btn btn-{% if user.TwoFactorEnabled %}danger{% else %}success{% endif %}" onclick="toggle2FA()">
+                                        {% if user.TwoFactorEnabled %}Disable{% else %}Enable{% endif %} 2FA
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="security-section mb-4">
+                                <h6 class="text-primary mb-3">Login Sessions</h6>
+                                <div class="sessions-list">
+                                    <div class="session-item d-flex justify-content-between align-items-center mb-2">
+                                        <div>
+                                            <strong>Current Session</strong>
+                                            <br>
+                                            <small class="text-muted">Chrome on Windows • {{ "now" | date: "MMM dd, yyyy HH:mm" }}</small>
+                                        </div>
+                                        <span class="badge bg-success">Active</span>
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline-danger btn-sm" onclick="logoutAllSessions()">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout All Other Sessions
+                                </button>
+                            </div>
+                            
+                            <div class="security-section">
+                                <h6 class="text-danger mb-3">Danger Zone</h6>
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    These actions are irreversible. Please be careful.
+                                </div>
+                                <button class="btn btn-outline-danger" onclick="deleteAccount()">
+                                    <i class="fas fa-trash me-2"></i>Delete Account
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Custom Styles -->
+<style>
+.profile-header {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+}
+
+.profile-avatar-container {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-avatar,
+.profile-avatar-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 4px solid rgba(255,255,255,0.3);
+    object-fit: cover;
+}
+
+.profile-avatar-placeholder {
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.avatar-edit-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-stats {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.8);
+}
+
+.profile-nav .list-group-item {
+    border: none;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.profile-nav .list-group-item:hover,
+.profile-nav .list-group-item.active {
+    background: #007bff;
+    color: white;
+}
+
+.profile-nav .list-group-item.active .badge {
+    background: rgba(255,255,255,0.2) !important;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.application-item,
+.alert-item {
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.application-item:hover,
+.alert-item:hover {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
+.saved-job-card .card {
+    transition: all 0.3s ease;
+}
+
+.saved-job-card .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.course-card .card {
+    transition: all 0.3s ease;
+}
+
+.course-card .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.empty-state {
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin: 2rem 0;
+}
+
+.settings-section {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 1.5rem;
+}
+
+.settings-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.security-section {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.security-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.session-item {
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .stat-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(255,255,255,0.1);
+        padding: 0.5rem;
+        border-radius: 5px;
+    }
+    
+    .profile-nav {
+        position: static !important;
+    }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
+<!-- JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    initializeProfileTabs();
+    setupFormHandlers();
+});
+
+function initializeProfileTabs() {
+    const tabLinks = document.querySelectorAll('[data-tab]');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetTab = this.getAttribute('data-tab');
+            
+            // Remove active class from all tabs and contents
+            tabLinks.forEach(l => l.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            // Add active class to clicked tab and corresponding content
+            this.classList.add('active');
+            document.getElementById(targetTab).classList.add('active');
+            
+            // Update URL hash
+            window.location.hash = targetTab;
+        });
+    });
+    
+    // Handle initial hash
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+        const targetLink = document.querySelector(`[data-tab="${hash}"]`);
+        if (targetLink) {
+            targetLink.click();
+        }
+    }
+}
+
+function setupFormHandlers() {
+    // Profile form
+    const profileForm = document.getElementById('profile-form');
+    if (profileForm) {
+        profileForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            updateProfile();
+        });
+    }
+    
+    // Settings form
+    const settingsForm = document.getElementById('settings-form');
+    if (settingsForm) {
+        settingsForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            updateSettings();
+        });
+    }
+    
+    // Password form
+    const passwordForm = document.getElementById('password-form');
+    if (passwordForm) {
+        passwordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            changePassword();
+        });
+    }
+}
+
+function editProfile() {
+    const form = document.getElementById('profile-form');
+    const inputs = form.querySelectorAll('input, textarea');
+    const actions = form.querySelector('.profile-actions');
+    const editBtn = document.querySelector('[onclick="editProfile()"]');
+    
+    inputs.forEach(input => {
+        if (input.name !== 'Email') { // Email should remain readonly
+            input.removeAttribute('readonly');
+        }
+    });
+    
+    actions.classList.remove('d-none');
+    editBtn.style.display = 'none';
+}
+
+function cancelEdit() {
+    const form = document.getElementById('profile-form');
+    const inputs = form.querySelectorAll('input, textarea');
+    const actions = form.querySelector('.profile-actions');
+    const editBtn = document.querySelector('[onclick="editProfile()"]');
+    
+    inputs.forEach(input => {
+        input.setAttribute('readonly', true);
+    });
+    
+    actions.classList.add('d-none');
+    editBtn.style.display = 'inline-block';
+    
+    // Reset form values
+    form.reset();
+}
+
+function updateProfile() {
+    const form = document.getElementById('profile-form');
+    const formData = new FormData(form);
+    
+    fetch('/account/update-profile', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Profile updated successfully!', 'success');
+            cancelEdit();
+        } else {
+            showToast(data.message || 'Failed to update profile', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Profile update error:', error);
+        showToast('Error updating profile. Please try again.', 'error');
+    });
+}
+
+function updateSettings() {
+    const form = document.getElementById('settings-form');
+    const formData = new FormData(form);
+    
+    fetch('/account/update-settings', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Settings updated successfully!', 'success');
+        } else {
+            showToast(data.message || 'Failed to update settings', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Settings update error:', error);
+        showToast('Error updating settings. Please try again.', 'error');
+    });
+}
+
+function changePassword() {
+    const form = document.getElementById('password-form');
+    const formData = new FormData(form);
+    
+    // Validate passwords match
+    const newPassword = formData.get('NewPassword');
+    const confirmPassword = formData.get('ConfirmNewPassword');
+    
+    if (newPassword !== confirmPassword) {
+        showToast('New passwords do not match', 'error');
+        return;
+    }
+    
+    fetch('/account/change-password', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Password changed successfully!', 'success');
+            form.reset();
+        } else {
+            showToast(data.message || 'Failed to change password', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Password change error:', error);
+        showToast('Error changing password. Please try again.', 'error');
+    });
+}
+
+function filterApplications(status) {
+    const applications = document.querySelectorAll('.application-item');
+    
+    applications.forEach(app => {
+        if (status === 'all' || app.getAttribute('data-status') === status) {
+            app.style.display = 'block';
+        } else {
+            app.style.display = 'none';
+        }
+    });
+}
+
+function viewApplication(applicationId) {
+    window.open(`/account/applications/${applicationId}`, '_blank');
+}
+
+function downloadApplication(applicationId) {
+    window.location.href = `/account/applications/${applicationId}/download`;
+}
+
+function withdrawApplication(applicationId) {
+    if (confirm('Are you sure you want to withdraw this application?')) {
+        fetch(`/account/applications/${applicationId}/withdraw`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': getAntiForgeryToken()
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('Application withdrawn successfully', 'success');
+                location.reload();
+            } else {
+                showToast(data.message || 'Failed to withdraw application', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Withdraw application error:', error);
+            showToast('Error withdrawing application. Please try again.', 'error');
+        });
+    }
+}
+
+function unsaveJob(jobId) {
+    fetch(`/api/jobs/${jobId}/save`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': getAntiForgeryToken()
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Job removed from saved list', 'success');
+            location.reload();
+        } else {
+            showToast(data.message || 'Failed to remove job', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Unsave job error:', error);
+        showToast('Error removing job. Please try again.', 'error');
+    });
+}
+
+function createJobAlert() {
+    window.location.href = '/account/job-alerts/create';
+}
+
+function editJobAlert(alertId) {
+    window.location.href = `/account/job-alerts/${alertId}/edit`;
+}
+
+function deleteJobAlert(alertId) {
+    if (confirm('Are you sure you want to delete this job alert?')) {
+        fetch(`/account/job-alerts/${alertId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': getAntiForgeryToken()
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('Job alert deleted successfully', 'success');
+                location.reload();
+            } else {
+                showToast(data.message || 'Failed to delete job alert', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Delete job alert error:', error);
+            showToast('Error deleting job alert. Please try again.', 'error');
+        });
+    }
+}
+
+function downloadCertificate(courseId) {
+    window.location.href = `/courses/${courseId}/certificate`;
+}
+
+function downloadCV() {
+    window.location.href = '/account/download-cv';
+}
+
+function editAvatar() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            uploadAvatar(file);
+        }
+    };
+    input.click();
+}
+
+function uploadAvatar(file) {
+    const formData = new FormData();
+    formData.append('avatar', file);
+    formData.append('__RequestVerificationToken', getAntiForgeryToken());
+    
+    fetch('/account/upload-avatar', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Avatar updated successfully!', 'success');
+            location.reload();
+        } else {
+            showToast(data.message || 'Failed to update avatar', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Avatar upload error:', error);
+        showToast('Error uploading avatar. Please try again.', 'error');
+    });
+}
+
+function toggle2FA() {
+    const isEnabled = {{ user.TwoFactorEnabled | default: false | json }};
+    
+    if (isEnabled) {
+        if (confirm('Are you sure you want to disable two-factor authentication?')) {
+            disable2FA();
+        }
+    } else {
+        enable2FA();
+    }
+}
+
+function enable2FA() {
+    window.location.href = '/account/enable-2fa';
+}
+
+function disable2FA() {
+    fetch('/account/disable-2fa', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': getAntiForgeryToken()
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Two-factor authentication disabled', 'success');
+            location.reload();
+        } else {
+            showToast(data.message || 'Failed to disable 2FA', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Disable 2FA error:', error);
+        showToast('Error disabling 2FA. Please try again.', 'error');
+    });
+}
+
+function logoutAllSessions() {
+    if (confirm('This will log you out of all other devices. Continue?')) {
+        fetch('/account/logout-all-sessions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': getAntiForgeryToken()
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('All other sessions logged out successfully', 'success');
+            } else {
+                showToast(data.message || 'Failed to logout sessions', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Logout sessions error:', error);
+            showToast('Error logging out sessions. Please try again.', 'error');
+        });
+    }
+}
+
+function deleteAccount() {
+    const confirmation = prompt('This action cannot be undone. Type "DELETE" to confirm:');
+    
+    if (confirmation === 'DELETE') {
+        fetch('/account/delete', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': getAntiForgeryToken()
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Account deleted successfully. You will be redirected to the homepage.');
+                window.location.href = '/';
+            } else {
+                showToast(data.message || 'Failed to delete account', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Delete account error:', error);
+            showToast('Error deleting account. Please try again.', 'error');
+        });
+    }
+}
+
+function getAntiForgeryToken() {
+    return document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast-notification toast-${type}`;
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+</script>
+
+<!-- Toast Styles -->
+<style>
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    z-index: 1050;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+}
+
+.toast-notification.show {
+    transform: translateX(0);
+}
+
+.toast-success { background-color: #28a745; }
+.toast-error { background-color: #dc3545; }
+.toast-info { background-color: #17a2b8; }
+.toast-warning { background-color: #ffc107; color: #212529; }
+</style>

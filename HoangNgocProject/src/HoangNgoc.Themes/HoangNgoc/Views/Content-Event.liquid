@@ -1,0 +1,1160 @@
+{% comment %}
+Event Display Template - HoangNgoc Professional Theme
+OrchardCore Content Display Pattern for Event ContentType
+{% endcomment %}
+
+{% assign event = Model.ContentItem %}
+
+{% zone "Header" %}
+    <!-- Event Header -->
+    <header class="event-header bg-gradient-warning text-dark">
+        <div class="container px-4 px-lg-5">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="pt-3">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/" class="text-dark">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/events" class="text-dark">Events</a></li>
+                    {% if event.Content.Event.Category.Text %}
+                    <li class="breadcrumb-item"><a href="/events/category/{{ event.Content.Event.Category.Text | slugify }}" class="text-dark">{{ event.Content.Event.Category.Text }}</a></li>
+                    {% endif %}
+                    <li class="breadcrumb-item active" aria-current="page">{{ event.DisplayText | truncate: 50 }}</li>
+                </ol>
+            </nav>
+            
+            <div class="row gx-4 gx-lg-5 align-items-center py-5">
+                <div class="col-lg-8">
+                    <!-- Event Info -->
+                    <div class="event-info">
+                        <!-- Event Category -->
+                        {% if event.Content.Event.Category.Text %}
+                        <div class="event-category mb-3">
+                            <span class="badge bg-primary fs-6 px-3 py-2">
+                                <i class="fas fa-tag me-2"></i>{{ event.Content.Event.Category.Text }}
+                            </span>
+                            {% if event.Content.Event.IsFeatured.Value %}
+                            <span class="badge bg-danger fs-6 px-3 py-2 ms-2">
+                                <i class="fas fa-star me-2"></i>Featured
+                            </span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Event Title -->
+                        <h1 class="display-5 fw-bold mb-4">{{ event.DisplayText }}</h1>
+                        
+                        <!-- Event Description -->
+                        {% if event.Content.Event.ShortDescription.Text %}
+                        <p class="lead mb-4">
+                            {{ event.Content.Event.ShortDescription.Text }}
+                        </p>
+                        {% endif %}
+                        
+                        <!-- Event Meta -->
+                        <div class="event-meta d-flex flex-wrap gap-4 mb-4">
+                            <div class="meta-item">
+                                <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                                <span class="fw-bold">{{ event.Content.Event.StartDate.Value | date: "MMMM dd, yyyy" }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock me-2 text-success"></i>
+                                <span>{{ event.Content.Event.StartTime.Value | date: "HH:mm" }} - {{ event.Content.Event.EndTime.Value | date: "HH:mm" }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-map-marker-alt me-2 text-danger"></i>
+                                <span>{{ event.Content.Event.Location.Text | default: "Online Event" }}</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-users me-2 text-info"></i>
+                                <span>{{ event.Content.Event.RegisteredCount.Value | default: 0 }}/{{ event.Content.Event.MaxAttendees.Value | default: "∞" }} registered</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Event Status -->
+                        <div class="event-status mb-4">
+                            {% assign eventDate = event.Content.Event.StartDate.Value | date: "%s" %}
+                            {% assign currentDate = "now" | date: "%s" %}
+                            {% if eventDate > currentDate %}
+                                <span class="badge bg-success fs-6 px-3 py-2">
+                                    <i class="fas fa-calendar-check me-2"></i>Upcoming Event
+                                </span>
+                            {% elsif eventDate == currentDate %}
+                                <span class="badge bg-warning text-dark fs-6 px-3 py-2">
+                                    <i class="fas fa-broadcast-tower me-2"></i>Happening Now
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary fs-6 px-3 py-2">
+                                    <i class="fas fa-history me-2"></i>Past Event
+                                </span>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Organizer Info -->
+                        <div class="organizer-info d-flex align-items-center">
+                            {% if event.Content.Event.OrganizerLogo.Paths.first %}
+                                <img src="{{ event.Content.Event.OrganizerLogo.Paths.first | asset_url | resize_url: width: 50, height: 50 }}" 
+                                     alt="{{ event.Content.Event.OrganizerName.Text }}" 
+                                     class="organizer-logo rounded-circle me-3">
+                            {% else %}
+                                <div class="organizer-logo-placeholder rounded-circle me-3">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                            {% endif %}
+                            <div>
+                                <div class="organizer-name fw-bold">Organized by {{ event.Content.Event.OrganizerName.Text | default: "HoangNgoc Events" }}</div>
+                                <div class="organizer-title text-muted">{{ event.Content.Event.OrganizerTitle.Text | default: "Professional Event Organizer" }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <!-- Event Registration Card -->
+                    <div class="event-registration-card">
+                        <div class="card shadow-lg">
+                            {% if event.Content.Event.EventImage.Paths.first %}
+                                <img src="{{ event.Content.Event.EventImage.Paths.first | asset_url | resize_url: width: 400, height: 225 }}" 
+                                     class="card-img-top" alt="{{ event.DisplayText }}">
+                            {% else %}
+                                <div class="event-image-placeholder">
+                                    <i class="fas fa-calendar-alt fa-4x text-primary"></i>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="card-body text-center">
+                                <!-- Event Price -->
+                                <div class="event-price mb-3">
+                                    {% if event.Content.Event.IsFree.Value %}
+                                        <span class="price-free h3 text-success mb-0">FREE</span>
+                                    {% else %}
+                                        <span class="price-current h3 text-primary mb-0">
+                                            ${{ event.Content.Event.Price.Value | default: 49 }}
+                                        </span>
+                                        {% if event.Content.Event.EarlyBirdPrice.Value %}
+                                            <div class="early-bird-price mt-1">
+                                                <small class="text-muted">Early Bird: </small>
+                                                <span class="text-success fw-bold">${{ event.Content.Event.EarlyBirdPrice.Value }}</span>
+                                                <small class="text-muted">(until {{ event.Content.Event.EarlyBirdDeadline.Value | date: "MMM dd" }})</small>
+                                            </div>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Registration Status -->
+                                {% assign eventDate = event.Content.Event.StartDate.Value | date: "%s" %}
+                                {% assign currentDate = "now" | date: "%s" %}
+                                {% assign registrationDeadline = event.Content.Event.RegistrationDeadline.Value | date: "%s" %}
+                                
+                                <div class="d-grid gap-2">
+                                    {% if eventDate < currentDate %}
+                                        <!-- Past Event -->
+                                        <button class="btn btn-secondary btn-lg" disabled>
+                                            <i class="fas fa-history me-2"></i>Event Ended
+                                        </button>
+                                        {% if event.Content.Event.HasRecording.Value %}
+                                        <a href="/events/{{ event.ContentItemId }}/recording" class="btn btn-outline-primary">
+                                            <i class="fas fa-play me-2"></i>Watch Recording
+                                        </a>
+                                        {% endif %}
+                                    {% elsif registrationDeadline and registrationDeadline < currentDate %}
+                                        <!-- Registration Closed -->
+                                        <button class="btn btn-warning btn-lg" disabled>
+                                            <i class="fas fa-lock me-2"></i>Registration Closed
+                                        </button>
+                                    {% elsif event.Content.Event.MaxAttendees.Value and event.Content.Event.RegisteredCount.Value >= event.Content.Event.MaxAttendees.Value %}
+                                        <!-- Event Full -->
+                                        <button class="btn btn-danger btn-lg" disabled>
+                                            <i class="fas fa-users me-2"></i>Event Full
+                                        </button>
+                                        <button class="btn btn-outline-secondary" onclick="joinWaitlist('{{ event.ContentItemId }}')">
+                                            <i class="fas fa-list me-2"></i>Join Waitlist
+                                        </button>
+                                    {% else %}
+                                        <!-- Available for Registration -->
+                                        {% if Model.User.IsRegistered %}
+                                            <button class="btn btn-success btn-lg" disabled>
+                                                <i class="fas fa-check me-2"></i>You're Registered!
+                                            </button>
+                                            <a href="/events/{{ event.ContentItemId }}/ticket" class="btn btn-outline-primary">
+                                                <i class="fas fa-ticket-alt me-2"></i>View Ticket
+                                            </a>
+                                            <button class="btn btn-outline-danger btn-sm" onclick="cancelRegistration('{{ event.ContentItemId }}')">
+                                                <i class="fas fa-times me-2"></i>Cancel Registration
+                                            </button>
+                                        {% else %}
+                                            <button class="btn btn-primary btn-lg" onclick="registerForEvent('{{ event.ContentItemId }}')">
+                                                <i class="fas fa-calendar-plus me-2"></i>Register Now
+                                            </button>
+                                            <button class="btn btn-outline-secondary" onclick="addToCalendar()">
+                                                <i class="fas fa-calendar me-2"></i>Add to Calendar
+                                            </button>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                
+                                <!-- Event Features -->
+                                <div class="event-features mt-3">
+                                    {% if event.Content.Event.IsOnline.Value %}
+                                    <small class="text-muted d-block">
+                                        <i class="fas fa-video me-1"></i>Online event via {{ event.Content.Event.Platform.Text | default: "Zoom" }}
+                                    </small>
+                                    {% endif %}
+                                    {% if event.Content.Event.IncludesCertificate.Value %}
+                                    <small class="text-muted d-block">
+                                        <i class="fas fa-certificate me-1"></i>Certificate of attendance
+                                    </small>
+                                    {% endif %}
+                                    {% if event.Content.Event.IncludesMaterials.Value %}
+                                    <small class="text-muted d-block">
+                                        <i class="fas fa-download me-1"></i>Downloadable materials
+                                    </small>
+                                    {% endif %}
+                                    {% if event.Content.Event.HasNetworking.Value %}
+                                    <small class="text-muted d-block">
+                                        <i class="fas fa-users me-1"></i>Networking opportunities
+                                    </small>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endzone %}
+
+<!-- Event Content Section -->
+<section class="event-content py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5">
+            <!-- Main Content -->
+            <div class="col-lg-8">
+                <!-- Event Navigation Tabs -->
+                <div class="event-nav mb-4">
+                    <ul class="nav nav-pills nav-fill" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#overview" type="button">
+                                <i class="fas fa-info-circle me-2"></i>Overview
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#agenda" type="button">
+                                <i class="fas fa-list me-2"></i>Agenda
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#speakers" type="button">
+                                <i class="fas fa-microphone me-2"></i>Speakers
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="pill" data-bs-target="#attendees" type="button">
+                                <i class="fas fa-users me-2"></i>Attendees
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- Overview Tab -->
+                    <div class="tab-pane fade show active" id="overview">
+                        <div class="event-overview">
+                            <!-- Event Description -->
+                            <div class="section mb-5">
+                                <h3 class="section-title">
+                                    <i class="fas fa-align-left text-primary me-2"></i>About This Event
+                                </h3>
+                                <div class="section-content">
+                                    {{ event.Content.Event.Description.Text | default: "Join us for this exciting event where you'll learn, network, and grow professionally." | newline_to_br }}
+                                </div>
+                            </div>
+                            
+                            <!-- What You'll Learn -->
+                            {% if event.Content.Event.LearningObjectives.Text %}
+                            <div class="section mb-5">
+                                <h3 class="section-title">
+                                    <i class="fas fa-lightbulb text-success me-2"></i>What You'll Learn
+                                </h3>
+                                <div class="section-content">
+                                    {% assign objectives = event.Content.Event.LearningObjectives.Text | split: '\n' %}
+                                    <div class="row g-3">
+                                        {% for objective in objectives %}
+                                            {% if objective != blank %}
+                                            <div class="col-md-6">
+                                                <div class="learning-objective">
+                                                    <i class="fas fa-check text-success me-2"></i>
+                                                    {{ objective | strip }}
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Target Audience -->
+                            {% if event.Content.Event.TargetAudience.Text %}
+                            <div class="section mb-5">
+                                <h3 class="section-title">
+                                    <i class="fas fa-users text-info me-2"></i>Who Should Attend
+                                </h3>
+                                <div class="section-content">
+                                    {{ event.Content.Event.TargetAudience.Text | newline_to_br }}
+                                </div>
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Event Location -->
+                            {% unless event.Content.Event.IsOnline.Value %}
+                            <div class="section mb-5">
+                                <h3 class="section-title">
+                                    <i class="fas fa-map-marker-alt text-danger me-2"></i>Event Location
+                                </h3>
+                                <div class="section-content">
+                                    <div class="location-info mb-3">
+                                        <h6>{{ event.Content.Event.VenueName.Text | default: "Event Venue" }}</h6>
+                                        <p class="text-muted mb-2">{{ event.Content.Event.Location.Text }}</p>
+                                        {% if event.Content.Event.VenueDescription.Text %}
+                                        <p>{{ event.Content.Event.VenueDescription.Text }}</p>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Map Placeholder -->
+                                    <div class="event-map">
+                                        <div class="map-placeholder bg-light rounded d-flex align-items-center justify-content-center" style="height: 300px;">
+                                            <div class="text-center">
+                                                <i class="fas fa-map fa-3x text-muted mb-3"></i>
+                                                <h6>Interactive Map</h6>
+                                                <p class="text-muted mb-3">{{ event.Content.Event.Location.Text }}</p>
+                                                <button class="btn btn-primary btn-sm" onclick="openMap()">
+                                                    <i class="fas fa-directions me-2"></i>Get Directions
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endunless %}
+                        </div>
+                    </div>
+                    
+                    <!-- Agenda Tab -->
+                    <div class="tab-pane fade" id="agenda">
+                        <div class="event-agenda">
+                            <div class="agenda-header mb-4">
+                                <h3 class="section-title">
+                                    <i class="fas fa-calendar-alt text-primary me-2"></i>Event Agenda
+                                </h3>
+                                <p class="text-muted">
+                                    {{ event.Content.Event.StartDate.Value | date: "MMMM dd, yyyy" }} • 
+                                    {{ event.Content.Event.StartTime.Value | date: "HH:mm" }} - {{ event.Content.Event.EndTime.Value | date: "HH:mm" }}
+                                </p>
+                            </div>
+                            
+                            <div class="agenda-timeline">
+                                {% if event.Content.Event.Agenda.Text %}
+                                    <!-- Parse agenda from content -->
+                                    {% assign agendaItems = event.Content.Event.Agenda.Text | split: '\n' %}
+                                    {% for item in agendaItems %}
+                                        {% if item != blank %}
+                                        <div class="agenda-item">
+                                            <div class="agenda-time">
+                                                <span class="time-badge">{{ item | split: ' - ' | first }}</span>
+                                            </div>
+                                            <div class="agenda-content">
+                                                <h6 class="agenda-title">{{ item | split: ' - ' | last }}</h6>
+                                                <p class="agenda-description text-muted">Session details and description</p>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                    <!-- Default agenda -->
+                                    <div class="agenda-item">
+                                        <div class="agenda-time">
+                                            <span class="time-badge">09:00</span>
+                                        </div>
+                                        <div class="agenda-content">
+                                            <h6 class="agenda-title">Registration & Welcome Coffee</h6>
+                                            <p class="agenda-description text-muted">Check-in and networking with fellow attendees</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="agenda-item">
+                                        <div class="agenda-time">
+                                            <span class="time-badge">09:30</span>
+                                        </div>
+                                        <div class="agenda-content">
+                                            <h6 class="agenda-title">Opening Keynote</h6>
+                                            <p class="agenda-description text-muted">Welcome address and event overview</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="agenda-item">
+                                        <div class="agenda-time">
+                                            <span class="time-badge">10:30</span>
+                                        </div>
+                                        <div class="agenda-content">
+                                            <h6 class="agenda-title">Main Presentation</h6>
+                                            <p class="agenda-description text-muted">Core content and learning objectives</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="agenda-item">
+                                        <div class="agenda-time">
+                                            <span class="time-badge">12:00</span>
+                                        </div>
+                                        <div class="agenda-content">
+                                            <h6 class="agenda-title">Lunch Break & Networking</h6>
+                                            <p class="agenda-description text-muted">Refreshments and networking opportunities</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="agenda-item">
+                                        <div class="agenda-time">
+                                            <span class="time-badge">13:30</span>
+                                        </div>
+                                        <div class="agenda-content">
+                                            <h6 class="agenda-title">Interactive Workshop</h6>
+                                            <p class="agenda-description text-muted">Hands-on activities and group discussions</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="agenda-item">
+                                        <div class="agenda-time">
+                                            <span class="time-badge">15:30</span>
+                                        </div>
+                                        <div class="agenda-content">
+                                            <h6 class="agenda-title">Q&A and Closing</h6>
+                                            <p class="agenda-description text-muted">Questions, answers, and final remarks</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Speakers Tab -->
+                    <div class="tab-pane fade" id="speakers">
+                        <div class="event-speakers">
+                            <div class="speakers-header mb-4">
+                                <h3 class="section-title">
+                                    <i class="fas fa-microphone text-primary me-2"></i>Featured Speakers
+                                </h3>
+                            </div>
+                            
+                            <div class="speakers-grid">
+                                {% if Model.Speakers and Model.Speakers.size > 0 %}
+                                    <div class="row g-4">
+                                        {% for speaker in Model.Speakers %}
+                                        <div class="col-md-6">
+                                            <div class="speaker-card">
+                                                <div class="card h-100">
+                                                    <div class="card-body text-center">
+                                                        {% if speaker.Avatar %}
+                                                            <img src="{{ speaker.Avatar | asset_url | resize_url: width: 120, height: 120 }}" 
+                                                                 alt="{{ speaker.Name }}" 
+                                                                 class="speaker-avatar rounded-circle mb-3">
+                                                        {% else %}
+                                                            <div class="speaker-avatar-placeholder rounded-circle mb-3">
+                                                                <i class="fas fa-user fa-2x text-muted"></i>
+                                                            </div>
+                                                        {% endif %}
+                                                        
+                                                        <h5 class="speaker-name">{{ speaker.Name }}</h5>
+                                                        <p class="speaker-title text-muted mb-3">{{ speaker.Title }}</p>
+                                                        <p class="speaker-bio">{{ speaker.Bio | truncate: 150 }}</p>
+                                                        
+                                                        <div class="speaker-social">
+                                                            {% if speaker.LinkedInUrl %}
+                                                            <a href="{{ speaker.LinkedInUrl }}" class="btn btn-outline-primary btn-sm me-2" target="_blank">
+                                                                <i class="fab fa-linkedin-in"></i>
+                                                            </a>
+                                                            {% endif %}
+                                                            {% if speaker.TwitterUrl %}
+                                                            <a href="{{ speaker.TwitterUrl }}" class="btn btn-outline-info btn-sm" target="_blank">
+                                                                <i class="fab fa-twitter"></i>
+                                                            </a>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <!-- Default speaker info -->
+                                    <div class="row g-4">
+                                        <div class="col-md-6">
+                                            <div class="speaker-card">
+                                                <div class="card h-100">
+                                                    <div class="card-body text-center">
+                                                        <div class="speaker-avatar-placeholder rounded-circle mb-3">
+                                                            <i class="fas fa-user fa-2x text-muted"></i>
+                                                        </div>
+                                                        <h5 class="speaker-name">{{ event.Content.Event.OrganizerName.Text | default: "Expert Speaker" }}</h5>
+                                                        <p class="speaker-title text-muted mb-3">Industry Professional</p>
+                                                        <p class="speaker-bio">Experienced professional with expertise in the field. Will share valuable insights and practical knowledge.</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Attendees Tab -->
+                    <div class="tab-pane fade" id="attendees">
+                        <div class="event-attendees">
+                            <div class="attendees-header mb-4">
+                                <h3 class="section-title">
+                                    <i class="fas fa-users text-primary me-2"></i>Event Attendees
+                                </h3>
+                                <p class="text-muted">
+                                    {{ event.Content.Event.RegisteredCount.Value | default: 0 }} people registered
+                                    {% if event.Content.Event.MaxAttendees.Value %}
+                                        ({{ event.Content.Event.MaxAttendees.Value }} max capacity)
+                                    {% endif %}
+                                </p>
+                            </div>
+                            
+                            <!-- Attendees List -->
+                            <div class="attendees-list" id="attendees-container">
+                                {% if Model.Attendees and Model.Attendees.size > 0 %}
+                                    <div class="row g-3">
+                                        {% for attendee in Model.Attendees %}
+                                        <div class="col-md-4">
+                                            <div class="attendee-card">
+                                                <div class="d-flex align-items-center">
+                                                    {% if attendee.Avatar %}
+                                                        <img src="{{ attendee.Avatar | asset_url | resize_url: width: 40, height: 40 }}" 
+                                                             alt="{{ attendee.Name }}" 
+                                                             class="attendee-avatar rounded-circle me-3">
+                                                    {% else %}
+                                                        <div class="attendee-avatar-placeholder rounded-circle me-3">
+                                                            <i class="fas fa-user"></i>
+                                                        </div>
+                                                    {% endif %}
+                                                    <div class="attendee-info">
+                                                        <h6 class="attendee-name mb-0">{{ attendee.Name }}</h6>
+                                                        <small class="text-muted">{{ attendee.Title | default: "Professional" }}</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="no-attendees text-center py-5">
+                                        <i class="fas fa-users fa-4x text-muted mb-3"></i>
+                                        <h5>No Public Attendees Yet</h5>
+                                        <p class="text-muted">Be the first to register and connect with other professionals!</p>
+                                        {% unless Model.User.IsRegistered %}
+                                        <button class="btn btn-primary" onclick="registerForEvent('{{ event.ContentItemId }}')">
+                                            <i class="fas fa-calendar-plus me-2"></i>Register Now
+                                        </button>
+                                        {% endunless %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Event Quick Info -->
+                <div class="card shadow-sm mb-4 sticky-top" style="top: 20px;">
+                    <div class="card-header bg-warning text-dark">
+                        <h6 class="mb-0">
+                            <i class="fas fa-info-circle me-2"></i>Quick Info
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="quick-info-list">
+                            <div class="info-item d-flex justify-content-between mb-2">
+                                <span><i class="fas fa-calendar me-2 text-primary"></i>Date:</span>
+                                <strong>{{ event.Content.Event.StartDate.Value | date: "MMM dd, yyyy" }}</strong>
+                            </div>
+                            <div class="info-item d-flex justify-content-between mb-2">
+                                <span><i class="fas fa-clock me-2 text-success"></i>Time:</span>
+                                <strong>{{ event.Content.Event.StartTime.Value | date: "HH:mm" }}</strong>
+                            </div>
+                            <div class="info-item d-flex justify-content-between mb-2">
+                                <span><i class="fas fa-hourglass-half me-2 text-info"></i>Duration:</span>
+                                <strong>{{ event.Content.Event.Duration.Text | default: "3 hours" }}</strong>
+                            </div>
+                            <div class="info-item d-flex justify-content-between mb-2">
+                                <span><i class="fas fa-globe me-2 text-warning"></i>Language:</span>
+                                <strong>{{ event.Content.Event.Language.Text | default: "English" }}</strong>
+                            </div>
+                            <div class="info-item d-flex justify-content-between">
+                                <span><i class="fas fa-users me-2 text-secondary"></i>Registered:</span>
+                                <strong>{{ event.Content.Event.RegisteredCount.Value | default: 0 }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Related Events -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-calendar-alt me-2"></i>Related Events
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="related-events" id="related-events-container">
+                            <div class="text-center">
+                                <div class="spinner-border text-success" role="status">
+                                    <span class="visually-hidden">Loading related events...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Event Organizer -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info text-white">
+                        <h6 class="mb-0">
+                            <i class="fas fa-building me-2"></i>Event Organizer
+                        </h6>
+                    </div>
+                    <div class="card-body text-center">
+                        {% if event.Content.Event.OrganizerLogo.Paths.first %}
+                            <img src="{{ event.Content.Event.OrganizerLogo.Paths.first | asset_url | resize_url: width: 80, height: 80 }}" 
+                                 alt="{{ event.Content.Event.OrganizerName.Text }}" 
+                                 class="organizer-logo-large rounded mb-3">
+                        {% else %}
+                            <div class="organizer-logo-large-placeholder rounded mb-3">
+                                <i class="fas fa-building fa-2x text-muted"></i>
+                            </div>
+                        {% endif %}
+                        
+                        <h6>{{ event.Content.Event.OrganizerName.Text | default: "HoangNgoc Events" }}</h6>
+                        <p class="text-muted mb-3">{{ event.Content.Event.OrganizerDescription.Text | default: "Professional event organizer with years of experience in creating memorable experiences." | truncate: 100 }}</p>
+                        
+                        <div class="d-grid gap-2">
+                            <a href="/organizers/{{ event.Content.Event.OrganizerName.Text | slugify }}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-external-link-alt me-1"></i>View Profile
+                            </a>
+                            <a href="/events?organizer={{ event.Content.Event.OrganizerName.Text | url_encode }}" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-calendar me-1"></i>More Events
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Custom Styles -->
+<style>
+.event-header {
+    background: linear-gradient(135deg, #ffc107 0%, #ff8c00 100%);
+}
+
+.event-registration-card .card {
+    border: none;
+    border-radius: 15px;
+}
+
+.event-image-placeholder {
+    height: 225px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px 15px 0 0;
+}
+
+.organizer-logo,
+.organizer-logo-placeholder {
+    width: 50px;
+    height: 50px;
+    background: rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #495057;
+}
+
+.organizer-logo-large,
+.organizer-logo-large-placeholder {
+    width: 80px;
+    height: 80px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.event-nav .nav-pills .nav-link {
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.event-nav .nav-pills .nav-link.active {
+    background: #007bff;
+}
+
+.section-title {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.learning-objective {
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.agenda-timeline {
+    position: relative;
+}
+
+.agenda-timeline::before {
+    content: '';
+    position: absolute;
+    left: 60px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: #e9ecef;
+}
+
+.agenda-item {
+    display: flex;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.agenda-time {
+    width: 120px;
+    flex-shrink: 0;
+}
+
+.time-badge {
+    background: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 1;
+}
+
+.agenda-content {
+    flex-grow: 1;
+    padding-left: 2rem;
+}
+
+.agenda-title {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.speaker-card .card {
+    transition: all 0.3s ease;
+}
+
+.speaker-card .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.speaker-avatar,
+.speaker-avatar-placeholder {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.attendee-card {
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.attendee-card:hover {
+    background: #e9ecef;
+    transform: translateY(-2px);
+}
+
+.attendee-avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    background: #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    font-size: 0.8rem;
+}
+
+.map-placeholder {
+    border: 2px dashed #dee2e6;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.map-placeholder:hover {
+    border-color: #007bff;
+    background: #f8f9fa !important;
+}
+
+.no-attendees {
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin: 2rem 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .event-meta {
+        flex-direction: column;
+        gap: 0.5rem !important;
+    }
+    
+    .organizer-info {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .organizer-logo {
+        margin-bottom: 1rem;
+    }
+    
+    .agenda-timeline::before {
+        display: none;
+    }
+    
+    .agenda-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .agenda-content {
+        padding-left: 0;
+        padding-top: 1rem;
+    }
+    
+    .attendee-card {
+        text-align: center;
+    }
+    
+    .attendee-card .d-flex {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .attendee-avatar-placeholder {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.section {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.agenda-item {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.speaker-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+</style>
+
+<!-- JavaScript -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    initializeEvent();
+    loadSidebarContent();
+});
+
+function initializeEvent() {
+    // Track event view
+    trackEventView('{{ event.ContentItemId }}');
+    
+    // Initialize tab switching
+    const tabButtons = document.querySelectorAll('[data-bs-toggle="pill"]');
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetTab = this.getAttribute('data-bs-target').substring(1);
+            trackTabView(targetTab);
+        });
+    });
+}
+
+function loadSidebarContent() {
+    loadRelatedEvents();
+}
+
+function loadRelatedEvents() {
+    const container = document.getElementById('related-events-container');
+    const eventId = '{{ event.ContentItemId }}';
+    const category = '{{ event.Content.Event.Category.Text }}';
+    
+    setTimeout(() => {
+        container.innerHTML = `
+            <div class="related-event-item mb-3">
+                <h6 class="mb-1">
+                    <a href="#" class="text-decoration-none">Web Development Workshop</a>
+                </h6>
+                <small class="text-muted">Jan 20, 2024 • Online</small>
+            </div>
+            <div class="related-event-item mb-3">
+                <h6 class="mb-1">
+                    <a href="#" class="text-decoration-none">Career Development Seminar</a>
+                </h6>
+                <small class="text-muted">Jan 25, 2024 • Hanoi</small>
+            </div>
+            <div class="related-event-item">
+                <h6 class="mb-1">
+                    <a href="#" class="text-decoration-none">Tech Networking Event</a>
+                </h6>
+                <small class="text-muted">Feb 01, 2024 • Ho Chi Minh</small>
+            </div>
+            <div class="text-center mt-3">
+                <a href="/events?category=${encodeURIComponent(category)}" class="btn btn-outline-success btn-sm">
+                    <i class="fas fa-arrow-right me-1"></i>More Events
+                </a>
+            </div>
+        `;
+    }, 1000);
+}
+
+function registerForEvent(eventId) {
+    if (!isUserLoggedIn()) {
+        showLoginModal();
+        return;
+    }
+    
+    const registerBtn = event.target;
+    const originalText = registerBtn.innerHTML;
+    
+    // Show loading state
+    registerBtn.disabled = true;
+    registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Registering...';
+    
+    fetch(`/api/events/${eventId}/register`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': getAntiForgeryToken()
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            if (data.requiresPayment) {
+                // Redirect to payment page
+                window.location.href = `/events/${eventId}/checkout`;
+            } else {
+                // Free event - show success and reload
+                showToast('Successfully registered for the event!', 'success');
+                setTimeout(() => location.reload(), 1500);
+            }
+        } else {
+            throw new Error(data.message || 'Registration failed');
+        }
+    })
+    .catch(error => {
+        console.error('Registration error:', error);
+        showToast('Registration failed. Please try again.', 'error');
+        
+        registerBtn.disabled = false;
+        registerBtn.innerHTML = originalText;
+    });
+}
+
+function cancelRegistration(eventId) {
+    if (confirm('Are you sure you want to cancel your registration for this event?')) {
+        fetch(`/api/events/${eventId}/cancel`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'RequestVerificationToken': getAntiForgeryToken()
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                showToast('Registration cancelled successfully', 'success');
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                showToast(data.message || 'Failed to cancel registration', 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Cancel registration error:', error);
+            showToast('Error cancelling registration. Please try again.', 'error');
+        });
+    }
+}
+
+function joinWaitlist(eventId) {
+    if (!isUserLoggedIn()) {
+        showLoginModal();
+        return;
+    }
+    
+    fetch(`/api/events/${eventId}/waitlist`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'RequestVerificationToken': getAntiForgeryToken()
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showToast('Added to waitlist! We\'ll notify you if spots become available.', 'success');
+            const button = event.target;
+            button.innerHTML = '<i class="fas fa-check me-2"></i>On Waitlist';
+            button.disabled = true;
+        } else {
+            showToast(data.message || 'Failed to join waitlist', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Waitlist error:', error);
+        showToast('Error joining waitlist. Please try again.', 'error');
+    });
+}
+
+function addToCalendar() {
+    const eventTitle = '{{ event.DisplayText }}';
+    const startDate = '{{ event.Content.Event.StartDate.Value | date: "%Y%m%d" }}';
+    const startTime = '{{ event.Content.Event.StartTime.Value | date: "%H%M%S" }}';
+    const endTime = '{{ event.Content.Event.EndTime.Value | date: "%H%M%S" }}';
+    const location = '{{ event.Content.Event.Location.Text }}';
+    const description = '{{ event.Content.Event.ShortDescription.Text }}';
+    
+    const googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${startDate}T${startTime}/${startDate}T${endTime}&details=${encodeURIComponent(description)}&location=${encodeURIComponent(location)}`;
+    
+    window.open(googleCalendarUrl, '_blank');
+}
+
+function openMap() {
+    const location = '{{ event.Content.Event.Location.Text }}';
+    const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location)}`;
+    window.open(googleMapsUrl, '_blank');
+}
+
+function trackEventView(eventId) {
+    fetch(`/api/events/${eventId}/view`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).catch(error => {
+        console.error('Error tracking event view:', error);
+    });
+}
+
+function trackTabView(tabName) {
+    fetch('/api/analytics/tab-view', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            page: 'event',
+            tab: tabName,
+            eventId: '{{ event.ContentItemId }}'
+        })
+    }).catch(error => {
+        console.error('Error tracking tab view:', error);
+    });
+}
+
+function isUserLoggedIn() {
+    return document.body.classList.contains('authenticated') || 
+           document.querySelector('.user-menu') !== null;
+}
+
+function showLoginModal() {
+    const loginUrl = '/account/login?returnUrl=' + encodeURIComponent(window.location.href);
+    window.location.href = loginUrl;
+}
+
+function getAntiForgeryToken() {
+    return document.querySelector('input[name="__RequestVerificationToken"]')?.value || '';
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `toast-notification toast-${type}`;
+    toast.textContent = message;
+    
+    document.body.appendChild(toast);
+    
+    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+</script>
+
+<!-- Toast Styles -->
+<style>
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+    z-index: 1050;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+    max-width: 300px;
+}
+
+.toast-notification.show {
+    transform: translateX(0);
+}
+
+.toast-success { background-color: #28a745; }
+.toast-error { background-color: #dc3545; }
+.toast-info { background-color: #17a2b8; }
+.toast-warning { background-color: #ffc107; color: #212529; }
+</style>

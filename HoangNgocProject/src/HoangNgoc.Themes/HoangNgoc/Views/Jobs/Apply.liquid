@@ -1,0 +1,804 @@
+{% comment %}
+Jobs Apply Form - HoangNgoc Professional Theme
+Job Application Form with CV Upload and Cover Letter
+{% endcomment %}
+
+{% assign job = Model.Job %}
+{% assign application = Model.Application %}
+
+{% zone "Header" %}
+    <!-- Application Header -->
+    <header class="application-header bg-gradient-success text-white">
+        <div class="container px-4 px-lg-5">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="pt-3">
+                <ol class="breadcrumb breadcrumb-light">
+                    <li class="breadcrumb-item"><a href="/" class="text-white-75">Home</a></li>
+                    <li class="breadcrumb-item"><a href="/jobs" class="text-white-75">Jobs</a></li>
+                    <li class="breadcrumb-item"><a href="/jobs/{{ job.ContentItemId }}" class="text-white-75">{{ job.DisplayText | truncate: 30 }}</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Apply</li>
+                </ol>
+            </nav>
+            
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-lg-10 col-xl-8 text-center py-4">
+                    <h1 class="display-6 fw-bold mb-3">Apply for Position</h1>
+                    <h2 class="h4 text-white-75 mb-3">{{ job.DisplayText }}</h2>
+                    <p class="lead text-white-50 mb-0">
+                        <i class="fas fa-building me-2"></i>{{ job.Content.JobPosting.Company.Text }}
+                        <span class="mx-3">|</span>
+                        <i class="fas fa-map-marker-alt me-2"></i>{{ job.Content.JobPosting.Location.Text }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+{% endzone %}
+
+<!-- Application Form Section -->
+<section class="application-form py-5">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5">
+            <!-- Main Application Form -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">
+                            <i class="fas fa-user-edit me-2"></i>Application Form
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="job-application-form" method="post" enctype="multipart/form-data" novalidate>
+                            <input type="hidden" name="JobId" value="{{ job.ContentItemId }}" />
+                            <input type="hidden" name="__RequestVerificationToken" value="{{ Model.AntiForgeryToken }}" />
+                            
+                            <!-- Progress Indicator -->
+                            <div class="application-progress mb-4">
+                                <div class="progress mb-2">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 0%" id="form-progress"></div>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <small class="text-muted">Personal Info</small>
+                                    <small class="text-muted">Experience</small>
+                                    <small class="text-muted">Documents</small>
+                                    <small class="text-muted">Review</small>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 1: Personal Information -->
+                            <div class="form-step active" id="step-1">
+                                <h5 class="step-title mb-4">
+                                    <span class="step-number">1</span>Personal Information
+                                </h5>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="firstName" name="FirstName" 
+                                               value="{{ application.FirstName }}" required>
+                                        <div class="invalid-feedback">Please provide your first name.</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="lastName" name="LastName" 
+                                               value="{{ application.LastName }}" required>
+                                        <div class="invalid-feedback">Please provide your last name.</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" id="email" name="Email" 
+                                               value="{{ application.Email }}" required>
+                                        <div class="invalid-feedback">Please provide a valid email address.</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label">Phone Number <span class="text-danger">*</span></label>
+                                        <input type="tel" class="form-control" id="phone" name="Phone" 
+                                               value="{{ application.Phone }}" required>
+                                        <div class="invalid-feedback">Please provide your phone number.</div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="address" class="form-label">Address</label>
+                                        <textarea class="form-control" id="address" name="Address" rows="2" 
+                                                  placeholder="Your current address">{{ application.Address }}</textarea>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="city" class="form-label">City</label>
+                                        <input type="text" class="form-control" id="city" name="City" 
+                                               value="{{ application.City }}">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="country" class="form-label">Country</label>
+                                        <select class="form-select" id="country" name="Country">
+                                            <option value="">Select Country</option>
+                                            <option value="VN" {% if application.Country == "VN" %}selected{% endif %}>Vietnam</option>
+                                            <option value="US" {% if application.Country == "US" %}selected{% endif %}>United States</option>
+                                            <option value="SG" {% if application.Country == "SG" %}selected{% endif %}>Singapore</option>
+                                            <option value="JP" {% if application.Country == "JP" %}selected{% endif %}>Japan</option>
+                                            <option value="KR" {% if application.Country == "KR" %}selected{% endif %}>South Korea</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="step-actions mt-4">
+                                    <button type="button" class="btn btn-primary" onclick="nextStep()">
+                                        Next: Experience <i class="fas fa-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 2: Experience & Education -->
+                            <div class="form-step" id="step-2">
+                                <h5 class="step-title mb-4">
+                                    <span class="step-number">2</span>Experience & Education
+                                </h5>
+                                
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="currentPosition" class="form-label">Current Position</label>
+                                        <input type="text" class="form-control" id="currentPosition" name="CurrentPosition" 
+                                               value="{{ application.CurrentPosition }}" 
+                                               placeholder="e.g., Senior Developer">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="currentCompany" class="form-label">Current Company</label>
+                                        <input type="text" class="form-control" id="currentCompany" name="CurrentCompany" 
+                                               value="{{ application.CurrentCompany }}" 
+                                               placeholder="e.g., Tech Corp">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="experienceYears" class="form-label">Years of Experience <span class="text-danger">*</span></label>
+                                        <select class="form-select" id="experienceYears" name="ExperienceYears" required>
+                                            <option value="">Select Experience</option>
+                                            <option value="0-1" {% if application.ExperienceYears == "0-1" %}selected{% endif %}>0-1 years</option>
+                                            <option value="1-3" {% if application.ExperienceYears == "1-3" %}selected{% endif %}>1-3 years</option>
+                                            <option value="3-5" {% if application.ExperienceYears == "3-5" %}selected{% endif %}>3-5 years</option>
+                                            <option value="5-10" {% if application.ExperienceYears == "5-10" %}selected{% endif %}>5-10 years</option>
+                                            <option value="10+" {% if application.ExperienceYears == "10+" %}selected{% endif %}>10+ years</option>
+                                        </select>
+                                        <div class="invalid-feedback">Please select your experience level.</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="expectedSalary" class="form-label">Expected Salary (VND)</label>
+                                        <input type="text" class="form-control" id="expectedSalary" name="ExpectedSalary" 
+                                               value="{{ application.ExpectedSalary }}" 
+                                               placeholder="e.g., 20,000,000">
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="education" class="form-label">Education</label>
+                                        <textarea class="form-control" id="education" name="Education" rows="3" 
+                                                  placeholder="Your educational background, degrees, certifications...">{{ application.Education }}</textarea>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="skills" class="form-label">Key Skills <span class="text-danger">*</span></label>
+                                        <textarea class="form-control" id="skills" name="Skills" rows="3" 
+                                                  placeholder="List your relevant skills, technologies, programming languages..." required>{{ application.Skills }}</textarea>
+                                        <div class="invalid-feedback">Please list your relevant skills.</div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label for="workExperience" class="form-label">Work Experience</label>
+                                        <textarea class="form-control" id="workExperience" name="WorkExperience" rows="4" 
+                                                  placeholder="Describe your relevant work experience, achievements, projects...">{{ application.WorkExperience }}</textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="step-actions mt-4">
+                                    <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">
+                                        <i class="fas fa-arrow-left me-2"></i>Previous
+                                    </button>
+                                    <button type="button" class="btn btn-primary" onclick="nextStep()">
+                                        Next: Documents <i class="fas fa-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 3: Documents & Cover Letter -->
+                            <div class="form-step" id="step-3">
+                                <h5 class="step-title mb-4">
+                                    <span class="step-number">3</span>Documents & Cover Letter
+                                </h5>
+                                
+                                <div class="row g-4">
+                                    <!-- CV Upload -->
+                                    <div class="col-12">
+                                        <label for="cvFile" class="form-label">Resume/CV <span class="text-danger">*</span></label>
+                                        <div class="file-upload-area" id="cv-upload-area">
+                                            <input type="file" class="form-control" id="cvFile" name="CVFile" 
+                                                   accept=".pdf,.doc,.docx" required style="display: none;">
+                                            <div class="upload-placeholder" onclick="document.getElementById('cvFile').click()">
+                                                <i class="fas fa-cloud-upload-alt fa-3x text-muted mb-3"></i>
+                                                <h6>Click to upload your CV/Resume</h6>
+                                                <p class="text-muted mb-0">Supported formats: PDF, DOC, DOCX (Max 5MB)</p>
+                                            </div>
+                                            <div class="upload-success d-none">
+                                                <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                                                <h6 class="text-success">File uploaded successfully!</h6>
+                                                <p class="mb-0" id="cv-file-name"></p>
+                                                <button type="button" class="btn btn-sm btn-outline-danger mt-2" onclick="removeFile('cv')">
+                                                    <i class="fas fa-trash me-1"></i>Remove
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="invalid-feedback">Please upload your CV/Resume.</div>
+                                    </div>
+                                    
+                                    <!-- Portfolio/Additional Documents -->
+                                    <div class="col-12">
+                                        <label for="portfolioFile" class="form-label">Portfolio/Additional Documents (Optional)</label>
+                                        <div class="file-upload-area" id="portfolio-upload-area">
+                                            <input type="file" class="form-control" id="portfolioFile" name="PortfolioFile" 
+                                                   accept=".pdf,.doc,.docx,.zip" style="display: none;">
+                                            <div class="upload-placeholder" onclick="document.getElementById('portfolioFile').click()">
+                                                <i class="fas fa-folder-plus fa-2x text-muted mb-2"></i>
+                                                <h6>Upload Portfolio or Additional Documents</h6>
+                                                <p class="text-muted mb-0">Optional: Portfolio, certificates, etc. (Max 10MB)</p>
+                                            </div>
+                                            <div class="upload-success d-none">
+                                                <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                                                <h6 class="text-success">File uploaded successfully!</h6>
+                                                <p class="mb-0" id="portfolio-file-name"></p>
+                                                <button type="button" class="btn btn-sm btn-outline-danger mt-2" onclick="removeFile('portfolio')">
+                                                    <i class="fas fa-trash me-1"></i>Remove
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Cover Letter -->
+                                    <div class="col-12">
+                                        <label for="coverLetter" class="form-label">Cover Letter <span class="text-danger">*</span></label>
+                                        <textarea class="form-control" id="coverLetter" name="CoverLetter" rows="6" 
+                                                  placeholder="Write a compelling cover letter explaining why you're the perfect fit for this position..." required>{{ application.CoverLetter }}</textarea>
+                                        <div class="form-text">
+                                            <span id="cover-letter-count">0</span>/1000 characters
+                                        </div>
+                                        <div class="invalid-feedback">Please write a cover letter.</div>
+                                    </div>
+                                    
+                                    <!-- Additional Information -->
+                                    <div class="col-12">
+                                        <label for="additionalInfo" class="form-label">Additional Information</label>
+                                        <textarea class="form-control" id="additionalInfo" name="AdditionalInfo" rows="3" 
+                                                  placeholder="Any additional information you'd like to share...">{{ application.AdditionalInfo }}</textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="step-actions mt-4">
+                                    <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">
+                                        <i class="fas fa-arrow-left me-2"></i>Previous
+                                    </button>
+                                    <button type="button" class="btn btn-primary" onclick="nextStep()">
+                                        Review Application <i class="fas fa-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Step 4: Review & Submit -->
+                            <div class="form-step" id="step-4">
+                                <h5 class="step-title mb-4">
+                                    <span class="step-number">4</span>Review & Submit
+                                </h5>
+                                
+                                <div class="application-review">
+                                    <div class="review-section mb-4">
+                                        <h6 class="text-primary">Personal Information</h6>
+                                        <div class="review-content" id="review-personal"></div>
+                                    </div>
+                                    
+                                    <div class="review-section mb-4">
+                                        <h6 class="text-primary">Experience & Education</h6>
+                                        <div class="review-content" id="review-experience"></div>
+                                    </div>
+                                    
+                                    <div class="review-section mb-4">
+                                        <h6 class="text-primary">Documents</h6>
+                                        <div class="review-content" id="review-documents"></div>
+                                    </div>
+                                    
+                                    <div class="review-section mb-4">
+                                        <h6 class="text-primary">Cover Letter</h6>
+                                        <div class="review-content" id="review-cover-letter"></div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Terms & Conditions -->
+                                <div class="terms-section mb-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="agreeTerms" name="AgreeTerms" required>
+                                        <label class="form-check-label" for="agreeTerms">
+                                            I agree to the <a href="/terms" target="_blank">Terms & Conditions</a> and 
+                                            <a href="/privacy" target="_blank">Privacy Policy</a> <span class="text-danger">*</span>
+                                        </label>
+                                        <div class="invalid-feedback">You must agree to the terms and conditions.</div>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="allowContact" name="AllowContact">
+                                        <label class="form-check-label" for="allowContact">
+                                            I allow the company to contact me regarding this application and future opportunities
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="step-actions">
+                                    <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">
+                                        <i class="fas fa-arrow-left me-2"></i>Previous
+                                    </button>
+                                    <button type="submit" class="btn btn-success btn-lg">
+                                        <i class="fas fa-paper-plane me-2"></i>Submit Application
+                                        <span class="spinner-border spinner-border-sm ms-2 d-none" role="status"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <!-- Job Summary -->
+                <div class="card shadow-sm mb-4 sticky-top" style="top: 20px;">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="fas fa-briefcase me-2"></i>Job Summary
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title">{{ job.DisplayText }}</h6>
+                        <p class="card-text text-muted mb-3">{{ job.Content.JobPosting.Company.Text }}</p>
+                        
+                        <div class="job-details">
+                            <div class="detail-item mb-2">
+                                <strong>Location:</strong>
+                                <span class="text-muted">{{ job.Content.JobPosting.Location.Text }}</span>
+                            </div>
+                            <div class="detail-item mb-2">
+                                <strong>Job Type:</strong>
+                                <span class="text-muted">{{ job.Content.JobPosting.JobType.Text }}</span>
+                            </div>
+                            <div class="detail-item mb-2">
+                                <strong>Salary:</strong>
+                                <span class="text-muted">{{ job.Content.JobPosting.Salary.Text }}</span>
+                            </div>
+                            {% if job.Content.JobPosting.ApplicationDeadline.Value %}
+                            <div class="detail-item mb-2">
+                                <strong>Deadline:</strong>
+                                <span class="text-danger">{{ job.Content.JobPosting.ApplicationDeadline.Value | date: "MMM dd, yyyy" }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <hr>
+                        
+                        <div class="text-center">
+                            <a href="/jobs/{{ job.ContentItemId }}" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-eye me-1"></i>View Full Job Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Application Tips -->
+                <div class="card shadow-sm">
+                    <div class="card-header bg-warning text-dark">
+                        <h6 class="mb-0">
+                            <i class="fas fa-lightbulb me-2"></i>Application Tips
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                <small>Tailor your CV to match the job requirements</small>
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                <small>Write a compelling cover letter</small>
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                <small>Highlight relevant experience and skills</small>
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-check text-success me-2"></i>
+                                <small>Proofread everything before submitting</small>
+                            </li>
+                            <li class="mb-0">
+                                <i class="fas fa-check text-success me-2"></i>
+                                <small>Follow up after 1-2 weeks if no response</small>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Custom Styles -->
+<style>
+.application-header {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.form-step {
+    display: none;
+}
+
+.form-step.active {
+    display: block;
+    animation: fadeInRight 0.5s ease-out;
+}
+
+.step-title {
+    color: #495057;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.step-number {
+    width: 35px;
+    height: 35px;
+    background: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-right: 1rem;
+    font-size: 0.9rem;
+}
+
+.file-upload-area {
+    border: 2px dashed #dee2e6;
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.file-upload-area:hover {
+    border-color: #007bff;
+    background-color: #f8f9fa;
+}
+
+.file-upload-area.dragover {
+    border-color: #28a745;
+    background-color: #d4edda;
+}
+
+.upload-placeholder h6 {
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.review-section {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 5px;
+    border-left: 4px solid #007bff;
+}
+
+.review-content {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.terms-section {
+    background: #fff3cd;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ffeaa7;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Progress Bar Animation */
+.progress-bar {
+    transition: width 0.5s ease;
+}
+
+/* Form Validation Styles */
+.was-validated .form-control:valid,
+.was-validated .form-select:valid {
+    border-color: #28a745;
+}
+
+.was-validated .form-control:invalid,
+.was-validated .form-select:invalid {
+    border-color: #dc3545;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .step-actions {
+        text-align: center;
+    }
+    
+    .step-actions .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .step-actions .btn:last-child {
+        margin-bottom: 0;
+    }
+    
+    .file-upload-area {
+        padding: 1.5rem 1rem;
+    }
+    
+    .detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+/* Animation */
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+</style>
+
+<!-- JavaScript -->
+<script>
+let currentStep = 1;
+const totalSteps = 4;
+
+document.addEventListener('DOMContentLoaded', function() {
+    initializeForm();
+    setupFileUploads();
+    setupFormValidation();
+    updateProgress();
+});
+
+function initializeForm() {
+    // Cover letter character counter
+    const coverLetter = document.getElementById('coverLetter');
+    const counter = document.getElementById('cover-letter-count');
+    
+    coverLetter.addEventListener('input', function() {
+        const count = this.value.length;
+        counter.textContent = count;
+        
+        if (count > 1000) {
+            counter.classList.add('text-danger');
+        } else {
+            counter.classList.remove('text-danger');
+        }
+    });
+    
+    // Initialize character count
+    counter.textContent = coverLetter.value.length;
+}
+
+function setupFileUploads() {
+    // CV File Upload
+    const cvFile = document.getElementById('cvFile');
+    const cvUploadArea = document.getElementById('cv-upload-area');
+    
+    cvFile.addEventListener('change', function() {
+        handleFileUpload(this, 'cv');
+    });
+    
+    // Portfolio File Upload
+    const portfolioFile = document.getElementById('portfolioFile');
+    const portfolioUploadArea = document.getElementById('portfolio-upload-area');
+    
+    portfolioFile.addEventListener('change', function() {
+        handleFileUpload(this, 'portfolio');
+    });
+    
+    // Drag and drop functionality
+    [cvUploadArea, portfolioUploadArea].forEach(area => {
+        area.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+        
+        area.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+        
+        area.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const input = this.querySelector('input[type="file"]');
+                input.files = files;
+                handleFileUpload(input, area.id.includes('cv') ? 'cv' : 'portfolio');
+            }
+        });
+    });
+}
+
+function handleFileUpload(input, type) {
+    const file = input.files[0];
+    if (!file) return;
+    
+    // Validate file size
+    const maxSize = type === 'cv' ? 5 * 1024 * 1024 : 10 * 1024 * 1024; // 5MB for CV, 10MB for portfolio
+    if (file.size > maxSize) {
+        alert(`File size too large. Maximum size is ${maxSize / (1024 * 1024)}MB.`);
+        input.value = '';
+        return;
+    }
+    
+    // Show success state
+    const uploadArea = document.getElementById(`${type}-upload-area`);
+    const placeholder = uploadArea.querySelector('.upload-placeholder');
+    const success = uploadArea.querySelector('.upload-success');
+    const fileName = uploadArea.querySelector(`#${type}-file-name`);
+    
+    placeholder.classList.add('d-none');
+    success.classList.remove('d-none');
+    fileName.textContent = file.name;
+}
+
+function removeFile(type) {
+    const input = document.getElementById(`${type}File`);
+    const uploadArea = document.getElementById(`${type}-upload-area`);
+    const placeholder = uploadArea.querySelector('.upload-placeholder');
+    const success = uploadArea.querySelector('.upload-success');
+    
+    input.value = '';
+    placeholder.classList.remove('d-none');
+    success.classList.add('d-none');
+}
+
+function setupFormValidation() {
+    const form = document.getElementById('job-application-form');
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (this.checkValidity()) {
+            submitApplication();
+        } else {
+            this.classList.add('was-validated');
+        }
+    });
+}
+
+function nextStep() {
+    if (validateCurrentStep()) {
+        if (currentStep < totalSteps) {
+            document.getElementById(`step-${currentStep}`).classList.remove('active');
+            currentStep++;
+            document.getElementById(`step-${currentStep}`).classList.add('active');
+            updateProgress();
+            
+            if (currentStep === 4) {
+                updateReview();
+            }
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    }
+}
+
+function prevStep() {
+    if (currentStep > 1) {
+        document.getElementById(`step-${currentStep}`).classList.remove('active');
+        currentStep--;
+        document.getElementById(`step-${currentStep}`).classList.add('active');
+        updateProgress();
+        
+        // Scroll to top
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function validateCurrentStep() {
+    const currentStepElement = document.getElementById(`step-${currentStep}`);
+    const requiredFields = currentStepElement.querySelectorAll('[required]');
+    let isValid = true;
+    
+    requiredFields.forEach(field => {
+        if (!field.checkValidity()) {
+            field.classList.add('is-invalid');
+            isValid = false;
+        } else {
+            field.classList.remove('is-invalid');
+            field.classList.add('is-valid');
+        }
+    });
+    
+    if (!isValid) {
+        currentStepElement.classList.add('was-validated');
+    }
+    
+    return isValid;
+}
+
+function updateProgress() {
+    const progress = (currentStep / totalSteps) * 100;
+    document.getElementById('form-progress').style.width = `${progress}%`;
+}
+
+function updateReview() {
+    // Personal Information
+    const personalInfo = `
+        <p><strong>Name:</strong> ${document.getElementById('firstName').value} ${document.getElementById('lastName').value}</p>
+        <p><strong>Email:</strong> ${document.getElementById('email').value}</p>
+        <p><strong>Phone:</strong> ${document.getElementById('phone').value}</p>
+        <p><strong>Address:</strong> ${document.getElementById('address').value || 'Not provided'}</p>
+    `;
+    document.getElementById('review-personal').innerHTML = personalInfo;
+    
+    // Experience
+    const experienceInfo = `
+        <p><strong>Current Position:</strong> ${document.getElementById('currentPosition').value || 'Not provided'}</p>
+        <p><strong>Experience:</strong> ${document.getElementById('experienceYears').value}</p>
+        <p><strong>Expected Salary:</strong> ${document.getElementById('expectedSalary').value || 'Not specified'}</p>
+        <p><strong>Skills:</strong> ${document.getElementById('skills').value}</p>
+    `;
+    document.getElementById('review-experience').innerHTML = experienceInfo;
+    
+    // Documents
+    const cvFile = document.getElementById('cvFile').files[0];
+    const portfolioFile = document.getElementById('portfolioFile').files[0];
+    const documentsInfo = `
+        <p><strong>CV/Resume:</strong> ${cvFile ? cvFile.name : 'Not uploaded'}</p>
+        <p><strong>Portfolio:</strong> ${portfolioFile ? portfolioFile.name : 'Not uploaded'}</p>
+    `;
+    document.getElementById('review-documents').innerHTML = documentsInfo;
+    
+    // Cover Letter
+    const coverLetterText = document.getElementById('coverLetter').value;
+    document.getElementById('review-cover-letter').innerHTML = `<p>${coverLetterText.substring(0, 200)}${coverLetterText.length > 200 ? '...' : ''}</p>`;
+}
+
+function submitApplication() {
+    const submitBtn = document.querySelector('button[type="submit"]');
+    const spinner = submitBtn.querySelector('.spinner-border');
+    
+    // Show loading state
+    submitBtn.disabled = true;
+    spinner.classList.remove('d-none');
+    
+    // Create FormData
+    const formData = new FormData(document.getElementById('job-application-form'));
+    
+    // Submit application
+    fetch('/jobs/apply', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Redirect to success page
+            window.location.href = `/jobs/apply/success?id=${data.applicationId}`;
+        } else {
+            throw new Error(data.message || 'Application submission failed');
+        }
+    })
+    .catch(error => {
+        console.error('Error submitting application:', error);
+        alert('Error submitting application. Please try again.');
+    })
+    .finally(() => {
+        submitBtn.disabled = false;
+        spinner.classList.add('d-none');
+    });
+}
+</script>
