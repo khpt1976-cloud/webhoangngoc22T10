@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Bundle containing all HoangNgoc modules and themes for OrchardCore CMS")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a695f021a7745e86c31a633d5df677dd59651ad")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4c760b589fad3339843a157db90136f4d0363f71")]
 [assembly: System.Reflection.AssemblyProductAttribute("HoangNgoc.Application.Targets")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HoangNgoc.Application.Targets")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
