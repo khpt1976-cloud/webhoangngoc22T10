@@ -1,0 +1,1123 @@
+{% comment %}
+News List View - HoangNgoc Professional Theme v2.0
+Bootstrap 5.3 Enhanced News listing with modern components
+{% endcomment %}
+
+<div class="news-list-page" data-animate="fade-in">
+    <div class="container py-4">
+        <!-- Page Header -->
+        <div class="row align-items-center mb-5">
+            <div class="col-md-8">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ '~/' | href }}">Trang chủ</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Tin tức</li>
+                    </ol>
+                </nav>
+                <h1 class="display-5 fw-bold mb-3">Tin tức & Sự kiện</h1>
+                <p class="lead text-muted">Cập nhật những thông tin mới nhất về công nghệ, đào tạo và sự kiện</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="d-flex gap-2 justify-content-end">
+                    <a href="{{ '~/News/Subscribe' | href }}" class="btn btn-outline-primary">
+                        <i class="fas fa-bell me-2"></i>Đăng ký nhận tin
+                    </a>
+                    <a href="{{ '~/News/RSS' | href }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-rss me-2"></i>RSS
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Featured News -->
+        {% if Model.FeaturedNews.size > 0 %}
+            <div class="featured-section">
+                <h2 class="section-title">
+                    <i class="fas fa-star"></i>
+                    Tin nổi bật
+                </h2>
+                <div class="featured-news-slider">
+                    {% for news in Model.FeaturedNews limit: 3 %}
+                        <div class="featured-news-item" data-animate="slide-up">
+                            <div class="news-image">
+                                {% if news.FeaturedImageUrl %}
+                                    <img src="{{ news.FeaturedImageUrl | asset_url }}" alt="{{ news.Title }}" loading="lazy">
+                                {% else %}
+                                    <div class="image-placeholder">
+                                        <i class="fas fa-newspaper"></i>
+                                    </div>
+                                {% endif %}
+                                <div class="news-overlay">
+                                    <div class="news-category">{{ news.Category.Name }}</div>
+                                </div>
+                            </div>
+                            <div class="news-content">
+                                <div class="news-meta">
+                                    <span class="news-date">
+                                        <i class="fas fa-calendar"></i>
+                                        {{ news.PublishedDate | date: "dd/MM/yyyy" }}
+                                    </span>
+                                    <span class="news-author">
+                                        <i class="fas fa-user"></i>
+                                        {{ news.Author.Name }}
+                                    </span>
+                                    <span class="news-views">
+                                        <i class="fas fa-eye"></i>
+                                        {{ news.ViewsCount | default: 0 }}
+                                    </span>
+                                </div>
+                                <h3 class="news-title">
+                                    <a href="{{ news.Url | href }}">{{ news.Title }}</a>
+                                </h3>
+                                <p class="news-excerpt">{{ news.Excerpt | truncate: 150 }}</p>
+                                <div class="news-tags">
+                                    {% for tag in news.Tags limit: 3 %}
+                                        <span class="tag">{{ tag.Name }}</span>
+                                    {% endfor %}
+                                </div>
+                                <a href="{{ news.Url | href }}" class="read-more-btn">
+                                    Đọc tiếp <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Filters and Search -->
+        <div class="filters-section">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="search-box">
+                        <form method="get" action="{{ Request.Path }}">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control search-input" 
+                                       placeholder="Tìm kiếm tin tức..." 
+                                       value="{{ Request.Query.search }}">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="filter-controls">
+                        <select name="category" class="form-control filter-select" onchange="this.form.submit()">
+                            <option value="">Tất cả danh mục</option>
+                            {% for category in Model.Categories %}
+                                <option value="{{ category.Id }}" 
+                                        {% if Request.Query.category == category.Id %}selected{% endif %}>
+                                    {{ category.Name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <select name="sort" class="form-control filter-select" onchange="this.form.submit()">
+                            <option value="newest" {% if Request.Query.sort == 'newest' %}selected{% endif %}>Mới nhất</option>
+                            <option value="popular" {% if Request.Query.sort == 'popular' %}selected{% endif %}>Phổ biến</option>
+                            <option value="trending" {% if Request.Query.sort == 'trending' %}selected{% endif %}>Xu hướng</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- News Grid -->
+        <div class="news-content">
+            <div class="row">
+                <!-- Main Content -->
+                <div class="col-lg-8">
+                    {% if Model.News.size > 0 %}
+                        <div class="news-grid">
+                            {% for news in Model.News %}
+                                <article class="news-card" data-animate="slide-up">
+                                    <div class="news-image">
+                                        {% if news.FeaturedImageUrl %}
+                                            <img src="{{ news.FeaturedImageUrl | asset_url }}" alt="{{ news.Title }}" loading="lazy">
+                                        {% else %}
+                                            <div class="image-placeholder">
+                                                <i class="fas fa-newspaper"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div class="news-badges">
+                                            {% if news.IsHot %}
+                                                <span class="badge hot">
+                                                    <i class="fas fa-fire"></i> Hot
+                                                </span>
+                                            {% endif %}
+                                            {% if news.IsBreaking %}
+                                                <span class="badge breaking">
+                                                    <i class="fas fa-bolt"></i> Nóng
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="news-content">
+                                        <div class="news-header">
+                                            <div class="news-category">
+                                                <a href="{{ news.Category.Url | href }}">{{ news.Category.Name }}</a>
+                                            </div>
+                                            <div class="news-meta">
+                                                <span class="news-date">{{ news.PublishedDate | date: "dd/MM/yyyy" }}</span>
+                                                <span class="news-reading-time">{{ news.ReadingTime | default: 5 }} phút đọc</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <h3 class="news-title">
+                                            <a href="{{ news.Url | href }}">{{ news.Title }}</a>
+                                        </h3>
+                                        
+                                        <p class="news-excerpt">{{ news.Excerpt | truncate: 120 }}</p>
+                                        
+                                        <div class="news-footer">
+                                            <div class="author-info">
+                                                <div class="author-avatar">
+                                                    {% if news.Author.Avatar %}
+                                                        <img src="{{ news.Author.Avatar | asset_url }}" alt="{{ news.Author.Name }}">
+                                                    {% else %}
+                                                        <div class="avatar-placeholder">
+                                                            <i class="fas fa-user"></i>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="author-details">
+                                                    <span class="author-name">{{ news.Author.Name }}</span>
+                                                    <span class="author-title">{{ news.Author.Title | default: "Tác giả" }}</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="news-stats">
+                                                <span class="stat-item">
+                                                    <i class="fas fa-eye"></i>
+                                                    {{ news.ViewsCount | default: 0 }}
+                                                </span>
+                                                <span class="stat-item">
+                                                    <i class="fas fa-comments"></i>
+                                                    {{ news.CommentsCount | default: 0 }}
+                                                </span>
+                                                <span class="stat-item">
+                                                    <i class="fas fa-heart"></i>
+                                                    {{ news.LikesCount | default: 0 }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        {% if news.Tags.size > 0 %}
+                                            <div class="news-tags">
+                                                {% for tag in news.Tags limit: 3 %}
+                                                    <a href="{{ tag.Url | href }}" class="tag">{{ tag.Name }}</a>
+                                                {% endfor %}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </article>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Pagination -->
+                        {% if Model.Pager.TotalPages > 1 %}
+                            <div class="pagination-wrapper">
+                                <nav aria-label="News pagination">
+                                    <ul class="pagination">
+                                        {% if Model.Pager.HasPreviousPage %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ Model.Pager.PreviousPageUrl }}">
+                                                    <i class="fas fa-chevron-left"></i> Trước
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        
+                                        {% for page in Model.Pager.Pages %}
+                                            <li class="page-item {% if page.IsCurrent %}active{% endif %}">
+                                                <a class="page-link" href="{{ page.Url }}">{{ page.Number }}</a>
+                                            </li>
+                                        {% endfor %}
+                                        
+                                        {% if Model.Pager.HasNextPage %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="{{ Model.Pager.NextPageUrl }}">
+                                                    Sau <i class="fas fa-chevron-right"></i>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </nav>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="empty-state">
+                            <i class="fas fa-newspaper"></i>
+                            <h3>Không tìm thấy tin tức nào</h3>
+                            <p>Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm để xem thêm tin tức.</p>
+                            <a href="{{ '~/News' | href }}" class="btn btn-primary">Xem tất cả tin tức</a>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <!-- Sidebar -->
+                <div class="col-lg-4">
+                    <div class="news-sidebar">
+                        <!-- Popular News -->
+                        {% if Model.PopularNews.size > 0 %}
+                            <div class="sidebar-widget">
+                                <h3 class="widget-title">
+                                    <i class="fas fa-fire"></i>
+                                    Tin phổ biến
+                                </h3>
+                                <div class="popular-news-list">
+                                    {% for news in Model.PopularNews limit: 5 %}
+                                        <div class="popular-news-item">
+                                            <div class="news-thumbnail">
+                                                {% if news.FeaturedImageUrl %}
+                                                    <img src="{{ news.FeaturedImageUrl | asset_url }}" alt="{{ news.Title }}">
+                                                {% else %}
+                                                    <div class="thumbnail-placeholder">
+                                                        <i class="fas fa-newspaper"></i>
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                            <div class="news-info">
+                                                <h4 class="news-title">
+                                                    <a href="{{ news.Url | href }}">{{ news.Title | truncate: 60 }}</a>
+                                                </h4>
+                                                <div class="news-meta">
+                                                    <span class="news-date">{{ news.PublishedDate | date: "dd/MM" }}</span>
+                                                    <span class="news-views">{{ news.ViewsCount }} lượt xem</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Categories -->
+                        {% if Model.Categories.size > 0 %}
+                            <div class="sidebar-widget">
+                                <h3 class="widget-title">
+                                    <i class="fas fa-folder"></i>
+                                    Danh mục
+                                </h3>
+                                <div class="categories-list">
+                                    {% for category in Model.Categories %}
+                                        <a href="{{ category.Url | href }}" class="category-item">
+                                            <span class="category-name">{{ category.Name }}</span>
+                                            <span class="category-count">{{ category.NewsCount }}</span>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Tags Cloud -->
+                        {% if Model.PopularTags.size > 0 %}
+                            <div class="sidebar-widget">
+                                <h3 class="widget-title">
+                                    <i class="fas fa-tags"></i>
+                                    Thẻ phổ biến
+                                </h3>
+                                <div class="tags-cloud">
+                                    {% for tag in Model.PopularTags %}
+                                        <a href="{{ tag.Url | href }}" class="tag-item" 
+                                           style="font-size: {{ tag.Weight | times: 0.8 | plus: 0.8 }}rem;">
+                                            {{ tag.Name }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Newsletter Signup -->
+                        <div class="sidebar-widget newsletter-widget">
+                            <h3 class="widget-title">
+                                <i class="fas fa-envelope"></i>
+                                Đăng ký nhận tin
+                            </h3>
+                            <p class="widget-description">Nhận thông báo về những tin tức mới nhất</p>
+                            <form class="newsletter-form" method="post" action="{{ '~/News/Subscribe' | href }}">
+                                <div class="form-group">
+                                    <input type="email" name="email" class="form-control" 
+                                           placeholder="Địa chỉ email của bạn" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Đăng ký
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <!-- Social Media -->
+                        <div class="sidebar-widget social-widget">
+                            <h3 class="widget-title">
+                                <i class="fas fa-share-alt"></i>
+                                Theo dõi chúng tôi
+                            </h3>
+                            <div class="social-links">
+                                <a href="#" class="social-link facebook">
+                                    <i class="fab fa-facebook-f"></i>
+                                    <span>Facebook</span>
+                                </a>
+                                <a href="#" class="social-link twitter">
+                                    <i class="fab fa-twitter"></i>
+                                    <span>Twitter</span>
+                                </a>
+                                <a href="#" class="social-link linkedin">
+                                    <i class="fab fa-linkedin-in"></i>
+                                    <span>LinkedIn</span>
+                                </a>
+                                <a href="#" class="social-link youtube">
+                                    <i class="fab fa-youtube"></i>
+                                    <span>YouTube</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.news-list-page {
+    padding: 2rem 0;
+    min-height: 100vh;
+}
+
+.page-header {
+    margin-bottom: 3rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.featured-section {
+    margin-bottom: 3rem;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--text-primary);
+}
+
+.featured-news-slider {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+}
+
+.featured-news-item {
+    background-color: var(--bg-primary);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.featured-news-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.featured-news-item .news-image {
+    position: relative;
+    height: 250px;
+    overflow: hidden;
+}
+
+.featured-news-item .news-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.featured-news-item:hover .news-image img {
+    transform: scale(1.05);
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light);
+    font-size: 3rem;
+}
+
+.news-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 50%, rgba(0,0,0,0.7) 100%);
+    display: flex;
+    align-items: flex-end;
+    padding: 1.5rem;
+}
+
+.news-category {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}
+
+.featured-news-item .news-content {
+    padding: 2rem;
+}
+
+.news-meta {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+.news-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.news-meta i {
+    color: var(--primary-color);
+}
+
+.featured-news-item .news-title {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+.featured-news-item .news-title a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.featured-news-item .news-title a:hover {
+    color: var(--primary-color);
+}
+
+.news-excerpt {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.news-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.tag {
+    padding: 0.25rem 0.75rem;
+    background-color: var(--bg-secondary);
+    color: var(--text-muted);
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.tag:hover {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    text-decoration: none;
+}
+
+.read-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary-color);
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.read-more-btn:hover {
+    color: var(--primary-dark);
+    text-decoration: none;
+}
+
+.filters-section {
+    background-color: var(--bg-secondary);
+    padding: 1.5rem;
+    border-radius: var(--border-radius-lg);
+    margin-bottom: 3rem;
+}
+
+.search-box .input-group {
+    display: flex;
+}
+
+.search-box .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.search-box .btn {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-left: none;
+}
+
+.filter-controls {
+    display: flex;
+    gap: 1rem;
+}
+
+.filter-select {
+    flex: 1;
+}
+
+.news-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.news-card {
+    background-color: var(--bg-primary);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: var(--transition);
+    display: flex;
+    gap: 1.5rem;
+}
+
+.news-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.news-card .news-image {
+    flex: 0 0 200px;
+    height: 200px;
+    position: relative;
+    overflow: hidden;
+}
+
+.news-card .news-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.news-card:hover .news-image img {
+    transform: scale(1.05);
+}
+
+.news-badges {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.badge.hot {
+    background-color: var(--error-color);
+    color: var(--text-light);
+}
+
+.badge.breaking {
+    background-color: var(--warning-color);
+    color: var(--text-light);
+}
+
+.news-card .news-content {
+    flex: 1;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.news-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.news-header .news-category a {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.news-header .news-category a:hover {
+    background-color: var(--primary-dark);
+    text-decoration: none;
+}
+
+.news-card .news-title {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+}
+
+.news-card .news-title a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.news-card .news-title a:hover {
+    color: var(--primary-color);
+}
+
+.news-card .news-excerpt {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: auto;
+}
+
+.news-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-light);
+}
+
+.author-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.author-avatar {
+    flex: 0 0 32px;
+}
+
+.author-avatar img,
+.author-avatar .avatar-placeholder {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+.author-avatar .avatar-placeholder {
+    background-color: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.author-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-name {
+    font-weight: 600;
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+}
+
+.author-title {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.news-stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.stat-item i {
+    color: var(--primary-color);
+}
+
+.news-card .news-tags {
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+.news-sidebar {
+    position: sticky;
+    top: 100px;
+}
+
+.sidebar-widget {
+    background-color: var(--bg-primary);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-sm);
+}
+
+.widget-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: var(--text-primary);
+}
+
+.popular-news-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.popular-news-item {
+    display: flex;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.popular-news-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.news-thumbnail {
+    flex: 0 0 60px;
+    height: 60px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.news-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumbnail-placeholder {
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-muted);
+}
+
+.popular-news-item .news-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.popular-news-item .news-title {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+
+.popular-news-item .news-title a {
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.popular-news-item .news-title a:hover {
+    color: var(--primary-color);
+}
+
+.popular-news-item .news-meta {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    gap: 0.5rem;
+}
+
+.categories-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.category-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: var(--transition-fast);
+}
+
+.category-item:hover {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    text-decoration: none;
+}
+
+.category-count {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+}
+
+.category-item:hover .category-count {
+    background-color: var(--text-light);
+    color: var(--primary-color);
+}
+
+.tags-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag-item {
+    padding: 0.5rem 1rem;
+    background-color: var(--bg-secondary);
+    color: var(--text-muted);
+    border-radius: var(--border-radius-full);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.tag-item:hover {
+    background-color: var(--primary-color);
+    color: var(--text-light);
+    text-decoration: none;
+}
+
+.newsletter-widget {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: var(--text-light);
+}
+
+.newsletter-widget .widget-title {
+    color: var(--text-light);
+}
+
+.widget-description {
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+}
+
+.newsletter-form .form-control {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-light);
+}
+
+.newsletter-form .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.newsletter-form .btn {
+    background-color: var(--text-light);
+    color: var(--primary-color);
+    border-color: var(--text-light);
+}
+
+.newsletter-form .btn:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: var(--transition-fast);
+}
+
+.social-link.facebook {
+    background-color: #1877f2;
+    color: var(--text-light);
+}
+
+.social-link.twitter {
+    background-color: #1da1f2;
+    color: var(--text-light);
+}
+
+.social-link.linkedin {
+    background-color: #0077b5;
+    color: var(--text-light);
+}
+
+.social-link.youtube {
+    background-color: #ff0000;
+    color: var(--text-light);
+}
+
+.social-link:hover {
+    transform: translateX(5px);
+    text-decoration: none;
+}
+
+.pagination-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 3rem;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+}
+
+.page-item {
+    display: flex;
+}
+
+.page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+.page-link:hover,
+.page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--text-light);
+    text-decoration: none;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.empty-state h3 {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.empty-state p {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 768px) {
+    .featured-news-slider {
+        grid-template-columns: 1fr;
+    }
+    
+    .header-actions {
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    
+    .filters-section .row {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .filter-controls {
+        flex-direction: column;
+    }
+    
+    .news-card {
+        flex-direction: column;
+    }
+    
+    .news-card .news-image {
+        flex: none;
+        height: 200px;
+    }
+    
+    .news-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .news-stats {
+        align-self: stretch;
+        justify-content: space-around;
+    }
+    
+    .news-sidebar {
+        position: static;
+        margin-top: 3rem;
+    }
+}
+</style>

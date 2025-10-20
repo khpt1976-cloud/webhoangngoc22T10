@@ -1,0 +1,85 @@
+@model HoangNgoc.Payment.ViewModels.PaymentPartViewModel
+
+<div class="payment-details">
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Payment Information</h4>
+            <dl class="row">
+                <dt class="col-sm-4">Payment ID:</dt>
+                <dd class="col-sm-8">@Model.PaymentPart.PaymentId.Text</dd>
+                
+                <dt class="col-sm-4">Order ID:</dt>
+                <dd class="col-sm-8">@Model.PaymentPart.OrderId.Text</dd>
+                
+                <dt class="col-sm-4">Amount:</dt>
+                <dd class="col-sm-8">@Model.PaymentPart.Amount.Value @Model.PaymentPart.Currency.Text</dd>
+                
+                <dt class="col-sm-4">Payment Method:</dt>
+                <dd class="col-sm-8">@Model.PaymentPart.PaymentMethod.Text</dd>
+                
+                <dt class="col-sm-4">Status:</dt>
+                <dd class="col-sm-8">
+                    <span class="badge badge-@(Model.PaymentPart.PaymentStatus.Text?.ToLower() == "completed" ? "success" : 
+                                              Model.PaymentPart.PaymentStatus.Text?.ToLower() == "pending" ? "warning" : "danger")">
+                        @Model.PaymentPart.PaymentStatus.Text
+                    </span>
+                </dd>
+                
+                <dt class="col-sm-4">Transaction ID:</dt>
+                <dd class="col-sm-8">@Model.PaymentPart.TransactionId.Text</dd>
+                
+                <dt class="col-sm-4">Payment Gateway:</dt>
+                <dd class="col-sm-8">@Model.PaymentPart.PaymentGateway.Text</dd>
+                
+                <dt class="col-sm-4">Payment Date:</dt>
+                <dd class="col-sm-8">@Model.PaymentPart.PaymentDate.Value?.ToString("dd/MM/yyyy HH:mm")</dd>
+            </dl>
+        </div>
+        
+        <div class="col-md-6">
+            <h4>Customer Information</h4>
+            <dl class="row">
+                <dt class="col-sm-4">Email:</dt>
+                <dd class="col-sm-8">@Model.PaymentPart.CustomerEmail.Text</dd>
+                
+                <dt class="col-sm-4">Phone:</dt>
+                <dd class="col-sm-8">@Model.PaymentPart.CustomerPhone.Text</dd>
+                
+                <dt class="col-sm-4">Billing Address:</dt>
+                <dd class="col-sm-8">@Model.PaymentPart.BillingAddress.Text</dd>
+            </dl>
+            
+            @if (Model.PaymentPart.IsRefunded.Value == true)
+            {
+                <h4>Refund Information</h4>
+                <dl class="row">
+                    <dt class="col-sm-4">Refund Amount:</dt>
+                    <dd class="col-sm-8">@Model.PaymentPart.RefundAmount.Value @Model.PaymentPart.Currency.Text</dd>
+                    
+                    <dt class="col-sm-4">Refund Date:</dt>
+                    <dd class="col-sm-8">@Model.PaymentPart.RefundDate.Value?.ToString("dd/MM/yyyy HH:mm")</dd>
+                </dl>
+            }
+        </div>
+    </div>
+    
+    @if (!string.IsNullOrEmpty(Model.PaymentPart.PaymentDescription.Text))
+    {
+        <div class="row mt-3">
+            <div class="col-12">
+                <h4>Description</h4>
+                <p>@Model.PaymentPart.PaymentDescription.Text</p>
+            </div>
+        </div>
+    }
+    
+    @if (!string.IsNullOrEmpty(Model.PaymentPart.PaymentNotes.Text))
+    {
+        <div class="row mt-3">
+            <div class="col-12">
+                <h4>Notes</h4>
+                <p>@Model.PaymentPart.PaymentNotes.Text</p>
+            </div>
+        </div>
+    }
+</div>
