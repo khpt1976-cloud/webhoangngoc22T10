@@ -23,6 +23,7 @@ namespace HoangNgoc.NewsArticle.Services
         Task<List<ArticleComment>> GetArticleCommentsAsync(string articleId, int page = 1, int pageSize = 20);
         Task<bool> IsCommentLikedByUserAsync(string commentId, string userId);
         Task<bool> UnlikeCommentAsync(string commentId, string userId);
+        Task<int> GetCommentLikesCountAsync(string commentId);
     }
 
     public interface IArticleRatingService
@@ -163,6 +164,13 @@ namespace HoangNgoc.NewsArticle.Services
             // TODO: Implement with OrchardCore ContentManager
             await Task.CompletedTask;
             return true;
+        }
+
+        public async Task<int> GetCommentLikesCountAsync(string commentId)
+        {
+            // TODO: Implement with OrchardCore ContentManager
+            await Task.CompletedTask;
+            return 0;
         }
     }
 

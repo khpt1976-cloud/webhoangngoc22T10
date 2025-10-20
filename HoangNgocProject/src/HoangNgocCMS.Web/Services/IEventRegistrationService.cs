@@ -20,6 +20,7 @@ namespace HoangNgoc.Event.Services
         Task<string> GenerateQRCodeAsync(string registrationId);
         Task<int> GetAttendeesCountAsync(string eventId);
         Task<EventRegistration> RegisterUserAsync(EventRegistrationCreateModel model);
+        Task<List<EventRegistration>> GetEventAttendeesAsync(string eventId, int page = 1, int pageSize = 20);
     }
 
     public class EventRegistrationService : IEventRegistrationService
@@ -138,6 +139,13 @@ namespace HoangNgoc.Event.Services
                 RegistrationDate = new() { Value = DateTime.UtcNow },
                 Status = new() { Text = "Pending" }
             };
+        }
+
+        public async Task<List<EventRegistration>> GetEventAttendeesAsync(string eventId, int page = 1, int pageSize = 20)
+        {
+            // TODO: Implement with OrchardCore ContentManager
+            await Task.CompletedTask;
+            return new List<EventRegistration>();
         }
     }
 }

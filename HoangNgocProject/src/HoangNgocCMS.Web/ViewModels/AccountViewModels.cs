@@ -72,6 +72,8 @@ namespace HoangNgocCMS.Web.ViewModels
         public string? LinkedInUrl { get; set; }
         public string? GitHubUrl { get; set; }
         public string? WebsiteUrl { get; set; }
+        public string? Website { get; set; }
+        public string? Location { get; set; }
         public bool IsPublic { get; set; }
         public bool IsAvailableForHire { get; set; }
         public decimal? SalaryExpectation { get; set; }

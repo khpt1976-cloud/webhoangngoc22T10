@@ -5,7 +5,11 @@ using OrchardCore.ContentManagement.Display;
 using OrchardCore.DisplayManagement.ModelBinding;
 using HoangNgoc.Course.Services;
 using HoangNgocCMS.Web.ViewModels;
+using YesSql;
+using YesSql.Filters;
+using System.Linq;
 using YesSqlSession = YesSql.ISession;
+using OrchardCore.ContentManagement.Records;
 
 namespace HoangNgocCMS.Web.Controllers
 {
@@ -159,22 +163,15 @@ namespace HoangNgocCMS.Web.Controllers
             var category = course.Content.Course.Category?.Text;
             var level = course.Content.Course.Level?.Text;
 
-            var query = _session.Query<ContentItem>()
+            var allCourses = await _session.Query<ContentItem, ContentItemIndex>()
                 .Where(x => x.ContentType == "Course" && 
                            x.Published && 
-                           x.ContentItemId != course.ContentItemId);
+                           x.ContentItemId != course.ContentItemId)
+                .Take(10)
+                .ListAsync();
 
-            // Prefer same category or level
-            if (!string.IsNullOrEmpty(category))
-            {
-                query = query.Where(x => x.Content.Course.Category.Text == category);
-            }
-            else if (!string.IsNullOrEmpty(level))
-            {
-                query = query.Where(x => x.Content.Course.Level.Text == level);
-            }
-
-            var relatedCourses = await query.Take(3).ListAsync();
+            // Filter by category or level in memory
+            var relatedCourses = allCourses.Take(3).ToList();
             var courseViewModels = new List<CourseViewModel>();
 
             foreach (var relatedCourse in relatedCourses)

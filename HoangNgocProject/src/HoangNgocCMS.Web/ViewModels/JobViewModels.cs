@@ -24,6 +24,11 @@ namespace HoangNgocCMS.Web.ViewModels
         public int Page { get; set; }
         public int TotalCount { get; set; }
         public bool HasMoreJobs { get; set; }
+        
+        // Missing properties for JobController
+        public string? SearchQuery { get; set; }
+        public List<string> JobTypes { get; set; } = new();
+        public List<string> ExperienceLevels { get; set; } = new();
     }
 
     public class JobPostingViewModel
@@ -60,6 +65,11 @@ namespace HoangNgocCMS.Web.ViewModels
         public string PostedBy { get; set; } = string.Empty;
         public DateTime PostedDate { get; set; }
         public DateTime LastModified { get; set; }
+        
+        // Missing properties for JobController
+        public DateTime CreatedUtc { get; set; }
+        public DateTime ModifiedUtc { get; set; }
+        public bool Published { get; set; }
     }
 
     public class JobApplicationViewModel
@@ -172,6 +182,11 @@ namespace HoangNgocCMS.Web.ViewModels
         public List<JobPostingViewModel> SimilarJobs { get; set; } = new();
         public List<string> RequiredSkills { get; set; } = new();
         public string CompanyDescription { get; set; } = string.Empty;
+        
+        // Missing properties for JobController
+        public List<JobPostingViewModel> RelatedJobs { get; set; } = new();
+        public bool IsUserLoggedIn { get; set; }
+        public bool HasUserApplied { get; set; }
     }
 
     public class ApplicationSuccessViewModel
@@ -181,6 +196,9 @@ namespace HoangNgocCMS.Web.ViewModels
         public string ApplicationId { get; set; } = string.Empty;
         public DateTime ApplicationDate { get; set; }
         public string ContactEmail { get; set; } = string.Empty;
+        
+        // Missing property for JobController
+        public DateTime SubmittedDate { get; set; }
     }
 
     public class JobApplicationCreateModel

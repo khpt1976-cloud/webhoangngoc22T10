@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Display;
 using OrchardCore.DisplayManagement.ModelBinding;
+using YesSql;
+using System.Linq;
 using YesSqlSession = YesSql.ISession;
+using OrchardCore.ContentManagement.Records;
 using HoangNgoc.Event.Services;
 using HoangNgocCMS.Web.ViewModels;
 
@@ -213,10 +216,10 @@ namespace HoangNgocCMS.Web.Controllers
                     success = true,
                     data = attendees.Select(a => new
                     {
-                        name = $"{a.FirstName} {a.LastName}",
-                        company = a.Company,
-                        jobTitle = a.JobTitle,
-                        registrationDate = a.RegistrationDate
+                        name = a.AttendeeName?.Text ?? string.Empty,
+                        company = a.Company?.Text ?? string.Empty,
+                        jobTitle = a.JobTitle?.Text ?? string.Empty,
+                        registrationDate = a.RegistrationDate?.Value ?? DateTime.MinValue
                     }),
                     count = attendees.Count
                 });
@@ -233,22 +236,15 @@ namespace HoangNgocCMS.Web.Controllers
             var category = eventItem.Content.Event.Category?.Text;
             var location = eventItem.Content.Event.Location?.Text;
 
-            var query = _session.Query<ContentItem>()
+            var allEvents = await _session.Query<ContentItem, ContentItemIndex>()
                 .Where(x => x.ContentType == "Event" && 
                            x.Published && 
-                           x.ContentItemId != eventItem.ContentItemId);
+                           x.ContentItemId != eventItem.ContentItemId)
+                .Take(10)
+                .ListAsync();
 
-            // Prefer same category or location
-            if (!string.IsNullOrEmpty(category))
-            {
-                query = query.Where(x => x.Content.Event.Category.Text == category);
-            }
-            else if (!string.IsNullOrEmpty(location))
-            {
-                query = query.Where(x => x.Content.Event.Location.Text == location);
-            }
-
-            var relatedEvents = await query.Take(3).ListAsync();
+            // Filter by category or location in memory
+            var relatedEvents = allEvents.Take(3).ToList();
             var eventViewModels = new List<EventViewModel>();
 
             foreach (var relatedEvent in relatedEvents)

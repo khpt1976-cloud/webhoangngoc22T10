@@ -21,6 +21,8 @@ namespace HoangNgoc.JobPosting.Services
         Task<bool> RateApplicationAsync(string applicationId, int rating, string? notes = null);
         Task<WebJobApplication> CreateApplicationAsync(JobApplicationCreateModel model);
         Task<JobSearchResult> SearchJobsAsync(JobSearchCriteria criteria);
+        Task<List<HoangNgocCMS.Web.ViewModels.JobApplicationModel>> GetUserApplicationsAsync(string userId, int page = 1, int pageSize = 20);
+        Task<List<JobPostingModel>> GetUserSavedJobsAsync(string userId, int page = 1, int pageSize = 20);
     }
 
     public interface IUserJobService
@@ -155,6 +157,20 @@ namespace HoangNgoc.JobPosting.Services
                 TotalPages = 0,
                 HasMore = false
             };
+        }
+
+        public async Task<List<HoangNgocCMS.Web.ViewModels.JobApplicationModel>> GetUserApplicationsAsync(string userId, int page = 1, int pageSize = 20)
+        {
+            // TODO: Implement with OrchardCore ContentManager
+            await Task.CompletedTask;
+            return new List<HoangNgocCMS.Web.ViewModels.JobApplicationModel>();
+        }
+
+        public async Task<List<JobPostingModel>> GetUserSavedJobsAsync(string userId, int page = 1, int pageSize = 20)
+        {
+            // TODO: Implement with OrchardCore ContentManager
+            await Task.CompletedTask;
+            return new List<JobPostingModel>();
         }
     }
 

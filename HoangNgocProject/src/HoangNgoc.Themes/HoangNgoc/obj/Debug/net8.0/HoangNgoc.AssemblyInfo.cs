@@ -66,7 +66,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HoangNgoc")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3efde7509768235469cc879a1052d12b00e5e4f1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a695f021a7745e86c31a633d5df677dd59651ad")]
 [assembly: System.Reflection.AssemblyProductAttribute("HoangNgoc")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HoangNgoc")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

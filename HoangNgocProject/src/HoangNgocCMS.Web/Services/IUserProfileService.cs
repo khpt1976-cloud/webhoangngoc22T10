@@ -17,6 +17,7 @@ namespace HoangNgoc.UserProfile.Services
         Task<bool> MarkProfileCompleteAsync(string userId);
         Task<int> GetProfileCompletionPercentageAsync(string userId);
         Task TrackUserLoginAsync(string userId);
+        Task<string> UploadUserAvatarAsync(string userId, IFormFile avatar);
     }
 
     public class UserProfileService : IUserProfileService
@@ -95,6 +96,13 @@ namespace HoangNgoc.UserProfile.Services
         {
             // TODO: Implement user login tracking
             await Task.CompletedTask;
+        }
+
+        public async Task<string> UploadUserAvatarAsync(string userId, IFormFile avatar)
+        {
+            // TODO: Implement avatar upload with OrchardCore Media
+            await Task.CompletedTask;
+            return "/images/default-avatar.png";
         }
     }
 }

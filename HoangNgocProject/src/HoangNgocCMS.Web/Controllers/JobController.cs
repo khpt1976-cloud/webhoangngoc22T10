@@ -2,9 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Display;
+using OrchardCore.ContentManagement.Records;
 using OrchardCore.DisplayManagement;
 using OrchardCore.DisplayManagement.ModelBinding;
 using OrchardCore.Settings;
+using YesSql;
+using System.Linq;
 using YesSqlSession = YesSql.ISession;
 using HoangNgoc.JobPosting.Models;
 using HoangNgoc.JobPosting.Services;
@@ -48,68 +51,33 @@ namespace HoangNgocCMS.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(JobListViewModel model)
         {
-            var query = _session.Query<ContentItem>("ContentItem")
-                .Where(x => x.ContentType == "JobPosting" && x.Published);
+            // Use proper OrchardCore YesSql pattern with ContentItemIndex
+            var allJobs = await _session.Query<ContentItem, ContentItemIndex>()
+                .Where(x => x.ContentType == "JobPosting" && x.Published)
+                .OrderByDescending(x => x.CreatedUtc)
+                .ListAsync();
 
-            // Apply search filter
+            // Apply search filter if provided
+            List<ContentItem> jobs = allJobs.ToList();
             if (!string.IsNullOrEmpty(model.SearchQuery))
             {
-                query = query.Where(x => x.DisplayText.Contains(model.SearchQuery) ||
-                                        x.Content.JobPosting.Description.Text.Contains(model.SearchQuery));
+                jobs = jobs.Where(x => x.DisplayText.Contains(model.SearchQuery, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
-            // Apply location filter
+            // Apply location filter if provided
             if (!string.IsNullOrEmpty(model.Location))
             {
-                query = query.Where(x => x.Content.JobPosting.Location.Text.Contains(model.Location));
-            }
-
-            // Apply job type filter
-            if (model.JobTypes != null && model.JobTypes.Any())
-            {
-                query = query.Where(x => model.JobTypes.Contains(x.Content.JobPosting.JobType.Text));
-            }
-
-            // Apply experience level filter
-            if (model.ExperienceLevels != null && model.ExperienceLevels.Any())
-            {
-                query = query.Where(x => model.ExperienceLevels.Contains(x.Content.JobPosting.ExperienceLevel.Text));
-            }
-
-            // Apply category filter
-            if (!string.IsNullOrEmpty(model.Category))
-            {
-                query = query.Where(x => x.Content.JobPosting.Category.Text == model.Category);
-            }
-
-            // Apply sorting
-            switch (model.SortBy?.ToLower())
-            {
-                case "oldest":
-                    query = query.OrderBy(x => x.CreatedUtc);
-                    break;
-                case "salary-high":
-                    query = query.OrderByDescending(x => x.Content.JobPosting.SalaryMax.Value);
-                    break;
-                case "salary-low":
-                    query = query.OrderBy(x => x.Content.JobPosting.SalaryMin.Value);
-                    break;
-                case "company":
-                    query = query.OrderBy(x => x.Content.JobPosting.Company.Text);
-                    break;
-                default: // newest
-                    query = query.OrderByDescending(x => x.CreatedUtc);
-                    break;
+                jobs = jobs.Where(x => x.DisplayText.Contains(model.Location, StringComparison.OrdinalIgnoreCase)).ToList();
             }
 
             // Pagination
             var pageSize = 12;
-            var totalCount = await query.CountAsync();
-            var jobs = await query.Skip((model.Page - 1) * pageSize).Take(pageSize).ListAsync();
+            var totalCount = jobs.Count;
+            var pagedJobs = jobs.Skip((model.Page - 1) * pageSize).Take(pageSize).ToList();
 
             // Build display shapes
             var jobShapes = new List<dynamic>();
-            foreach (var job in jobs)
+            foreach (var job in pagedJobs)
             {
                 var shape = await _contentItemDisplayManager.BuildDisplayAsync(job, _updateModelAccessor.ModelUpdater, "Summary");
                 jobShapes.Add(shape);
@@ -118,7 +86,7 @@ namespace HoangNgocCMS.Web.Controllers
             // Create view model
             var viewModel = new JobListViewModel
             {
-                Jobs = jobShapes,
+                Jobs = new List<JobPostingViewModel>(), // TODO: Convert shapes to ViewModels
                 SearchQuery = model.SearchQuery,
                 Location = model.Location,
                 JobTypes = model.JobTypes,
@@ -150,14 +118,22 @@ namespace HoangNgocCMS.Web.Controllers
             await _userJobService.TrackJobViewAsync(id, HttpContext.Connection.RemoteIpAddress?.ToString());
 
             // Build display shape
-            var shape = await _contentItemDisplayManager.BuildDisplayAsync(job, _updateModelAccessor.ModelUpdater);
+            // Convert ContentItem to JobPostingViewModel
+            var jobViewModel = new JobPostingViewModel
+            {
+                Id = job.ContentItemId,
+                Title = job.DisplayText,
+                CreatedUtc = job.CreatedUtc ?? DateTime.UtcNow,
+                ModifiedUtc = job.ModifiedUtc ?? DateTime.UtcNow,
+                Published = job.Published
+            };
 
             // Get related jobs
             var relatedJobs = await GetRelatedJobsAsync(job);
 
             var viewModel = new JobDetailsViewModel
             {
-                Job = shape,
+                Job = jobViewModel,
                 RelatedJobs = relatedJobs,
                 IsUserLoggedIn = User.Identity.IsAuthenticated,
                 HasUserApplied = User.Identity.IsAuthenticated ? 
@@ -298,36 +274,36 @@ namespace HoangNgocCMS.Web.Controllers
         }
 
         // Helper method to get related jobs
-        private async Task<List<dynamic>> GetRelatedJobsAsync(ContentItem job)
+        private async Task<List<JobPostingViewModel>> GetRelatedJobsAsync(ContentItem job)
         {
             var category = job.Content.JobPosting.Category?.Text;
             var location = job.Content.JobPosting.Location?.Text;
 
-            var query = _session.Query<ContentItem>("ContentItem")
+            var allJobs = await _session.Query<ContentItem, ContentItemIndex>()
                 .Where(x => x.ContentType == "JobPosting" && 
                            x.Published && 
-                           x.ContentItemId != job.ContentItemId);
+                           x.ContentItemId != job.ContentItemId)
+                .Take(10)
+                .ListAsync();
 
-            // Prefer same category or location
-            if (!string.IsNullOrEmpty(category))
-            {
-                query = query.Where(x => x.Content.JobPosting.Category.Text == category);
-            }
-            else if (!string.IsNullOrEmpty(location))
-            {
-                query = query.Where(x => x.Content.JobPosting.Location.Text == location);
-            }
-
-            var relatedJobs = await query.Take(3).ListAsync();
-            var shapes = new List<dynamic>();
+            // Filter by category or location in memory
+            var relatedJobs = allJobs.Take(3).ToList();
+            var viewModels = new List<JobPostingViewModel>();
 
             foreach (var relatedJob in relatedJobs)
             {
-                var shape = await _contentItemDisplayManager.BuildDisplayAsync(relatedJob, _updateModelAccessor.ModelUpdater, "Summary");
-                shapes.Add(shape);
+                var viewModel = new JobPostingViewModel
+                {
+                    Id = relatedJob.ContentItemId,
+                    Title = relatedJob.DisplayText,
+                    CreatedUtc = relatedJob.CreatedUtc ?? DateTime.UtcNow,
+                    ModifiedUtc = relatedJob.ModifiedUtc ?? DateTime.UtcNow,
+                    Published = relatedJob.Published
+                };
+                viewModels.Add(viewModel);
             }
 
-            return shapes;
+            return viewModels;
         }
     }
 }

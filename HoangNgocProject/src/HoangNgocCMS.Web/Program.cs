@@ -16,14 +16,14 @@ builder.Services
         services.AddScoped<ICustomEmailService, CustomEmailService>();
         services.AddScoped<IUserProfileService, UserProfileService>();
         services.AddScoped<IJobApplicationService, JobApplicationService>();
-        services.AddScoped<IUserJobService, UserJobService>();
+        services.AddScoped<HoangNgocCMS.Web.Services.IUserJobService, HoangNgocCMS.Web.Services.UserJobService>();
         services.AddScoped<ICourseEnrollmentService, CourseEnrollmentService>();
         services.AddScoped<IEventRegistrationService, EventRegistrationService>();
         services.AddScoped<ICommentService, CommentService>();
-        services.AddScoped<IArticleRatingService, ArticleRatingService>();
+        services.AddScoped<HoangNgoc.NewsArticle.Services.IArticleRatingService, HoangNgoc.NewsArticle.Services.ArticleRatingService>();
         
         // Configure email settings
-        services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+        services.Configure<HoangNgocCMS.Web.Services.EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
         
         // Add authentication services
         services.AddAuthentication()
@@ -34,11 +34,11 @@ builder.Services
             .AddFacebook(options => {
                 options.AppId = builder.Configuration["Authentication:Facebook:AppId"];
                 options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
-            })
-            .AddGitHub(options => {
-                options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"];
-                options.ClientSecret = builder.Configuration["Authentication:GitHub:ClientSecret"];
             });
+            // .AddGitHub(options => {
+            //     options.ClientId = builder.Configuration["Authentication:GitHub:ClientId"];
+            //     options.ClientSecret = builder.Configuration["Authentication:GitHub:ClientSecret"];
+            // });
             
         // Configure Identity options
         services.Configure<IdentityOptions>(options =>
@@ -79,7 +79,7 @@ builder.Services
         services.AddScoped<ICommentService, CommentService>();
         services.AddScoped<HoangNgocCMS.Web.Services.IUserJobService, HoangNgocCMS.Web.Services.UserJobService>();
         services.AddScoped<HoangNgocCMS.Web.Services.IArticleRatingService, HoangNgocCMS.Web.Services.ArticleRatingService>();
-        services.AddScoped<EmailService>();
+        services.AddScoped<HoangNgocCMS.Web.Services.CustomEmailService>();
     })
     .Configure((app, routes, services) => {
         // Configure custom routes

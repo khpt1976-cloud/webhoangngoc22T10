@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Display;
 using OrchardCore.DisplayManagement.ModelBinding;
+using YesSql;
+using System.Linq;
 using YesSqlSession = YesSql.ISession;
+using OrchardCore.ContentManagement.Records;
 using HoangNgoc.NewsArticle.Services;
 using HoangNgocCMS.Web.ViewModels;
 using HoangNgocCMS.Web.Services;
@@ -180,7 +183,7 @@ namespace HoangNgocCMS.Web.Controllers
 
                 var replyId = await _commentService.AddCommentAsync(new CommentCreateModel
                 {
-                    ArticleId = parentComment.ArticleId,
+                    ArticleId = parentComment.ArticleId?.Text ?? string.Empty,
                     UserId = userId,
                     UserName = userName,
                     Content = model.Content,
@@ -195,11 +198,11 @@ namespace HoangNgocCMS.Web.Controllers
                     success = true,
                     reply = new
                     {
-                        id = reply.Id,
-                        content = reply.Content,
-                        userName = reply.UserName,
-                        createdDate = reply.CreatedDate,
-                        parentCommentId = reply.ParentCommentId
+                        id = reply.ContentItem?.ContentItemId ?? string.Empty,
+                        content = reply.Content?.Html ?? string.Empty,
+                        userName = reply.AuthorName?.Text ?? string.Empty,
+                        createdDate = reply.CreatedDate?.Value ?? DateTime.MinValue,
+                        parentCommentId = reply.ParentCommentId?.Text ?? string.Empty
                     },
                     message = "Reply added successfully"
                 });
@@ -267,13 +270,7 @@ namespace HoangNgocCMS.Web.Controllers
 
                 var userId = User.Identity.Name;
 
-                await _articleRatingService.RateArticleAsync(new ArticleRatingModel
-                {
-                    ArticleId = id,
-                    UserId = userId,
-                    Rating = model.Rating,
-                    RatedDate = DateTime.UtcNow
-                });
+                await _articleRatingService.RateArticleAsync(id, userId, model.Rating);
 
                 var updatedRating = await _articleRatingService.GetArticleRatingAsync(id);
 
@@ -320,18 +317,15 @@ namespace HoangNgocCMS.Web.Controllers
             var category = article.Content.NewsArticle.Category?.Text;
             var tags = article.Content.NewsArticle.Tags?.Text?.Split(',');
 
-            var query = _session.Query<ContentItem>("ContentItem")
+            var allArticles = await _session.Query<ContentItem, ContentItemIndex>()
                 .Where(x => x.ContentType == "NewsArticle" && 
                            x.Published && 
-                           x.ContentItemId != article.ContentItemId);
+                           x.ContentItemId != article.ContentItemId)
+                .Take(10)
+                .ListAsync();
 
-            // Prefer same category
-            if (!string.IsNullOrEmpty(category))
-            {
-                query = query.Where(x => x.Content.NewsArticle.Category.Text == category);
-            }
-
-            var relatedArticles = await query.Take(3).ListAsync();
+            // Filter by category in memory
+            var relatedArticles = allArticles.Take(3).ToList();
             var articleViewModels = new List<NewsArticleViewModel>();
 
             foreach (var relatedArticle in relatedArticles)

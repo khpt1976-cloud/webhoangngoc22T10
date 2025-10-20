@@ -252,7 +252,7 @@ namespace HoangNgocCMS.Web.Controllers
                     return Json(new { success = false, message = "User not found." });
                 }
 
-                await _userProfileService.UpdateUserProfileAsync(user.UserId, new UserProfileUpdateModel
+                await _userProfileService.UpdateUserProfileAsync(user.UserId, new UpdateProfileViewModel
                 {
                     FirstName = model.FirstName,
                     LastName = model.LastName,
