@@ -6,6 +6,7 @@
 
 ```
 YourProject/
+├── YourProject.sln                        ← **SOLUTION FILE (QUAN TRỌNG)**
 ├── src/
 │   ├── YourProject.Web/                    ← Main Web Application (CLEAN)
 │   │   ├── YourProject.Web.csproj
@@ -43,7 +44,40 @@ YourProject/
 └── README.md
 ```
 
-## 🎯 2. MAIN WEB APPLICATION (YourProject.Web)
+## 🎯 2. SOLUTION FILE (.sln) - QUAN TRỌNG
+
+### ✅ Tạo Solution file:
+
+```bash
+# Tạo solution file
+dotnet new sln --name YourProject
+
+# Thêm tất cả projects vào solution
+dotnet sln add src/YourProject.Web/YourProject.Web.csproj
+dotnet sln add src/YourProject.Application.Targets/YourProject.Application.Targets.csproj
+dotnet sln add src/YourProject.Modules/YourModule.*/YourModule.*.csproj
+dotnet sln add src/YourProject.Themes/YourTheme/YourTheme.csproj
+```
+
+### ✅ Lợi ích của Solution file:
+
+1. **Quản lý tập trung** - Build tất cả projects cùng lúc
+2. **Visual Studio support** - Mở toàn bộ dự án trong IDE
+3. **Dependency management** - Tự động resolve dependencies
+4. **CI/CD friendly** - Build scripts đơn giản hơn
+5. **Team collaboration** - Cấu trúc rõ ràng cho team
+
+### ✅ Build từ Solution:
+
+```bash
+# Build toàn bộ solution
+dotnet build
+
+# Run từ solution
+dotnet run --project src/YourProject.Web
+```
+
+## 🎯 3. MAIN WEB APPLICATION (YourProject.Web)
 
 ### ✅ CÁCH ĐÚNG - Main Project .csproj:
 
