@@ -1,0 +1,178 @@
+info: Microsoft.Hosting.Lifetime[14]
+      Now listening on: http://0.0.0.0:8080
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /workspace/HoangNgocProject/src/HoangNgocCMS.Web
+warn: Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
+      Failed to determine the https port for redirect.
+info: OrchardCore.Environment.Shell.ShellHost[0]
+      Start creation of shells
+info: OrchardCore.Environment.Shell.ShellHost[0]
+      Done pre-creating and registering shells
+info: OrchardCore.Environment.Shell.Builders.ShellContextFactory[0]
+      Creating shell context for tenant 'Default'
+info: OrchardCore.Modules.ModularTenantRouterMiddleware[0]
+      Begin Routing Request
+info: OrchardCore.DisplayManagement.Descriptors.DefaultShapeTableManager[0]
+      Start building shape table for HoangNgoc
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering shapes
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Start discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering candidate views filenames
+info: OrchardCore.DisplayManagement.Descriptors.ShapeTemplateStrategy.ShapeTemplateBindingStrategy[0]
+      Done discovering shapes
+info: OrchardCore.DisplayManagement.Descriptors.DefaultShapeTableManager[0]
+      Done building shape table for HoangNgoc

@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "aCB4BJY/ovu0X/Eo4UmkMH3NYmC6WxmzTFl74rVOyzA=",
+  "Source": "HoangNgoc",
+  "BasePath": "_content/HoangNgoc",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "HoangNgoc/wwwroot",
+      "Source": "HoangNgoc",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgoc.Themes/HoangNgoc/wwwroot/",
+      "BasePath": "_content/HoangNgoc",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}

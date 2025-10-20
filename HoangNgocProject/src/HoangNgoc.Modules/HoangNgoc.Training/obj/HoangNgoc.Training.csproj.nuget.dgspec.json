@@ -1,0 +1,147 @@
+{
+  "format": 1,
+  "restore": {
+    "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Training/HoangNgoc.Training.csproj": {}
+  },
+  "projects": {
+    "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Training/HoangNgoc.Training.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Training/HoangNgoc.Training.csproj",
+        "projectName": "HoangNgoc.Training",
+        "projectPath": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Training/HoangNgoc.Training.csproj",
+        "packagesPath": "/root/.nuget/packages/",
+        "outputPath": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Training/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/root/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "OrchardCore.Autoroute": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.ContentFields": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.ContentManagement": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.ContentTypes": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.Data": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.DisplayManagement": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.Html": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.Indexing": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.Liquid": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.Media": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.Module.Targets": {
+              "target": "Package",
+              "version": "[2.2.1, )"
+            },
+            "OrchardCore.Navigation": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.Queries": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.Roles": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.Security": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.Taxonomies": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.Title": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.Users": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "OrchardCore.Workflows": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.415/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

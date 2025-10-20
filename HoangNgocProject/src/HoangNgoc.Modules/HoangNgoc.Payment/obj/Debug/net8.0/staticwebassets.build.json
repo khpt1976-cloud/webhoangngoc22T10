@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "KNz5cbHZ9miQsLY5UJQgrtNtkl2RahTXzRY3J+mOTqw=",
+  "Source": "HoangNgoc.Payment",
+  "BasePath": "_content/HoangNgoc.Payment",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "HoangNgoc.Payment/wwwroot",
+      "Source": "HoangNgoc.Payment",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Payment/wwwroot/",
+      "BasePath": "_content/HoangNgoc.Payment",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}

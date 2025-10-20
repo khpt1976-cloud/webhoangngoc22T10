@@ -1,0 +1,247 @@
+@model dynamic
+
+@{
+    ViewData["Title"] = "Tin tức";
+    var newsArticles = Model.NewsArticles as IEnumerable<OrchardCore.ContentManagement.ContentItem>;
+    var page = (int)Model.Page;
+    var pageSize = (int)Model.PageSize;
+    var totalCount = (int)Model.TotalCount;
+    var totalPages = (int)Model.TotalPages;
+    var searchQuery = Model.SearchQuery as string;
+    var categorySlug = Model.CategorySlug as string;
+    var isFeatured = Model.IsFeatured as bool?;
+}
+
+<div class="news-container">
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="news-header">
+                <h1 class="news-title">
+                    @if (!string.IsNullOrEmpty(searchQuery))
+                    {
+                        <span>Kết quả tìm kiếm: "@searchQuery"</span>
+                    }
+                    else if (!string.IsNullOrEmpty(categorySlug))
+                    {
+                        <span>Danh mục: @System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(categorySlug.Replace("-", " "))</span>
+                    }
+                    else if (isFeatured == true)
+                    {
+                        <span>Tin nổi bật</span>
+                    }
+                    else
+                    {
+                        <span>Tin tức mới nhất</span>
+                    }
+                </h1>
+                <p class="news-count">Tìm thấy @totalCount bài viết</p>
+            </div>
+
+            @if (newsArticles != null && newsArticles.Any())
+            {
+                <div class="news-grid">
+                    @foreach (var article in newsArticles)
+                    {
+                        <article class="news-card">
+                            @await DisplayAsync(await New.NewsArticle_Summary(ContentItem: article))
+                        </article>
+                    }
+                </div>
+
+                @if (totalPages > 1)
+                {
+                    <nav class="news-pagination">
+                        <ul class="pagination justify-content-center">
+                            @if (page > 1)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" href="@GetPageUrl(page - 1)">Trước</a>
+                                </li>
+                            }
+
+                            @for (int i = Math.Max(1, page - 2); i <= Math.Min(totalPages, page + 2); i++)
+                            {
+                                <li class="page-item @(i == page ? "active" : "")">
+                                    <a class="page-link" href="@GetPageUrl(i)">@i</a>
+                                </li>
+                            }
+
+                            @if (page < totalPages)
+                            {
+                                <li class="page-item">
+                                    <a class="page-link" href="@GetPageUrl(page + 1)">Sau</a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                }
+            }
+            else
+            {
+                <div class="no-news">
+                    <div class="text-center py-5">
+                        <i class="fas fa-newspaper fa-3x text-muted mb-3"></i>
+                        <h3>Không có bài viết nào</h3>
+                        <p class="text-muted">
+                            @if (!string.IsNullOrEmpty(searchQuery))
+                            {
+                                <span>Không tìm thấy bài viết nào với từ khóa "@searchQuery"</span>
+                            }
+                            else
+                            {
+                                <span>Chưa có bài viết nào được đăng tải.</span>
+                            }
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-lg-4">
+            <aside class="news-sidebar">
+                <!-- Search Box -->
+                <div class="sidebar-widget">
+                    <h4>Tìm kiếm</h4>
+                    <form method="get" action="/news/search" class="search-form">
+                        <div class="input-group">
+                            <input type="text" name="q" class="form-control" placeholder="Nhập từ khóa..." value="@searchQuery">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="sidebar-widget">
+                    <h4>Danh mục</h4>
+                    <ul class="category-links">
+                        <li><a href="/news">Tất cả tin tức</a></li>
+                        <li><a href="/news/featured">Tin nổi bật</a></li>
+                        <li><a href="/news/category/cong-nghe">Công nghệ</a></li>
+                        <li><a href="/news/category/kinh-doanh">Kinh doanh</a></li>
+                        <li><a href="/news/category/dao-tao">Đào tạo</a></li>
+                    </ul>
+                </div>
+            </aside>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetPageUrl(int pageNumber)
+    {
+        var url = Context.Request.Path.Value;
+        var query = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
+        query["page"] = pageNumber.ToString();
+        
+        var queryString = string.Join("&", query.Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
+        return $"{url}?{queryString}";
+    }
+}
+
+<style>
+.news-container {
+    margin: 2rem 0;
+}
+
+.news-header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #007bff;
+}
+
+.news-title {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.news-count {
+    color: #666;
+    margin: 0;
+}
+
+.news-grid {
+    display: grid;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.news-card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.news-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.news-sidebar {
+    position: sticky;
+    top: 2rem;
+}
+
+.sidebar-widget {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.sidebar-widget h4 {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #007bff;
+}
+
+.category-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-links li {
+    margin-bottom: 0.5rem;
+}
+
+.category-links a {
+    color: #666;
+    text-decoration: none;
+    padding: 0.5rem 0;
+    display: block;
+    transition: color 0.2s;
+}
+
+.category-links a:hover {
+    color: #007bff;
+}
+
+.no-news {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.news-pagination {
+    margin-top: 2rem;
+}
+
+@@media (max-width: 768px) {
+    .news-container .row {
+        flex-direction: column-reverse;
+    }
+    
+    .news-sidebar {
+        position: static;
+        margin-bottom: 2rem;
+    }
+}
+</style>

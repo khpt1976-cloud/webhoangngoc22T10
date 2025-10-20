@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "8gNkggPB/ZBxVSLWIqVO26/DjBZ+ldx9BIhsAqSQjBk=",
+  "Source": "HoangNgoc.Comment",
+  "BasePath": "_content/HoangNgoc.Comment",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "HoangNgoc.Comment/wwwroot",
+      "Source": "HoangNgoc.Comment",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Comment/wwwroot/",
+      "BasePath": "_content/HoangNgoc.Comment",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}

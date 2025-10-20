@@ -1,0 +1,494 @@
+{
+  // ===== CORE CONTENT PARTS =====
+  "Parts_Title": [
+    {
+      "place": "Header:1",
+      "wrapper": "div",
+      "classes": ["page-title-wrapper", "mb-3"]
+    }
+  ],
+  "Parts_Common_Body": [
+    {
+      "place": "Content:1",
+      "wrapper": "div",
+      "classes": ["content-body", "mb-4"]
+    }
+  ],
+  "Parts_Common_Metadata": [
+    {
+      "place": "Meta:1",
+      "wrapper": "div",
+      "classes": ["content-meta", "text-muted", "small", "mb-2"]
+    }
+  ],
+  "Parts_Tags": [
+    {
+      "place": "Footer:1",
+      "wrapper": "div",
+      "classes": ["content-tags", "mt-3"]
+    }
+  ],
+  "Parts_Publish": [
+    {
+      "place": "Meta:2",
+      "wrapper": "div",
+      "classes": ["publish-info", "text-muted", "small"]
+    }
+  ],
+  "Parts_Comments": [
+    {
+      "place": "Footer:2",
+      "wrapper": "div",
+      "classes": ["comments-section", "mt-4", "pt-4", "border-top"]
+    }
+  ],
+  
+  // ===== NAVIGATION & UI ELEMENTS =====
+  "Menu": [
+    {
+      "place": "Navigation:1",
+      "differentiator": "main-menu",
+      "wrapper": "nav",
+      "classes": ["main-navigation"]
+    }
+  ],
+  "Breadcrumb": [
+    {
+      "place": "Header:0",
+      "wrapper": "nav",
+      "classes": ["breadcrumb-nav", "mb-3"]
+    }
+  ],
+  "Messages": [
+    {
+      "place": "Messages:1",
+      "wrapper": "div",
+      "classes": ["alert-container", "mb-4"]
+    }
+  ],
+  "Pager": [
+    {
+      "place": "Footer:0",
+      "wrapper": "nav",
+      "classes": ["pagination-nav", "mt-4", "d-flex", "justify-content-center"]
+    }
+  ],
+  "Widget": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Widget_Html": [
+    {
+      "place": "-"
+    }
+  ],
+  "Widget_Menu": [
+    {
+      "place": "Navigation:1"
+    }
+  ],
+  "Widget_RecentBlogPosts": [
+    {
+      "place": "Sidebar:1"
+    }
+  ],
+  "Widget_Search": [
+    {
+      "place": "Header:2"
+    }
+  ],
+  "Widget_User": [
+    {
+      "place": "Header:3"
+    }
+  ],
+  "ContentItem": [
+    {
+      "place": "Content:1",
+      "contentType": "Page"
+    },
+    {
+      "place": "Content:1",
+      "contentType": "BlogPost"
+    },
+    {
+      "place": "Content:1",
+      "contentType": "Course"
+    },
+    {
+      "place": "Content:1",
+      "contentType": "News"
+    },
+    {
+      "place": "Content:1",
+      "contentType": "Application"
+    }
+  ],
+  "Content": [
+    {
+      "place": "Content:1",
+      "displayType": "HomePage"
+    }
+  ],
+  "Parts_Course": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Parts_Course_Instructor": [
+    {
+      "place": "Meta:1"
+    }
+  ],
+  "Parts_Course_Price": [
+    {
+      "place": "Footer:1"
+    }
+  ],
+  "Parts_Course_Rating": [
+    {
+      "place": "Meta:2"
+    }
+  ],
+  "Parts_Course_Enrollment": [
+    {
+      "place": "Footer:2"
+    }
+  ],
+  "Parts_Payment": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Parts_Payment_Method": [
+    {
+      "place": "Content:2"
+    }
+  ],
+  "Parts_Payment_Status": [
+    {
+      "place": "Meta:1"
+    }
+  ],
+  "Parts_Application": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Parts_Application_Access": [
+    {
+      "place": "Footer:1"
+    }
+  ],
+  "Parts_Application_Download": [
+    {
+      "place": "Footer:2"
+    }
+  ],
+  "Parts_User": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Parts_User_Profile": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Parts_User_Wallet": [
+    {
+      "place": "Sidebar:1"
+    }
+  ],
+  "Parts_User_Activity": [
+    {
+      "place": "Content:2"
+    }
+  ],
+  "Parts_Comment": [
+    {
+      "place": "Footer:3"
+    }
+  ],
+  "Parts_Comment_Form": [
+    {
+      "place": "Footer:4"
+    }
+  ],
+  "Parts_Comment_List": [
+    {
+      "place": "Footer:5"
+    }
+  ],
+  "Parts_News": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Parts_News_Category": [
+    {
+      "place": "Meta:1"
+    }
+  ],
+  "Parts_News_Author": [
+    {
+      "place": "Meta:2"
+    }
+  ],
+  "Parts_News_Tags": [
+    {
+      "place": "Footer:1"
+    }
+  ],
+  "Parts_News_Related": [
+    {
+      "place": "Footer:2"
+    }
+  ],
+  "Parts_Extension": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Parts_Extension_Email": [
+    {
+      "place": "Content:2"
+    }
+  ],
+  "Parts_Extension_SMS": [
+    {
+      "place": "Content:3"
+    }
+  ],
+  "Parts_Core": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Parts_Core_Settings": [
+    {
+      "place": "Content:2"
+    }
+  ],
+  "Parts_Core_Cache": [
+    {
+      "place": "Content:3"
+    }
+  ],
+  "Form": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Form_Field": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Form_Button": [
+    {
+      "place": "Actions:1"
+    }
+  ],
+  "ValidationSummary": [
+    {
+      "place": "Messages:0"
+    }
+  ],
+  "Field_Input": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Field_Textarea": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Field_Select": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Field_Checkbox": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Field_Radio": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Field_File": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Field_Image": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Field_Date": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Field_Time": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Field_DateTime": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Field_Number": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Field_Email": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Field_Url": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Field_Password": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Field_Hidden": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Layout": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Zone": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Shape": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "List": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "ListItem": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Summary": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "SummaryAdmin": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Detail": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Edit": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Create": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Delete": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Admin": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Dashboard": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Settings": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Login": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Register": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "ForgotPassword": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "ResetPassword": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "ChangePassword": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Profile": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Error": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "NotFound": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Unauthorized": [
+    {
+      "place": "Content:1"
+    }
+  ],
+  "Forbidden": [
+    {
+      "place": "Content:1"
+    }
+  ]
+}

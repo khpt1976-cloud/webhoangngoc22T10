@@ -1,0 +1,297 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {
+      "Json.More.Net/2.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Json.More.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Json.More.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "JsonPath.Net/1.1.6": {
+        "type": "package",
+        "dependencies": {
+          "Json.More.Net": "2.0.2"
+        },
+        "compile": {
+          "lib/net8.0/JsonPath.Net.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/JsonPath.Net.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Microsoft.IO.RecyclableMemoryStream/3.0.1": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/Microsoft.IO.RecyclableMemoryStream.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Microsoft.IO.RecyclableMemoryStream.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "OrchardCore.Abstractions/2.2.1": {
+        "type": "package",
+        "dependencies": {
+          "JsonPath.Net": "1.1.6",
+          "Microsoft.IO.RecyclableMemoryStream": "3.0.1",
+          "ZString": "2.6.0"
+        },
+        "compile": {
+          "lib/net8.0/OrchardCore.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/OrchardCore.Abstractions.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "OrchardCore.Module.Targets/2.2.1": {
+        "type": "package",
+        "dependencies": {
+          "JsonPath.Net": "1.1.6",
+          "Microsoft.IO.RecyclableMemoryStream": "3.0.1",
+          "OrchardCore.Abstractions": "2.2.1",
+          "ZString": "2.6.0"
+        },
+        "compile": {
+          "lib/net8.0/OrchardCore.Module.Targets.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/OrchardCore.Module.Targets.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ],
+        "build": {
+          "build/OrchardCore.Module.Targets.props": {},
+          "build/OrchardCore.Module.Targets.targets": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/OrchardCore.Module.Targets.props": {},
+          "buildMultiTargeting/OrchardCore.Module.Targets.targets": {}
+        }
+      },
+      "ZString/2.6.0": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/ZString.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/ZString.dll": {
+            "related": ".xml"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Json.More.Net/2.0.2": {
+      "sha512": "izscdjjk8EAHDBCjyz7V7n77SzkrSjh/hUGV6cyR6PlVdjYDh5ohc8yqvwSqJ9+6Uof8W6B24dIHlDKD+I1F8A==",
+      "type": "package",
+      "path": "json.more.net/2.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "README.md",
+        "json-logo-256.png",
+        "json.more.net.2.0.2.nupkg.sha512",
+        "json.more.net.nuspec",
+        "lib/net8.0/Json.More.dll",
+        "lib/net8.0/Json.More.xml",
+        "lib/netstandard2.0/Json.More.dll",
+        "lib/netstandard2.0/Json.More.xml"
+      ]
+    },
+    "JsonPath.Net/1.1.6": {
+      "sha512": "FQLbFJdjIa70GdYGR3RpdGkLTMZwQCqcd8gC35yx6aGofVEP3QxMvSuXHn75N30jj9SS6yvsPPTDzJmPMt/Mdw==",
+      "type": "package",
+      "path": "jsonpath.net/1.1.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "README.md",
+        "json-logo-256.png",
+        "jsonpath.net.1.1.6.nupkg.sha512",
+        "jsonpath.net.nuspec",
+        "lib/net8.0/JsonPath.Net.dll",
+        "lib/net8.0/JsonPath.Net.xml",
+        "lib/netstandard2.0/JsonPath.Net.dll",
+        "lib/netstandard2.0/JsonPath.Net.xml"
+      ]
+    },
+    "Microsoft.IO.RecyclableMemoryStream/3.0.1": {
+      "sha512": "s/s20YTVY9r9TPfTrN5g8zPF1YhwxyqO6PxUkrYTGI2B+OGPe9AdajWZrLhFqXIvqIW23fnUE4+ztrUWNU1+9g==",
+      "type": "package",
+      "path": "microsoft.io.recyclablememorystream/3.0.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net6.0/Microsoft.IO.RecyclableMemoryStream.dll",
+        "lib/net6.0/Microsoft.IO.RecyclableMemoryStream.xml",
+        "lib/netstandard2.0/Microsoft.IO.RecyclableMemoryStream.dll",
+        "lib/netstandard2.0/Microsoft.IO.RecyclableMemoryStream.xml",
+        "lib/netstandard2.1/Microsoft.IO.RecyclableMemoryStream.dll",
+        "lib/netstandard2.1/Microsoft.IO.RecyclableMemoryStream.xml",
+        "microsoft.io.recyclablememorystream.3.0.1.nupkg.sha512",
+        "microsoft.io.recyclablememorystream.nuspec"
+      ]
+    },
+    "OrchardCore.Abstractions/2.2.1": {
+      "sha512": "wkF5++58guCguXsRUK7JH1ZTfqeTk7O1s6euRUDsFWzHfYWRl+HoYeophW+7bWq/UhkgVvAEo9/YW8vcuYKZHg==",
+      "type": "package",
+      "path": "orchardcore.abstractions/2.2.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "icon.png",
+        "lib/net8.0/OrchardCore.Abstractions.dll",
+        "lib/net8.0/OrchardCore.Abstractions.xml",
+        "orchardcore.abstractions.2.2.1.nupkg.sha512",
+        "orchardcore.abstractions.nuspec"
+      ]
+    },
+    "OrchardCore.Module.Targets/2.2.1": {
+      "sha512": "6R3Ee4X/BiKC8sU3pvzTpyouw8Gh80IJRzsH8w6b7eZxRQcafIQ3i348NEdJWpEJLg+07cuxYu8N1ebVD3YbSw==",
+      "type": "package",
+      "path": "orchardcore.module.targets/2.2.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/OrchardCore.Module.Targets.props",
+        "build/OrchardCore.Module.Targets.targets",
+        "build/Package.Build.props",
+        "buildMultiTargeting/OrchardCore.Module.Targets.props",
+        "buildMultiTargeting/OrchardCore.Module.Targets.targets",
+        "icon.png",
+        "lib/net8.0/OrchardCore.Module.Targets.dll",
+        "lib/net8.0/OrchardCore.Module.Targets.xml",
+        "orchardcore.module.targets.2.2.1.nupkg.sha512",
+        "orchardcore.module.targets.nuspec"
+      ]
+    },
+    "ZString/2.6.0": {
+      "sha512": "XE8a+11nZg0LRaf+RGABEWaHIf8yGd5w8v/Ra1iWxMBmAVzwuKbW7G21mS0U7w7sh1lYcgckInWGgnz4qyET8A==",
+      "type": "package",
+      "path": "zstring/2.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "lib/net6.0/ZString.dll",
+        "lib/net6.0/ZString.xml",
+        "lib/net7.0/ZString.dll",
+        "lib/net7.0/ZString.xml",
+        "lib/netstandard2.0/ZString.dll",
+        "lib/netstandard2.0/ZString.xml",
+        "lib/netstandard2.1/ZString.dll",
+        "lib/netstandard2.1/ZString.xml",
+        "zstring.2.6.0.nupkg.sha512",
+        "zstring.nuspec"
+      ]
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "OrchardCore.Module.Targets >= 2.2.1"
+    ]
+  },
+  "packageFolders": {
+    "/root/.nuget/packages/": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Simple/HoangNgoc.Simple.csproj",
+      "projectName": "HoangNgoc.Simple",
+      "projectPath": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Simple/HoangNgoc.Simple.csproj",
+      "packagesPath": "/root/.nuget/packages/",
+      "outputPath": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Simple/obj/",
+      "projectStyle": "PackageReference",
+      "configFilePaths": [
+        "/root/.nuget/NuGet/NuGet.Config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {}
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      }
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "dependencies": {
+          "OrchardCore.Module.Targets": {
+            "target": "Package",
+            "version": "[2.2.1, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.AspNetCore.App": {
+            "privateAssets": "none"
+          },
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.415/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

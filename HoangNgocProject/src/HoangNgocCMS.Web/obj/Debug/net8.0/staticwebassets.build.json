@@ -1,0 +1,195 @@
+{
+  "Version": 1,
+  "Hash": "b2/1TbFpBpLvdPEP93c12446LT8pwiS7pg+bqbhcWng=",
+  "Source": "HoangNgocCMS.Web",
+  "BasePath": "_content/HoangNgocCMS.Web",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [
+    {
+      "Identity": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Application/HoangNgoc.Application.csproj",
+      "Version": 2,
+      "Source": "HoangNgoc.Application",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    },
+    {
+      "Identity": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Authentication/HoangNgoc.Authentication.csproj",
+      "Version": 2,
+      "Source": "HoangNgoc.Authentication",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    },
+    {
+      "Identity": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Comment/HoangNgoc.Comment.csproj",
+      "Version": 2,
+      "Source": "HoangNgoc.Comment",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    },
+    {
+      "Identity": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Core/HoangNgoc.Core.csproj",
+      "Version": 2,
+      "Source": "HoangNgoc.Core",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    },
+    {
+      "Identity": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.News/HoangNgoc.News.csproj",
+      "Version": 2,
+      "Source": "HoangNgoc.News",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    },
+    {
+      "Identity": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Payment/HoangNgoc.Payment.csproj",
+      "Version": 2,
+      "Source": "HoangNgoc.Payment",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    },
+    {
+      "Identity": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Simple/HoangNgoc.Simple.csproj",
+      "Version": 2,
+      "Source": "HoangNgoc.Simple",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    },
+    {
+      "Identity": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Training/HoangNgoc.Training.csproj",
+      "Version": 2,
+      "Source": "HoangNgoc.Training",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    },
+    {
+      "Identity": "/workspace/HoangNgocProject/src/HoangNgoc.Themes/HoangNgoc/HoangNgoc.csproj",
+      "Version": 2,
+      "Source": "HoangNgoc",
+      "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
+      "AdditionalPublishProperties": "",
+      "AdditionalPublishPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained",
+      "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
+      "AdditionalBuildProperties": "",
+      "AdditionalBuildPropertiesToRemove": "WebPublishProfileFile;TargetFramework;RuntimeIdentifier;SelfContained"
+    }
+  ],
+  "DiscoveryPatterns": [
+    {
+      "Name": "HoangNgoc.Application/wwwroot",
+      "Source": "HoangNgoc.Application",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Application/wwwroot/",
+      "BasePath": "_content/HoangNgoc.Application",
+      "Pattern": "**"
+    },
+    {
+      "Name": "HoangNgoc.Authentication/wwwroot",
+      "Source": "HoangNgoc.Authentication",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Authentication/wwwroot/",
+      "BasePath": "_content/HoangNgoc.Authentication",
+      "Pattern": "**"
+    },
+    {
+      "Name": "HoangNgoc.Comment/wwwroot",
+      "Source": "HoangNgoc.Comment",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Comment/wwwroot/",
+      "BasePath": "_content/HoangNgoc.Comment",
+      "Pattern": "**"
+    },
+    {
+      "Name": "HoangNgoc.Core/wwwroot",
+      "Source": "HoangNgoc.Core",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Core/wwwroot/",
+      "BasePath": "_content/HoangNgoc.Core",
+      "Pattern": "**"
+    },
+    {
+      "Name": "HoangNgoc.News/wwwroot",
+      "Source": "HoangNgoc.News",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.News/wwwroot/",
+      "BasePath": "_content/HoangNgoc.News",
+      "Pattern": "**"
+    },
+    {
+      "Name": "HoangNgoc.Payment/wwwroot",
+      "Source": "HoangNgoc.Payment",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Payment/wwwroot/",
+      "BasePath": "_content/HoangNgoc.Payment",
+      "Pattern": "**"
+    },
+    {
+      "Name": "HoangNgoc.Training/wwwroot",
+      "Source": "HoangNgoc.Training",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Training/wwwroot/",
+      "BasePath": "_content/HoangNgoc.Training",
+      "Pattern": "**"
+    },
+    {
+      "Name": "HoangNgoc/wwwroot",
+      "Source": "HoangNgoc",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgoc.Themes/HoangNgoc/wwwroot/",
+      "BasePath": "_content/HoangNgoc",
+      "Pattern": "**"
+    },
+    {
+      "Name": "HoangNgocCMS.Web/wwwroot",
+      "Source": "HoangNgocCMS.Web",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgocCMS.Web/wwwroot/",
+      "BasePath": "_content/HoangNgocCMS.Web",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/workspace/HoangNgocProject/src/HoangNgocCMS.Web/wwwroot/.placeholder",
+      "SourceId": "HoangNgocCMS.Web",
+      "SourceType": "Discovered",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgocCMS.Web/wwwroot/",
+      "BasePath": "_content/HoangNgocCMS.Web",
+      "RelativePath": ".placeholder",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/.placeholder"
+    }
+  ]
+}

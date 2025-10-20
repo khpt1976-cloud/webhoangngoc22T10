@@ -1,0 +1,737 @@
+{% comment %}
+Application List View - HoangNgoc Theme
+Displays available applications with access management
+{% endcomment %}
+
+<div class="application-list-page" data-animate="fade-in">
+    <div class="container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="page-title">Ứng dụng & Dịch vụ</h1>
+                    <p class="page-subtitle">Khám phá các ứng dụng và dịch vụ độc quyền dành cho thành viên</p>
+                </div>
+                <div class="col-md-4 text-right">
+                    <div class="header-actions">
+                        <a href="{{ '~/Application/MyApps' | href }}" class="btn btn-outline">
+                            <i class="fas fa-mobile-alt"></i> Ứng dụng của tôi
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#all-apps" role="tab">
+                        <i class="fas fa-th-large"></i> Tất cả
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#mobile-apps" role="tab">
+                        <i class="fas fa-mobile-alt"></i> Ứng dụng di động
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#web-apps" role="tab">
+                        <i class="fas fa-globe"></i> Ứng dụng web
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#premium-apps" role="tab">
+                        <i class="fas fa-crown"></i> Premium
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Applications Grid -->
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="all-apps" role="tabpanel">
+                <div class="applications-grid">
+                    {% for app in Model.Applications %}
+                        <div class="app-card" data-animate="slide-up">
+                            <div class="app-header">
+                                <div class="app-icon">
+                                    {% if app.IconUrl %}
+                                        <img src="{{ app.IconUrl | asset_url }}" alt="{{ app.Name }}">
+                                    {% else %}
+                                        <div class="icon-placeholder">
+                                            <i class="fas fa-mobile-alt"></i>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <div class="app-badges">
+                                    {% if app.IsPremium %}
+                                        <span class="badge premium">
+                                            <i class="fas fa-crown"></i> Premium
+                                        </span>
+                                    {% endif %}
+                                    {% if app.IsNew %}
+                                        <span class="badge new">
+                                            <i class="fas fa-sparkles"></i> Mới
+                                        </span>
+                                    {% endif %}
+                                    {% if app.IsFeatured %}
+                                        <span class="badge featured">
+                                            <i class="fas fa-star"></i> Nổi bật
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="app-content">
+                                <h3 class="app-name">{{ app.Name }}</h3>
+                                <p class="app-description">{{ app.Description | truncate: 100 }}</p>
+                                
+                                <div class="app-meta">
+                                    <div class="app-category">
+                                        <i class="fas fa-tag"></i>
+                                        <span>{{ app.Category.Name }}</span>
+                                    </div>
+                                    <div class="app-type">
+                                        <i class="fas fa-{{ app.Type | downcase == 'mobile' ? 'mobile-alt' : 'globe' }}"></i>
+                                        <span>{{ app.Type }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="app-features">
+                                    <h4>Tính năng chính:</h4>
+                                    <ul class="feature-list">
+                                        {% for feature in app.Features limit: 3 %}
+                                            <li>
+                                                <i class="fas fa-check"></i>
+                                                {{ feature }}
+                                            </li>
+                                        {% endfor %}
+                                        {% if app.Features.size > 3 %}
+                                            <li class="more-features">
+                                                <i class="fas fa-plus"></i>
+                                                Và {{ app.Features.size | minus: 3 }} tính năng khác
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+
+                                {% if app.Screenshots.size > 0 %}
+                                    <div class="app-screenshots">
+                                        <div class="screenshot-carousel">
+                                            {% for screenshot in app.Screenshots limit: 3 %}
+                                                <div class="screenshot-item">
+                                                    <img src="{{ screenshot.ThumbnailUrl | asset_url }}" 
+                                                         alt="Screenshot {{ forloop.index }}"
+                                                         onclick="openScreenshot('{{ screenshot.FullUrl | asset_url }}')">
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="app-stats">
+                                    <div class="stat-item">
+                                        <i class="fas fa-download"></i>
+                                        <span>{{ app.DownloadsCount | default: 0 }} lượt tải</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <i class="fas fa-users"></i>
+                                        <span>{{ app.ActiveUsersCount | default: 0 }} người dùng</span>
+                                    </div>
+                                    {% if app.Rating > 0 %}
+                                        <div class="stat-item">
+                                            <div class="rating-stars">
+                                                {% for i in (1..5) %}
+                                                    {% if i <= app.Rating %}
+                                                        <i class="fas fa-star"></i>
+                                                    {% else %}
+                                                        <i class="far fa-star"></i>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                            <span>{{ app.Rating }}/5</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="app-footer">
+                                <div class="app-pricing">
+                                    {% if app.IsFree %}
+                                        <span class="price free">Miễn phí</span>
+                                    {% elsif app.Price > 0 %}
+                                        <span class="price paid">{{ app.Price | currency: "VND" }}</span>
+                                    {% else %}
+                                        <span class="price subscription">Theo gói</span>
+                                    {% endif %}
+                                </div>
+
+                                <div class="app-actions">
+                                    {% if app.HasAccess %}
+                                        {% if app.Type == 'Mobile' %}
+                                            <a href="{{ app.DownloadUrl }}" class="btn btn-success btn-sm" download>
+                                                <i class="fas fa-download"></i> Tải xuống
+                                            </a>
+                                        {% else %}
+                                            <a href="{{ app.LaunchUrl | href }}" class="btn btn-success btn-sm" target="_blank">
+                                                <i class="fas fa-external-link-alt"></i> Mở ứng dụng
+                                            </a>
+                                        {% endif %}
+                                    {% elsif app.IsFree %}
+                                        <button class="btn btn-primary btn-sm" onclick="requestAccess('{{ app.Id }}')">
+                                            <i class="fas fa-plus"></i> Thêm vào
+                                        </button>
+                                    {% else %}
+                                        <a href="{{ app.PurchaseUrl | href }}" class="btn btn-primary btn-sm">
+                                            <i class="fas fa-shopping-cart"></i> Mua ngay
+                                        </a>
+                                    {% endif %}
+                                    
+                                    <button class="btn btn-outline btn-sm" onclick="showAppDetails('{{ app.Id }}')">
+                                        <i class="fas fa-info-circle"></i> Chi tiết
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Mobile Apps Tab -->
+            <div class="tab-pane fade" id="mobile-apps" role="tabpanel">
+                <div class="applications-grid">
+                    {% for app in Model.Applications %}
+                        {% if app.Type == 'Mobile' %}
+                            <!-- Same app card structure as above -->
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Web Apps Tab -->
+            <div class="tab-pane fade" id="web-apps" role="tabpanel">
+                <div class="applications-grid">
+                    {% for app in Model.Applications %}
+                        {% if app.Type == 'Web' %}
+                            <!-- Same app card structure as above -->
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Premium Apps Tab -->
+            <div class="tab-pane fade" id="premium-apps" role="tabpanel">
+                <div class="applications-grid">
+                    {% for app in Model.Applications %}
+                        {% if app.IsPremium %}
+                            <!-- Same app card structure as above -->
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        {% if Model.Applications.size == 0 %}
+            <div class="empty-state">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Chưa có ứng dụng nào</h3>
+                <p>Các ứng dụng và dịch vụ sẽ được cập nhật sớm nhất có thể.</p>
+                <a href="{{ '~/' | href }}" class="btn btn-primary">Quay về trang chủ</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- App Details Modal -->
+<div class="modal fade" id="appDetailsModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Chi tiết ứng dụng</h4>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- App details will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Screenshot Modal -->
+<div class="modal fade" id="screenshotModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="screenshotImage" src="" alt="Screenshot" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.application-list-page {
+    padding: 2rem 0;
+    min-height: 100vh;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.filter-tabs {
+    margin-bottom: 2rem;
+}
+
+.nav-tabs {
+    border-bottom: 2px solid var(--border-color);
+}
+
+.nav-tabs .nav-link {
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-secondary);
+    padding: 1rem 1.5rem;
+    transition: var(--transition-fast);
+}
+
+.nav-tabs .nav-link:hover,
+.nav-tabs .nav-link.active {
+    border-bottom-color: var(--primary-color);
+    color: var(--primary-color);
+    background-color: transparent;
+}
+
+.applications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.app-card {
+    background-color: var(--bg-primary);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    transition: var(--transition);
+    position: relative;
+}
+
+.app-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.app-header {
+    position: relative;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: var(--text-light);
+}
+
+.app-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem auto;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.icon-placeholder {
+    font-size: 2rem;
+    color: var(--text-light);
+}
+
+.app-badges {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius-full);
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.badge.premium {
+    background-color: var(--warning-color);
+    color: var(--text-light);
+}
+
+.badge.new {
+    background-color: var(--success-color);
+    color: var(--text-light);
+}
+
+.badge.featured {
+    background-color: var(--info-color);
+    color: var(--text-light);
+}
+
+.app-content {
+    padding: 1.5rem;
+}
+
+.app-name {
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    text-align: center;
+    color: var(--text-primary);
+}
+
+.app-description {
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.app-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.app-category,
+.app-type {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+.app-category i,
+.app-type i {
+    color: var(--primary-color);
+}
+
+.app-features {
+    margin-bottom: 1.5rem;
+}
+
+.app-features h4 {
+    font-size: var(--font-size-base);
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+}
+
+.feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.feature-list li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+}
+
+.feature-list li i {
+    color: var(--success-color);
+    font-size: var(--font-size-xs);
+}
+
+.more-features {
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.app-screenshots {
+    margin-bottom: 1.5rem;
+}
+
+.screenshot-carousel {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.screenshot-item {
+    flex: 0 0 100px;
+    height: 60px;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.screenshot-item:hover {
+    transform: scale(1.05);
+}
+
+.screenshot-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.app-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.stat-item i {
+    color: var(--primary-color);
+}
+
+.rating-stars {
+    display: flex;
+    gap: 0.125rem;
+}
+
+.rating-stars i {
+    color: var(--warning-color);
+    font-size: var(--font-size-xs);
+}
+
+.app-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background-color: var(--bg-secondary);
+    border-top: 1px solid var(--border-light);
+}
+
+.app-pricing {
+    font-weight: 700;
+}
+
+.price.free {
+    color: var(--success-color);
+}
+
+.price.paid {
+    color: var(--primary-color);
+}
+
+.price.subscription {
+    color: var(--warning-color);
+}
+
+.app-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: var(--text-muted);
+    margin-bottom: 1.5rem;
+}
+
+.empty-state h3 {
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+}
+
+.empty-state p {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.modal-content {
+    border-radius: var(--border-radius-lg);
+    border: none;
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+    background-color: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+}
+
+.modal-title {
+    margin: 0;
+    color: var(--text-primary);
+}
+
+.close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+
+.close:hover {
+    color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+    .applications-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .header-actions {
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    
+    .nav-tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+    
+    .nav-tabs .nav-link {
+        white-space: nowrap;
+        padding: 0.75rem 1rem;
+    }
+    
+    .app-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+    
+    .app-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+        text-align: center;
+    }
+    
+    .app-footer {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .app-actions {
+        justify-content: center;
+    }
+}
+</style>
+
+<script>
+// Tab functionality
+document.querySelectorAll('[data-toggle="tab"]').forEach(tab => {
+    tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // Remove active class from all tabs and panes
+        document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(pane => {
+            pane.classList.remove('show', 'active');
+        });
+        
+        // Add active class to clicked tab
+        this.classList.add('active');
+        
+        // Show corresponding pane
+        const targetPane = document.querySelector(this.getAttribute('href'));
+        if (targetPane) {
+            targetPane.classList.add('show', 'active');
+        }
+    });
+});
+
+// Request access to app
+function requestAccess(appId) {
+    // Show loading state
+    const button = event.target;
+    const originalText = button.innerHTML;
+    button.innerHTML = '<span class="spinner"></span> Đang xử lý...';
+    button.disabled = true;
+    
+    // Simulate API call
+    setTimeout(() => {
+        // Reset button
+        button.innerHTML = '<i class="fas fa-check"></i> Đã thêm';
+        button.classList.remove('btn-primary');
+        button.classList.add('btn-success');
+        
+        // Show success message
+        alert('Ứng dụng đã được thêm vào danh sách của bạn!');
+    }, 1000);
+}
+
+// Show app details modal
+function showAppDetails(appId) {
+    // Load app details via AJAX
+    fetch(`/api/applications/${appId}`)
+        .then(response => response.json())
+        .then(data => {
+            // Populate modal with app details
+            document.querySelector('#appDetailsModal .modal-body').innerHTML = `
+                <div class="app-detail-content">
+                    <h3>${data.name}</h3>
+                    <p>${data.fullDescription}</p>
+                    <!-- Add more details as needed -->
+                </div>
+            `;
+            
+            // Show modal
+            $('#appDetailsModal').modal('show');
+        })
+        .catch(error => {
+            console.error('Error loading app details:', error);
+        });
+}
+
+// Open screenshot in modal
+function openScreenshot(imageUrl) {
+    document.getElementById('screenshotImage').src = imageUrl;
+    $('#screenshotModal').modal('show');
+}
+</script>

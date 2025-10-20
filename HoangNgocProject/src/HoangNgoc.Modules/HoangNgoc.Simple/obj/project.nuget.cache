@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "Qc2203XsXDA=",
+  "success": true,
+  "projectFilePath": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Simple/HoangNgoc.Simple.csproj",
+  "expectedPackageFiles": [
+    "/root/.nuget/packages/json.more.net/2.0.2/json.more.net.2.0.2.nupkg.sha512",
+    "/root/.nuget/packages/jsonpath.net/1.1.6/jsonpath.net.1.1.6.nupkg.sha512",
+    "/root/.nuget/packages/microsoft.io.recyclablememorystream/3.0.1/microsoft.io.recyclablememorystream.3.0.1.nupkg.sha512",
+    "/root/.nuget/packages/orchardcore.abstractions/2.2.1/orchardcore.abstractions.2.2.1.nupkg.sha512",
+    "/root/.nuget/packages/orchardcore.module.targets/2.2.1/orchardcore.module.targets.2.2.1.nupkg.sha512",
+    "/root/.nuget/packages/zstring/2.6.0/zstring.2.6.0.nupkg.sha512"
+  ],
+  "logs": []
+}

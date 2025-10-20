@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "90pvzHs5XMJt5f//lIpmJ907XBhXWKTD0PbOW80l/Ts=",
+  "Source": "HoangNgoc.News",
+  "BasePath": "_content/HoangNgoc.News",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "HoangNgoc.News/wwwroot",
+      "Source": "HoangNgoc.News",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.News/wwwroot/",
+      "BasePath": "_content/HoangNgoc.News",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}

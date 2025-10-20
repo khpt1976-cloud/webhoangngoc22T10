@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="{{ Culture.Name }}" dir="{{ Culture.Dir }}">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()" />
+    
+    <!-- Content Security Policy -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; connect-src 'self'; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';" />
+    
+    <title>{% if Model.Title %}{{ Model.Title }} - {% endif %}{{ Site.SiteName }}</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="{{ Model.Description | default: Site.Description }}" />
+    <meta name="keywords" content="{{ Model.Keywords | default: Site.Keywords }}" />
+    <meta name="author" content="HoangNgoc Professional Theme v2.0" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0d6efd" />
+    
+    <!-- Accessibility Meta -->
+    <meta name="color-scheme" content="light dark" />
+    <meta name="supported-color-schemes" content="light dark" />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% if Model.Title %}{{ Model.Title }} - {% endif %}{{ Site.SiteName }}" />
+    <meta property="og:description" content="{{ Model.Description | default: Site.Description }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ Request.Url }}" />
+    <meta property="og:site_name" content="{{ Site.SiteName }}" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{% if Model.Title %}{{ Model.Title }} - {% endif %}{{ Site.SiteName }}" />
+    <meta name="twitter:description" content="{{ Model.Description | default: Site.Description }}" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ '~/favicon.ico' | href }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ '~/apple-touch-icon.png' | href }}" />
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+    
+    <!-- Font Awesome 6.5 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- Google Fonts - Inter & Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Theme CSS Resources -->
+    <link rel="stylesheet" href="{{ '~/Themes/HoangNgoc/css/hoangngoc-theme.css' | href }}" />
+    <link rel="stylesheet" href="{{ '~/Themes/HoangNgoc/css/hoangngoc-responsive.css' | href }}" />
+    
+    <!-- Head Resources -->
+    {% render_section "HeadMeta", required: false %}
+    {% render_section "HeadLinks", required: false %}
+    {% render_section "HeadScripts", required: false %}
+</head>
+<body class="{% if User.Identity.IsAuthenticated %}authenticated{% else %}anonymous{% endif %} {{ Model.Classes | join: ' ' }}" data-theme="hoangngoc-v2">
+    
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="skip-link visually-hidden-focusable">Bỏ qua đến nội dung chính</a>
+    
+    <!-- Header -->
+    <header class="site-header navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top" role="banner">
+        <div class="container">
+            <!-- Logo -->
+            <a class="navbar-brand d-flex align-items-center" href="{{ '~/' | href }}" title="{{ Site.SiteName }}" aria-label="Trang chủ {{ Site.SiteName }}">
+                <img src="{{ '~/images/logo.png' | href }}" alt="{{ Site.SiteName }}" class="logo-img me-2" height="40" width="40" loading="eager" />
+                <span class="logo-text fw-bold text-primary">{{ Site.SiteName }}</span>
+            </a>
+            
+            <!-- Mobile Menu Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Mở/đóng menu điều hướng">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Navigation -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Main Navigation -->
+                <nav class="navbar-nav me-auto">
+                    <a class="nav-link" href="{{ '~/' | href }}">
+                        <i class="fas fa-home me-1"></i>Trang chủ
+                    </a>
+                    <a class="nav-link" href="{{ '~/News' | href }}">
+                        <i class="fas fa-newspaper me-1"></i>Tin tức
+                    </a>
+                    <a class="nav-link" href="{{ '~/Training' | href }}">
+                        <i class="fas fa-graduation-cap me-1"></i>Đào tạo
+                    </a>
+                    <a class="nav-link" href="{{ '~/Application' | href }}">
+                        <i class="fas fa-briefcase me-1"></i>Ứng dụng
+                    </a>
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cogs me-1"></i>Dịch vụ
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ '~/Payment' | href }}"><i class="fas fa-credit-card me-2"></i>Thanh toán</a></li>
+                            <li><a class="dropdown-item" href="{{ '~/Core' | href }}"><i class="fas fa-wallet me-2"></i>Ví điện tử</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{{ '~/Support' | href }}"><i class="fas fa-headset me-2"></i>Hỗ trợ</a></li>
+                        </ul>
+                    </div>
+                </nav>
+                
+                <!-- User Menu -->
+                <div class="navbar-nav ms-auto">
+                    {% if User.Identity.IsAuthenticated %}
+                        <!-- Wallet Balance -->
+                        <div class="nav-item me-3">
+                            <span class="navbar-text">
+                                <i class="fas fa-wallet text-success"></i>
+                                <span class="fw-semibold">{{ User.WalletBalance | default: "0" | number_format }} VNĐ</span>
+                            </span>
+                        </div>
+                        
+                        <!-- Notifications -->
+                        <div class="nav-item dropdown me-2">
+                            <a class="nav-link position-relative" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bell"></i>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    3
+                                    <span class="visually-hidden">unread messages</span>
+                                </span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><h6 class="dropdown-header">Thông báo</h6></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-info-circle text-info me-2"></i>Khóa học mới đã được thêm</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-check-circle text-success me-2"></i>Thanh toán thành công</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-graduation-cap text-primary me-2"></i>Hoàn thành bài học</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-center" href="{{ '~/Notifications' | href }}">Xem tất cả</a></li>
+                            </ul>
+                        </div>
+                        
+                        <!-- User Dropdown -->
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="{{ User.Avatar | default: '~/images/default-avatar.png' | href }}" alt="{{ User.Identity.Name }}" class="rounded-circle me-2" width="32" height="32" />
+                                <span class="d-none d-md-inline">{{ User.Identity.Name }}</span>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li><h6 class="dropdown-header">{{ User.Identity.Name }}</h6></li>
+                                <li><a class="dropdown-item" href="{{ '~/Account/Profile' | href }}">
+                                    <i class="fas fa-user me-2"></i>Hồ sơ cá nhân
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ '~/Wallet/Dashboard' | href }}">
+                                    <i class="fas fa-wallet me-2"></i>Ví điện tử
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ '~/Training/MyCourses' | href }}">
+                                    <i class="fas fa-graduation-cap me-2"></i>Khóa học của tôi
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ '~/Application/MyApps' | href }}">
+                                    <i class="fas fa-mobile-alt me-2"></i>Ứng dụng của tôi
+                                </a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{{ '~/Account/Settings' | href }}">
+                                    <i class="fas fa-cog me-2"></i>Cài đặt
+                                </a></li>
+                                <li><a class="dropdown-item" href="{{ '~/Account/Logout' | href }}">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Đăng xuất
+                                </a></li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <div class="nav-item">
+                            <div class="d-flex gap-2">
+                                <a href="{{ '~/Account/Login' | href }}" class="btn btn-outline-primary">
+                                    <i class="fas fa-sign-in-alt me-1"></i>Đăng nhập
+                                </a>
+                                <a href="{{ '~/Account/Register' | href }}" class="btn btn-primary">
+                                    <i class="fas fa-user-plus me-1"></i>Đăng ký
+                                </a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Breadcrumb Navigation -->
+    {% unless Model.IsHomePage %}
+    <nav class="breadcrumb-nav bg-light py-2" aria-label="breadcrumb">
+        <div class="container">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item">
+                    <a href="{{ '~/' | href }}">
+                        <i class="fas fa-home me-1"></i>Trang chủ
+                    </a>
+                </li>
+                {% if Model.ContentItem.ContentType %}
+                    <li class="breadcrumb-item">
+                        <a href="{{ '~/' | append: Model.ContentItem.ContentType | href }}">
+                            {{ Model.ContentItem.ContentType }}
+                        </a>
+                    </li>
+                {% endif %}
+                {% if Model.Title %}
+                    <li class="breadcrumb-item active" aria-current="page">
+                        {{ Model.Title }}
+                    </li>
+                {% endif %}
+            </ol>
+        </div>
+    </nav>
+    {% endunless %}
+    
+    <!-- Main Content -->
+    <main class="site-main" id="main-content" role="main">
+        
+        <!-- Homepage Content -->
+        {% assign is_homepage = true %}
+        {% for content_item in Model.ContentItems %}
+            {% if content_item.ContentType != "HtmlWidget" %}
+                {% assign is_homepage = false %}
+                {% break %}
+            {% endif %}
+        {% endfor %}
+        
+        {% if is_homepage %}
+            <!-- Hero Section -->
+            <section class="hero-section bg-gradient-primary text-white py-5 mb-5">
+                <div class="container">
+                    <div class="row align-items-center min-vh-50">
+                        <div class="col-lg-8">
+                            <div class="hero-content">
+                                <h1 class="hero-title display-4 fw-bold mb-3 animate-fade-in">
+                                    {{ Site.SiteName | default: "Website Hoàng Ngọc" }}
+                                </h1>
+                                <p class="hero-subtitle lead mb-4 animate-fade-in-delay">
+                                    {{ Site.Description | default: "Nền tảng quản lý và đào tạo chuyên nghiệp - Giải pháp toàn diện cho doanh nghiệp hiện đại" }}
+                                </p>
+                                <div class="hero-actions animate-fade-in-delay-2">
+                                    {% unless User.Identity.IsAuthenticated %}
+                                        <a href="{{ '~/Account/Register' | href }}" class="btn btn-light btn-lg me-3 shadow-sm">
+                                            <i class="fas fa-rocket me-2"></i>Bắt đầu ngay
+                                        </a>
+                                        <a href="{{ '~/Training' | href }}" class="btn btn-outline-light btn-lg shadow-sm">
+                                            <i class="fas fa-graduation-cap me-2"></i>Khám phá khóa học
+                                        </a>
+                                    {% else %}
+                                        <a href="{{ '~/Dashboard' | href }}" class="btn btn-light btn-lg me-3 shadow-sm">
+                                            <i class="fas fa-tachometer-alt me-2"></i>Bảng điều khiển
+                                        </a>
+                                        <a href="{{ '~/Training/MyCourses' | href }}" class="btn btn-outline-light btn-lg shadow-sm">
+                                            <i class="fas fa-book-open me-2"></i>Khóa học của tôi
+                                        </a>
+                                    {% endunless %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 text-center">
+                            <div class="hero-image animate-float">
+                                <div class="hero-icon-wrapper">
+                                    <i class="fas fa-laptop-code display-1 text-white-50 mb-3"></i>
+                                    <div class="hero-stats">
+                                        <div class="stat-item">
+                                            <span class="stat-number">1000+</span>
+                                            <span class="stat-label">Học viên</span>
+                                        </div>
+                                        <div class="stat-item">
+                                            <span class="stat-number">50+</span>
+                                            <span class="stat-label">Khóa học</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="features-section py-5 mb-5">
+                <div class="container">
+                    <div class="row text-center mb-5">
+                        <div class="col-lg-8 mx-auto">
+                            <h2 class="section-title display-5 fw-bold mb-3">Tại sao chọn chúng tôi?</h2>
+                            <p class="section-subtitle lead text-muted">
+                                Chúng tôi cung cấp giải pháp toàn diện với công nghệ hiện đại và dịch vụ chuyên nghiệp
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <!-- Feature 1: Training -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="feature-card h-100 text-center p-4 border rounded-3 shadow-sm hover-lift">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-graduation-cap fa-3x text-primary"></i>
+                                </div>
+                                <h4 class="feature-title mb-3">Đào tạo chuyên nghiệp</h4>
+                                <p class="feature-description text-muted mb-4">
+                                    Hệ thống khóa học đa dạng với giảng viên giàu kinh nghiệm và chương trình cập nhật liên tục
+                                </p>
+                                <a href="{{ '~/Training' | href }}" class="btn btn-outline-primary">
+                                    Xem khóa học <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Feature 2: Applications -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="feature-card h-100 text-center p-4 border rounded-3 shadow-sm hover-lift">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-mobile-alt fa-3x text-success"></i>
+                                </div>
+                                <h4 class="feature-title mb-3">Ứng dụng thông minh</h4>
+                                <p class="feature-description text-muted mb-4">
+                                    Phát triển và quản lý ứng dụng với công nghệ tiên tiến, giao diện thân thiện và hiệu suất cao
+                                </p>
+                                <a href="{{ '~/Application' | href }}" class="btn btn-outline-success">
+                                    Khám phá app <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <!-- Feature 3: Payment -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="feature-card h-100 text-center p-4 border rounded-3 shadow-sm hover-lift">
+                                <div class="feature-icon mb-3">
+                                    <i class="fas fa-credit-card fa-3x text-warning"></i>
+                                </div>
+                                <h4 class="feature-title mb-3">Thanh toán an toàn</h4>
+                                <p class="feature-description text-muted mb-4">
+                                    Hệ thống thanh toán đa dạng, bảo mật cao với ví điện tử và các phương thức hiện đại
+                                </p>
+                                <a href="{{ '~/Payment' | href }}" class="btn btn-outline-warning">
+                                    Tìm hiểu thêm <i class="fas fa-arrow-right ms-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Section -->
+            <section class="stats-section bg-light py-5 mb-5">
+                <div class="container">
+                    <div class="row text-center">
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="stat-item">
+                                <div class="stat-icon mb-3">
+                                    <i class="fas fa-users fa-2x text-primary"></i>
+                                </div>
+                                <h3 class="stat-number fw-bold text-primary mb-1">1,000+</h3>
+                                <p class="stat-label text-muted">Học viên đã đăng ký</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="stat-item">
+                                <div class="stat-icon mb-3">
+                                    <i class="fas fa-book fa-2x text-success"></i>
+                                </div>
+                                <h3 class="stat-number fw-bold text-success mb-1">50+</h3>
+                                <p class="stat-label text-muted">Khóa học chất lượng</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="stat-item">
+                                <div class="stat-icon mb-3">
+                                    <i class="fas fa-mobile-alt fa-2x text-warning"></i>
+                                </div>
+                                <h3 class="stat-number fw-bold text-warning mb-1">25+</h3>
+                                <p class="stat-label text-muted">Ứng dụng phát triển</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 mb-4">
+                            <div class="stat-item">
+                                <div class="stat-icon mb-3">
+                                    <i class="fas fa-star fa-2x text-info"></i>
+                                </div>
+                                <h3 class="stat-number fw-bold text-info mb-1">4.9/5</h3>
+                                <p class="stat-label text-muted">Đánh giá từ người dùng</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="cta-section bg-primary text-white py-5">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <h3 class="cta-title display-6 fw-bold mb-3">Sẵn sàng bắt đầu hành trình của bạn?</h3>
+                            <p class="cta-subtitle lead mb-0">
+                                Tham gia cùng hàng nghìn học viên đã tin tưởng và thành công với chúng tôi
+                            </p>
+                        </div>
+                        <div class="col-lg-4 text-lg-end">
+                            {% unless User.Identity.IsAuthenticated %}
+                                <a href="{{ '~/Account/Register' | href }}" class="btn btn-light btn-lg shadow">
+                                    <i class="fas fa-user-plus me-2"></i>Đăng ký ngay
+                                </a>
+                            {% else %}
+                                <a href="{{ '~/Dashboard' | href }}" class="btn btn-light btn-lg shadow">
+                                    <i class="fas fa-tachometer-alt me-2"></i>Vào Dashboard
+                                </a>
+                            {% endunless %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        {% endif %}
+        
+        <!-- Page Content -->
+        <section class="page-content">
+            <div class="container">
+                <div class="row">
+                    <!-- Main Content Area -->
+                    <div class="col-main">
+                        <!-- Messages -->
+                        {% render_section "Messages", required: false %}
+                        
+                        <!-- Page Title -->
+                        {% if Model.Title and Model.IsHomePage == false %}
+                            <div class="page-header">
+                                <h1 class="page-title">{{ Model.Title }}</h1>
+                                {% if Model.Subtitle %}
+                                    <p class="page-subtitle">{{ Model.Subtitle }}</p>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Main Content -->
+                        {% unless is_homepage %}
+                            <div class="main-content">
+                                {% render_body %}
+                            </div>
+                        {% endunless %}
+                    </div>
+                    
+                    <!-- Sidebar -->
+                    {% assign sidebar_content = Model.Sidebar | shape_render %}
+                    {% if sidebar_content != blank %}
+                        <aside class="col-sidebar">
+                            <div class="sidebar-content">
+                                {{ sidebar_content }}
+                            </div>
+                        </aside>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="row">
+                    <!-- Company Info -->
+                    <div class="col-md-4">
+                        <div class="footer-section">
+                            <h3>{{ Site.SiteName }}</h3>
+                            <p>{{ Site.Description }}</p>
+                            <div class="social-links">
+                                <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Links -->
+                    <div class="col-md-2">
+                        <div class="footer-section">
+                            <h4>Liên kết</h4>
+                            <ul class="footer-links">
+                                <li><a href="{{ '~/About' | href }}">Giới thiệu</a></li>
+                                <li><a href="{{ '~/Training' | href }}">Khóa học</a></li>
+                                <li><a href="{{ '~/News' | href }}">Tin tức</a></li>
+                                <li><a href="{{ '~/Contact' | href }}">Liên hệ</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Services -->
+                    <div class="col-md-2">
+                        <div class="footer-section">
+                            <h4>Dịch vụ</h4>
+                            <ul class="footer-links">
+                                <li><a href="{{ '~/Training' | href }}">Đào tạo</a></li>
+                                <li><a href="{{ '~/Application' | href }}">Ứng dụng</a></li>
+                                <li><a href="{{ '~/Payment' | href }}">Thanh toán</a></li>
+                                <li><a href="{{ '~/Support' | href }}">Hỗ trợ</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Contact Info -->
+                    <div class="col-md-4">
+                        <div class="footer-section">
+                            <h4>Liên hệ</h4>
+                            <div class="contact-info">
+                                <p><i class="fas fa-map-marker-alt"></i> Địa chỉ: 123 Đường ABC, Quận XYZ, TP.HCM</p>
+                                <p><i class="fas fa-phone"></i> Điện thoại: (028) 1234 5678</p>
+                                <p><i class="fas fa-envelope"></i> Email: info@hoangngoc.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Copyright -->
+            <div class="footer-bottom">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p>&copy; {{ "now" | date: "yyyy" }} {{ Site.SiteName }}. Tất cả quyền được bảo lưu.</p>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <ul class="footer-legal">
+                            <li><a href="{{ '~/Privacy' | href }}">Chính sách bảo mật</a></li>
+                            <li><a href="{{ '~/Terms' | href }}">Điều khoản sử dụng</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap 5.3 JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    
+    <!-- Theme JavaScript -->
+    {{ "hoangngoc-theme.js" | asset_url | script_tag }}
+    
+    <!-- Footer Scripts -->
+    {% render_section "FooterScripts", required: false %}
+    
+    <!-- Analytics -->
+    {% render_section "Analytics", required: false %}
+    
+    <!-- Back to Top Button -->
+    <button type="button" class="btn btn-primary btn-floating btn-lg" id="btn-back-to-top" style="display: none;">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+</body>
+</html>

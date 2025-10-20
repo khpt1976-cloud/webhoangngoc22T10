@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "S8SlO7qdGEoi3QVEgxCsfw2EOXjsSPff/MMHZl0gvOM=",
+  "Source": "HoangNgoc.Training",
+  "BasePath": "_content/HoangNgoc.Training",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "HoangNgoc.Training/wwwroot",
+      "Source": "HoangNgoc.Training",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Training/wwwroot/",
+      "BasePath": "_content/HoangNgoc.Training",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}

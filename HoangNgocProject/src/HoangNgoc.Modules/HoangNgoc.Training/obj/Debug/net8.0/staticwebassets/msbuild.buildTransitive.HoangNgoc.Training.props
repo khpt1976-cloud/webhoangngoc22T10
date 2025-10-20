@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../buildMultiTargeting/HoangNgoc.Training.props" />
+</Project>

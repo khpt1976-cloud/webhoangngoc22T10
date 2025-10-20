@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "WDl4m7nUaVXbHEQJ86ZaVwyKwH90BJO3dmJb00dA7xc=",
+  "Source": "HoangNgoc.Authentication",
+  "BasePath": "_content/HoangNgoc.Authentication",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "HoangNgoc.Authentication/wwwroot",
+      "Source": "HoangNgoc.Authentication",
+      "ContentRoot": "/workspace/HoangNgocProject/src/HoangNgoc.Modules/HoangNgoc.Authentication/wwwroot/",
+      "BasePath": "_content/HoangNgoc.Authentication",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}

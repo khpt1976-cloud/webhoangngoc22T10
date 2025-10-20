@@ -1,0 +1,93 @@
+@model HoangNgoc.News.Models.NewsArticlePart
+
+<div class="news-article-meta">
+    @if (!string.IsNullOrEmpty(Model.Author.Text))
+    {
+        <div class="news-author">
+            <i class="fas fa-user"></i>
+            <span>@Model.Author.Text</span>
+        </div>
+    }
+    
+    @if (Model.PublishedDate.Value.HasValue)
+    {
+        <div class="news-date">
+            <i class="fas fa-calendar"></i>
+            <span>@Model.PublishedDate.Value.Value.ToString("dd/MM/yyyy")</span>
+        </div>
+    }
+    
+    @if (Model.ViewCount.Value.HasValue && Model.ViewCount.Value > 0)
+    {
+        <div class="news-views">
+            <i class="fas fa-eye"></i>
+            <span>@Model.ViewCount.Value lượt xem</span>
+        </div>
+    }
+    
+    @if (Model.IsFeatured.Value)
+    {
+        <div class="news-featured">
+            <i class="fas fa-star"></i>
+            <span class="badge badge-warning">Nổi bật</span>
+        </div>
+    }
+</div>
+
+@if (!string.IsNullOrEmpty(Model.Summary.Text))
+{
+    <div class="news-summary">
+        <p class="lead">@Model.Summary.Text</p>
+    </div>
+}
+
+@if (Model.FeaturedImage.Paths.Any())
+{
+    <div class="news-featured-image">
+        <img src="@Model.FeaturedImage.Paths.First()" alt="@Model.ContentItem.DisplayText" class="img-fluid" />
+    </div>
+}
+
+<style>
+.news-article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.news-article-meta > div {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.news-article-meta i {
+    color: #007bff;
+}
+
+.news-summary {
+    margin: 1rem 0;
+}
+
+.news-featured-image {
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.news-featured-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.badge-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+</style>
