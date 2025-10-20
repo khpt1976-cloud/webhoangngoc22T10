@@ -1,75 +1,177 @@
-# HoangNgoc OrchardCore CMS - Final Version
+# 🌟 HoangNgoc CMS - OrchardCore Project
 
-## 🎯 Mô tả Project
-Đây là phiên bản hoàn chỉnh của HoangNgoc OrchardCore CMS với 8 modules được tích hợp thành công.
+**Dự án OrchardCore CMS được tái cấu trúc theo chuẩn OrchardCore pattern với 8 custom modules và 1 custom theme.**
 
-## 📋 8 Modules đã tích hợp
+## 🏗️ Cấu Trúc Dự Án
 
-1. **HoangNgoc.Simple** - Module cơ bản
-2. **HoangNgoc.Authentication** - Xác thực người dùng  
-3. **HoangNgoc.Core** - Chức năng cốt lõi
-4. **HoangNgoc.News** - Quản lý tin tức
-5. **HoangNgoc.Comment** - Hệ thống bình luận
-6. **HoangNgoc.Payment** - Xử lý thanh toán
-7. **HoangNgoc.Training** - Đào tạo trực tuyến
-8. **HoangNgoc.Application** - Quản lý ứng tuyển
+```
+HoangNgocProject/
+├── src/
+│   ├── HoangNgocCMS.Web/                   ← Main Web Application (CLEAN)
+│   ├── HoangNgoc.Modules/                  ← 8 Custom Modules (Separate Projects)
+│   │   ├── HoangNgoc.Core/                 ← Platform chính
+│   │   ├── HoangNgoc.Authentication/       ← Xác thực người dùng
+│   │   ├── HoangNgoc.News/                 ← Quản lý tin tức
+│   │   ├── HoangNgoc.Comment/              ← Hệ thống bình luận
+│   │   ├── HoangNgoc.Training/             ← Đào tạo và khóa học
+│   │   ├── HoangNgoc.Payment/              ← Thanh toán
+│   │   ├── HoangNgoc.Application/          ← Ứng dụng việc làm
+│   │   └── HoangNgoc.Simple/               ← Test module
+│   ├── HoangNgoc.Themes/                   ← Custom Themes
+│   │   └── HoangNgoc/                      ← HoangNgoc Theme v2.0
+│   └── HoangNgoc.Application.Targets/      ← Bundle Package
+├── CẤU_TRÚC_CHUẨN_CỦA_DỰ_ÁN_ORCHARDCORE.md ← Tài liệu cấu trúc chuẩn
+└── README.md
+```
 
-## 🚀 Cách chạy
+## 🚀 Công Nghệ Sử Dụng
 
-### Yêu cầu hệ thống:
+- **Framework:** ASP.NET Core 8.0
+- **CMS:** OrchardCore 2.2.1
+- **Database:** SQL Server / SQLite
+- **Frontend:** Bootstrap, jQuery
+- **Architecture:** Modular Architecture Pattern
+
+## 📦 Modules Chính
+
+### 🔧 HoangNgoc.Core
+- Platform chính với các services cơ bản
+- Wallet system và transaction management
+- Application management core
+
+### 🔐 HoangNgoc.Authentication
+- Xác thực người dùng tùy chỉnh
+- Tích hợp với OrchardCore.Users
+- Role-based access control
+
+### 📰 HoangNgoc.News
+- Quản lý tin tức và bài viết
+- Workflow publishing
+- SEO optimization
+- Media integration
+
+### 💬 HoangNgoc.Comment
+- Hệ thống bình luận
+- Moderation tools
+- User interaction
+
+### 🎓 HoangNgoc.Training
+- Quản lý khóa học
+- Lesson tracking
+- Progress monitoring
+- Certificate system
+
+### 💳 HoangNgoc.Payment
+- Tích hợp thanh toán
+- Transaction history
+- Payment methods
+
+### 💼 HoangNgoc.Application
+- Ứng dụng việc làm
+- Job posting management
+- Candidate tracking
+- Recruitment workflow
+
+## 🎨 Theme
+
+### HoangNgoc Theme v2.0
+- Responsive design
+- Bootstrap-based
+- Custom layouts
+- SEO optimized
+
+## 🛠️ Cài Đặt và Chạy
+
+### Yêu Cầu Hệ Thống
 - .NET 8.0 SDK
+- SQL Server hoặc SQLite
 - Visual Studio 2022 hoặc VS Code
 
-### Khởi động:
+### Các Bước Cài Đặt
+
+1. **Clone repository:**
+   ```bash
+   git clone https://github.com/khpt1976-cloud/webhoangngoc20T10.git
+   cd webhoangngoc20T10
+   ```
+
+2. **Restore packages:**
+   ```bash
+   cd src/HoangNgocCMS.Web
+   dotnet restore
+   ```
+
+3. **Build project:**
+   ```bash
+   dotnet build
+   ```
+
+4. **Chạy ứng dụng:**
+   ```bash
+   dotnet run --urls="http://localhost:5000"
+   ```
+
+5. **Truy cập setup:**
+   - Mở browser: `http://localhost:5000`
+   - Làm theo hướng dẫn setup OrchardCore
+   - Tạo admin user và cấu hình database
+
+## 🔧 Cấu Hình
+
+### Database
+- **Development:** SQLite (mặc định)
+- **Production:** SQL Server
+
+### Admin Account
+- **Username:** Hpt
+- **Email:** Khpt1976@gmail.com
+- **Password:** Hpt@768696
+
+## 📚 Tài Liệu
+
+- [Cấu Trúc Chuẩn OrchardCore](./CẤU_TRÚC_CHUẨN_CỦA_DỰ_ÁN_ORCHARDCORE.md)
+- [OrchardCore Documentation](https://docs.orchardcore.net/)
+
+## 🎯 Tính Năng Chính
+
+- ✅ **Modular Architecture** - Cấu trúc module riêng biệt
+- ✅ **Custom Authentication** - Xác thực tùy chỉnh
+- ✅ **News Management** - Quản lý tin tức
+- ✅ **Training System** - Hệ thống đào tạo
+- ✅ **Job Application** - Ứng dụng việc làm
+- ✅ **Payment Integration** - Tích hợp thanh toán
+- ✅ **Comment System** - Hệ thống bình luận
+- ✅ **Responsive Theme** - Giao diện responsive
+
+## 🚀 Deployment
+
+### Development
 ```bash
-dotnet restore
-dotnet build
-dotnet run --urls="http://localhost:5000"
+dotnet run --environment Development
 ```
 
-## 📁 Cấu trúc Project
-
-```
-HoangNgocFinal/
-├── Modules/                    # 8 modules tùy chỉnh
-│   ├── HoangNgoc.Simple/
-│   ├── HoangNgoc.Authentication/
-│   ├── HoangNgoc.Core/
-│   ├── HoangNgoc.News/
-│   ├── HoangNgoc.Comment/
-│   ├── HoangNgoc.Payment/
-│   ├── HoangNgoc.Training/
-│   └── HoangNgoc.Application/
-├── App_Data/                   # Database và cấu hình
-├── wwwroot/                    # Static files
-├── Localization/               # Đa ngôn ngữ
-└── HoangNgocFinal.csproj      # Project file
+### Production
+```bash
+dotnet publish -c Release
 ```
 
-## ✅ Trạng thái
+## 🤝 Đóng Góp
 
-- **Build**: ✅ Thành công (0 errors)
-- **Runtime**: ✅ Hoạt động bình thường
-- **Modules**: ✅ Tất cả 8 modules tích hợp
-- **Database**: SQLite (mặc định)
-- **Theme**: TheTheme (OrchardCore default)
+1. Fork repository
+2. Tạo feature branch
+3. Commit changes
+4. Push to branch
+5. Tạo Pull Request
 
-## 🔧 Lưu ý kỹ thuật
+## 📄 License
 
-- **Framework**: .NET 8.0 + OrchardCore CMS
-- **Database**: SQLite (có thể chuyển sang SQL Server)
-- **Authentication**: Tích hợp sẵn với OrchardCore Identity
-- **Migrations**: Tạm thời disabled để tránh dependency issues
+This project is licensed under the MIT License.
 
-## 📞 Hỗ trợ
+## 📞 Liên Hệ
 
-Nếu gặp vấn đề, vui lòng kiểm tra:
-1. .NET 8.0 SDK đã được cài đặt
-2. Tất cả packages đã được restore
-3. Port 5000 không bị chiếm dụng
+- **Email:** Khpt1976@gmail.com
+- **GitHub:** [khpt1976-cloud](https://github.com/khpt1976-cloud)
 
 ---
 
-**Phát triển bởi**: HoangNgoc Team  
-**Phiên bản**: 1.0.0  
-**Ngày cập nhật**: 19/10/2024
+**🎉 Dự án được tái cấu trúc hoàn toàn theo chuẩn OrchardCore pattern để đảm bảo tính ổn định và khả năng mở rộng!**

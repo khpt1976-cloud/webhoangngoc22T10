@@ -320,3 +320,11 @@ MigrationBackup/
 # *.db-shm - Commented out to include database in git
 # *.db-wal - Commented out to include database in git
 server.log
+
+# HoangNgoc CMS specific
+src/HoangNgocCMS.Web/App_Data/
+src/HoangNgocCMS.Web/Localization/
+src/HoangNgocCMS.Web/wwwroot/media/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
