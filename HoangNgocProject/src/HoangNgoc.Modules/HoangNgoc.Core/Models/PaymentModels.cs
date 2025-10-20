@@ -1,3 +1,4 @@
+using OrchardCore.Media.Fields;
 using System.ComponentModel.DataAnnotations;
 
 namespace HoangNgoc.Core.Models;

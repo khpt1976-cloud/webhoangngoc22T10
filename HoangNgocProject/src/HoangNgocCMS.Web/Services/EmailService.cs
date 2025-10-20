@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace HoangNgocCMS.Web.Services
 {
-    public interface IEmailService
+    public interface ICustomEmailService
     {
         Task SendWelcomeEmailAsync(string email, string name);
         Task SendEmailConfirmationAsync(string email, string name, string confirmationUrl);
@@ -15,18 +15,18 @@ namespace HoangNgocCMS.Web.Services
         Task SendCourseEnrollmentConfirmationAsync(string email, string name, string courseTitle);
     }
 
-    public class EmailService : IEmailService
+    public class CustomEmailService : ICustomEmailService
     {
-        private readonly ISmtpService _smtpService;
-        private readonly ILogger<EmailService> _logger;
+        private readonly IEmailService _emailService;
+        private readonly ILogger<CustomEmailService> _logger;
         private readonly EmailSettings _emailSettings;
 
-        public EmailService(
-            ISmtpService smtpService,
-            ILogger<EmailService> logger,
+        public CustomEmailService(
+            IEmailService emailService,
+            ILogger<CustomEmailService> logger,
             IOptions<EmailSettings> emailSettings)
         {
-            _smtpService = smtpService;
+            _emailService = emailService;
             _logger = logger;
             _emailSettings = emailSettings.Value;
         }
@@ -43,10 +43,10 @@ namespace HoangNgocCMS.Web.Services
                     To = email,
                     Subject = subject,
                     Body = body,
-                    IsBodyHtml = true
+                    IsHtmlBody = true
                 };
 
-                await _smtpService.SendAsync(message);
+                await _emailService.SendAsync(message);
                 _logger.LogInformation($"Welcome email sent to {email}");
             }
             catch (Exception ex)
@@ -68,10 +68,10 @@ namespace HoangNgocCMS.Web.Services
                     To = email,
                     Subject = subject,
                     Body = body,
-                    IsBodyHtml = true
+                    IsHtmlBody = true
                 };
 
-                await _smtpService.SendAsync(message);
+                await _emailService.SendAsync(message);
                 _logger.LogInformation($"Email confirmation sent to {email}");
             }
             catch (Exception ex)
@@ -93,10 +93,10 @@ namespace HoangNgocCMS.Web.Services
                     To = email,
                     Subject = subject,
                     Body = body,
-                    IsBodyHtml = true
+                    IsHtmlBody = true
                 };
 
-                await _smtpService.SendAsync(message);
+                await _emailService.SendAsync(message);
                 _logger.LogInformation($"Password reset email sent to {email}");
             }
             catch (Exception ex)
@@ -118,10 +118,10 @@ namespace HoangNgocCMS.Web.Services
                     To = email,
                     Subject = subject,
                     Body = body,
-                    IsBodyHtml = true
+                    IsHtmlBody = true
                 };
 
-                await _smtpService.SendAsync(message);
+                await _emailService.SendAsync(message);
                 _logger.LogInformation($"Job application confirmation sent to {email} for {jobTitle}");
             }
             catch (Exception ex)
@@ -143,10 +143,10 @@ namespace HoangNgocCMS.Web.Services
                     To = email,
                     Subject = subject,
                     Body = body,
-                    IsBodyHtml = true
+                    IsHtmlBody = true
                 };
 
-                await _smtpService.SendAsync(message);
+                await _emailService.SendAsync(message);
                 _logger.LogInformation($"Application status update sent to {email} for {jobTitle}: {status}");
             }
             catch (Exception ex)
@@ -168,10 +168,10 @@ namespace HoangNgocCMS.Web.Services
                     To = email,
                     Subject = subject,
                     Body = body,
-                    IsBodyHtml = true
+                    IsHtmlBody = true
                 };
 
-                await _smtpService.SendAsync(message);
+                await _emailService.SendAsync(message);
                 _logger.LogInformation($"Event registration confirmation sent to {email} for {eventTitle}");
             }
             catch (Exception ex)
@@ -193,10 +193,10 @@ namespace HoangNgocCMS.Web.Services
                     To = email,
                     Subject = subject,
                     Body = body,
-                    IsBodyHtml = true
+                    IsHtmlBody = true
                 };
 
-                await _smtpService.SendAsync(message);
+                await _emailService.SendAsync(message);
                 _logger.LogInformation($"Course enrollment confirmation sent to {email} for {courseTitle}");
             }
             catch (Exception ex)

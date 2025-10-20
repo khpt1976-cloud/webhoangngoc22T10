@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using OrchardCore.ContentManagement;
 using HoangNgoc.JobPosting.Services;
-using HoangNgoc.JobPosting.ViewModels;
+using HoangNgocCMS.Web.ViewModels;
 
 namespace HoangNgocCMS.Web.Controllers.Api
 {
@@ -70,7 +70,7 @@ namespace HoangNgocCMS.Web.Controllers.Api
                 }
 
                 var ipAddress = HttpContext.Connection.RemoteIpAddress?.ToString();
-                await _jobApplicationService.TrackJobViewAsync(id, ipAddress);
+                await _userJobService.TrackJobViewAsync(id, ipAddress);
 
                 return Ok(new { success = true });
             }

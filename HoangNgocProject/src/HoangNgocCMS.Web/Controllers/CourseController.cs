@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Display;
 using OrchardCore.DisplayManagement.ModelBinding;
-using YesSql;
 using HoangNgoc.Course.Services;
-using HoangNgoc.Course.ViewModels;
+using HoangNgocCMS.Web.ViewModels;
+using YesSqlSession = YesSql.ISession;
 
 namespace HoangNgocCMS.Web.Controllers
 {
@@ -13,14 +13,14 @@ namespace HoangNgocCMS.Web.Controllers
     {
         private readonly IContentManager _contentManager;
         private readonly IContentItemDisplayManager _contentItemDisplayManager;
-        private readonly ISession _session;
+        private readonly YesSqlSession _session;
         private readonly IUpdateModelAccessor _updateModelAccessor;
         private readonly ICourseEnrollmentService _courseEnrollmentService;
 
         public CourseController(
             IContentManager contentManager,
             IContentItemDisplayManager contentItemDisplayManager,
-            ISession session,
+            YesSqlSession session,
             IUpdateModelAccessor updateModelAccessor,
             ICourseEnrollmentService courseEnrollmentService)
         {
@@ -42,15 +42,34 @@ namespace HoangNgocCMS.Web.Controllers
                 return NotFound();
             }
 
-            // Build display shape
+            // Build display shape for rendering
             var shape = await _contentItemDisplayManager.BuildDisplayAsync(course, _updateModelAccessor.ModelUpdater);
+
+            // Create CourseViewModel from ContentItem
+            var courseViewModel = new CourseViewModel
+            {
+                Id = course.ContentItemId,
+                Title = course.Content.Course.Title?.Text ?? course.DisplayText,
+                Description = course.Content.Course.Description?.Text ?? "",
+                Instructor = course.Content.Course.Instructor?.Text ?? "",
+                Price = course.Content.Course.Price?.Value ?? 0,
+                Duration = course.Content.Course.Duration?.Value ?? 0,
+                Level = course.Content.Course.Level?.Text ?? "",
+                Category = course.Content.Course.Category?.Text ?? "",
+                IsActive = course.Published,
+                CreatedUtc = course.CreatedUtc ?? DateTime.UtcNow,
+                ModifiedUtc = course.ModifiedUtc ?? DateTime.UtcNow,
+                ImageUrl = course.Content.Course.ImageUrl?.Text ?? "",
+                MaxStudents = course.Content.Course.MaxStudents?.Value ?? 0,
+                Prerequisites = course.Content.Course.Prerequisites?.Text ?? ""
+            };
 
             // Get related courses
             var relatedCourses = await GetRelatedCoursesAsync(course);
 
             var viewModel = new CourseDetailsViewModel
             {
-                Course = shape,
+                Course = courseViewModel,
                 RelatedCourses = relatedCourses,
                 IsUserLoggedIn = User.Identity.IsAuthenticated,
                 IsUserEnrolled = User.Identity.IsAuthenticated ? 
@@ -85,17 +104,12 @@ namespace HoangNgocCMS.Web.Controllers
                 }
 
                 // Create enrollment
-                var enrollmentId = await _courseEnrollmentService.EnrollUserAsync(new CourseEnrollmentCreateModel
-                {
-                    CourseId = id,
-                    UserId = userId,
-                    EnrollmentDate = DateTime.UtcNow
-                });
+                var enrollment = await _courseEnrollmentService.EnrollUserAsync(userId, id);
 
                 return Ok(new
                 {
                     success = true,
-                    enrollmentId = enrollmentId,
+                    enrollmentId = enrollment.Id,
                     message = "Successfully enrolled in the course"
                 });
             }
@@ -140,7 +154,7 @@ namespace HoangNgocCMS.Web.Controllers
         }
 
         // Helper method to get related courses
-        private async Task<List<dynamic>> GetRelatedCoursesAsync(ContentItem course)
+        private async Task<List<CourseViewModel>> GetRelatedCoursesAsync(ContentItem course)
         {
             var category = course.Content.Course.Category?.Text;
             var level = course.Content.Course.Level?.Text;
@@ -161,15 +175,31 @@ namespace HoangNgocCMS.Web.Controllers
             }
 
             var relatedCourses = await query.Take(3).ListAsync();
-            var shapes = new List<dynamic>();
+            var courseViewModels = new List<CourseViewModel>();
 
             foreach (var relatedCourse in relatedCourses)
             {
-                var shape = await _contentItemDisplayManager.BuildDisplayAsync(relatedCourse, _updateModelAccessor.ModelUpdater, "Summary");
-                shapes.Add(shape);
+                var courseViewModel = new CourseViewModel
+                {
+                    Id = relatedCourse.ContentItemId,
+                    Title = relatedCourse.Content.Course.Title?.Text ?? relatedCourse.DisplayText,
+                    Description = relatedCourse.Content.Course.Description?.Text ?? "",
+                    Instructor = relatedCourse.Content.Course.Instructor?.Text ?? "",
+                    Price = relatedCourse.Content.Course.Price?.Value ?? 0,
+                    Duration = relatedCourse.Content.Course.Duration?.Value ?? 0,
+                    Level = relatedCourse.Content.Course.Level?.Text ?? "",
+                    Category = relatedCourse.Content.Course.Category?.Text ?? "",
+                    IsActive = relatedCourse.Published,
+                    CreatedUtc = relatedCourse.CreatedUtc ?? DateTime.UtcNow,
+                    ModifiedUtc = relatedCourse.ModifiedUtc ?? DateTime.UtcNow,
+                    ImageUrl = relatedCourse.Content.Course.ImageUrl?.Text ?? "",
+                    MaxStudents = relatedCourse.Content.Course.MaxStudents?.Value ?? 0,
+                    Prerequisites = relatedCourse.Content.Course.Prerequisites?.Text ?? ""
+                };
+                courseViewModels.Add(courseViewModel);
             }
 
-            return shapes;
+            return courseViewModels;
         }
     }
 }

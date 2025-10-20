@@ -1,3 +1,4 @@
+using OrchardCore.Media.Fields;
 namespace HoangNgoc.Core.Models
 {
     public enum TransactionStatus

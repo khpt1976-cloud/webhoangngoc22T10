@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using OrchardCore.ContentManagement;
 using OrchardCore.ContentManagement.Display;
 using OrchardCore.DisplayManagement.ModelBinding;
-using YesSql;
+using YesSqlSession = YesSql.ISession;
 using HoangNgoc.Event.Services;
-using HoangNgoc.Event.ViewModels;
+using HoangNgocCMS.Web.ViewModels;
 
 namespace HoangNgocCMS.Web.Controllers
 {
@@ -13,14 +13,14 @@ namespace HoangNgocCMS.Web.Controllers
     {
         private readonly IContentManager _contentManager;
         private readonly IContentItemDisplayManager _contentItemDisplayManager;
-        private readonly ISession _session;
+        private readonly YesSqlSession _session;
         private readonly IUpdateModelAccessor _updateModelAccessor;
         private readonly IEventRegistrationService _eventRegistrationService;
 
         public EventController(
             IContentManager contentManager,
             IContentItemDisplayManager contentItemDisplayManager,
-            ISession session,
+            YesSqlSession session,
             IUpdateModelAccessor updateModelAccessor,
             IEventRegistrationService eventRegistrationService)
         {
@@ -42,8 +42,28 @@ namespace HoangNgocCMS.Web.Controllers
                 return NotFound();
             }
 
-            // Build display shape
+            // Build display shape for rendering
             var shape = await _contentItemDisplayManager.BuildDisplayAsync(eventItem, _updateModelAccessor.ModelUpdater);
+
+            // Create EventViewModel from ContentItem
+            var eventViewModel = new EventViewModel
+            {
+                Id = eventItem.ContentItemId,
+                Title = eventItem.Content.Event.Title?.Text ?? eventItem.DisplayText,
+                Description = eventItem.Content.Event.Description?.Text ?? "",
+                StartDate = eventItem.Content.Event.StartDate?.Value ?? DateTime.Now,
+                EndDate = eventItem.Content.Event.EndDate?.Value ?? DateTime.Now,
+                Location = eventItem.Content.Event.Location?.Text ?? "",
+                Price = eventItem.Content.Event.Price?.Value ?? 0,
+                MaxAttendees = eventItem.Content.Event.MaxAttendees?.Value ?? 0,
+                Category = eventItem.Content.Event.Category?.Text ?? "",
+                OrganizerName = eventItem.Content.Event.OrganizerName?.Text ?? "",
+                OrganizerEmail = eventItem.Content.Event.OrganizerEmail?.Text ?? "",
+                OrganizerPhone = eventItem.Content.Event.OrganizerPhone?.Text ?? "",
+                IsActive = eventItem.Published,
+                CreatedUtc = eventItem.CreatedUtc ?? DateTime.UtcNow,
+                ModifiedUtc = eventItem.ModifiedUtc ?? DateTime.UtcNow
+            };
 
             // Get related events
             var relatedEvents = await GetRelatedEventsAsync(eventItem);
@@ -54,7 +74,7 @@ namespace HoangNgocCMS.Web.Controllers
 
             var viewModel = new EventDetailsViewModel
             {
-                Event = shape,
+                Event = eventViewModel,
                 RelatedEvents = relatedEvents,
                 IsUserLoggedIn = User.Identity.IsAuthenticated,
                 IsUserRegistered = User.Identity.IsAuthenticated ? 
@@ -118,8 +138,7 @@ namespace HoangNgocCMS.Web.Controllers
                     Company = model.Company,
                     JobTitle = model.JobTitle,
                     DietaryRequirements = model.DietaryRequirements,
-                    SpecialRequests = model.SpecialRequests,
-                    RegistrationDate = DateTime.UtcNow
+                    SpecialRequirements = model.SpecialRequirements
                 });
 
                 return Ok(new
@@ -164,7 +183,7 @@ namespace HoangNgocCMS.Web.Controllers
                     return BadRequest(new { success = false, message = "Cancellation deadline has passed" });
                 }
 
-                await _eventRegistrationService.CancelRegistrationAsync(userId, id);
+                await _eventRegistrationService.CancelRegistrationAsync(id);
 
                 return Ok(new { success = true, message = "Registration cancelled successfully" });
             }
@@ -209,7 +228,7 @@ namespace HoangNgocCMS.Web.Controllers
         }
 
         // Helper methods
-        private async Task<List<dynamic>> GetRelatedEventsAsync(ContentItem eventItem)
+        private async Task<List<EventViewModel>> GetRelatedEventsAsync(ContentItem eventItem)
         {
             var category = eventItem.Content.Event.Category?.Text;
             var location = eventItem.Content.Event.Location?.Text;
@@ -230,15 +249,32 @@ namespace HoangNgocCMS.Web.Controllers
             }
 
             var relatedEvents = await query.Take(3).ListAsync();
-            var shapes = new List<dynamic>();
+            var eventViewModels = new List<EventViewModel>();
 
             foreach (var relatedEvent in relatedEvents)
             {
-                var shape = await _contentItemDisplayManager.BuildDisplayAsync(relatedEvent, _updateModelAccessor.ModelUpdater, "Summary");
-                shapes.Add(shape);
+                var eventViewModel = new EventViewModel
+                {
+                    Id = relatedEvent.ContentItemId,
+                    Title = relatedEvent.Content.Event.Title?.Text ?? relatedEvent.DisplayText,
+                    Description = relatedEvent.Content.Event.Description?.Text ?? "",
+                    StartDate = relatedEvent.Content.Event.StartDate?.Value ?? DateTime.Now,
+                    EndDate = relatedEvent.Content.Event.EndDate?.Value ?? DateTime.Now,
+                    Location = relatedEvent.Content.Event.Location?.Text ?? "",
+                    Price = relatedEvent.Content.Event.Price?.Value ?? 0,
+                    MaxAttendees = relatedEvent.Content.Event.MaxAttendees?.Value ?? 0,
+                    Category = relatedEvent.Content.Event.Category?.Text ?? "",
+                    OrganizerName = relatedEvent.Content.Event.OrganizerName?.Text ?? "",
+                    OrganizerEmail = relatedEvent.Content.Event.OrganizerEmail?.Text ?? "",
+                    OrganizerPhone = relatedEvent.Content.Event.OrganizerPhone?.Text ?? "",
+                    IsActive = relatedEvent.Published,
+                    CreatedUtc = relatedEvent.CreatedUtc ?? DateTime.UtcNow,
+                    ModifiedUtc = relatedEvent.ModifiedUtc ?? DateTime.UtcNow
+                };
+                eventViewModels.Add(eventViewModel);
             }
 
-            return shapes;
+            return eventViewModels;
         }
 
         private string GetRegistrationStatus(ContentItem eventItem, int attendeesCount, int maxAttendees)

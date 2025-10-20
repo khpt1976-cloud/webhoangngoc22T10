@@ -1,5 +1,11 @@
 using HoangNgocCMS.Web.Services;
 using OrchardCore.Email;
+using HoangNgoc.UserProfile.Services;
+using HoangNgoc.JobPosting.Services;
+using HoangNgoc.Course.Services;
+using HoangNgoc.Event.Services;
+using HoangNgoc.NewsArticle.Services;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +13,14 @@ builder.Services
     .AddOrchardCms()
     .ConfigureServices(services => {
         // Register custom services
-        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<ICustomEmailService, CustomEmailService>();
+        services.AddScoped<IUserProfileService, UserProfileService>();
+        services.AddScoped<IJobApplicationService, JobApplicationService>();
+        services.AddScoped<IUserJobService, UserJobService>();
+        services.AddScoped<ICourseEnrollmentService, CourseEnrollmentService>();
+        services.AddScoped<IEventRegistrationService, EventRegistrationService>();
+        services.AddScoped<ICommentService, CommentService>();
+        services.AddScoped<IArticleRatingService, ArticleRatingService>();
         
         // Configure email settings
         services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
@@ -57,6 +70,16 @@ builder.Services
                       .AllowAnyHeader();
             });
         });
+        
+        // Register custom services
+        services.AddScoped<IUserProfileService, UserProfileService>();
+        services.AddScoped<IJobApplicationService, JobApplicationService>();
+        services.AddScoped<ICourseEnrollmentService, CourseEnrollmentService>();
+        services.AddScoped<IEventRegistrationService, EventRegistrationService>();
+        services.AddScoped<ICommentService, CommentService>();
+        services.AddScoped<HoangNgocCMS.Web.Services.IUserJobService, HoangNgocCMS.Web.Services.UserJobService>();
+        services.AddScoped<HoangNgocCMS.Web.Services.IArticleRatingService, HoangNgocCMS.Web.Services.ArticleRatingService>();
+        services.AddScoped<EmailService>();
     })
     .Configure((app, routes, services) => {
         // Configure custom routes

@@ -5,10 +5,11 @@ using OrchardCore.ContentManagement.Display;
 using OrchardCore.DisplayManagement;
 using OrchardCore.DisplayManagement.ModelBinding;
 using OrchardCore.Settings;
-using YesSql;
+using YesSqlSession = YesSql.ISession;
 using HoangNgoc.JobPosting.Models;
 using HoangNgoc.JobPosting.Services;
-using HoangNgoc.JobPosting.ViewModels;
+using HoangNgocCMS.Web.ViewModels;
+using HoangNgocCMS.Web.Models;
 
 namespace HoangNgocCMS.Web.Controllers
 {
@@ -16,19 +17,21 @@ namespace HoangNgocCMS.Web.Controllers
     {
         private readonly IContentManager _contentManager;
         private readonly IContentItemDisplayManager _contentItemDisplayManager;
-        private readonly ISession _session;
+        private readonly YesSqlSession _session;
         private readonly ISiteService _siteService;
         private readonly IUpdateModelAccessor _updateModelAccessor;
         private readonly IJobApplicationService _jobApplicationService;
+        private readonly IUserJobService _userJobService;
         private readonly IShapeFactory _shapeFactory;
 
         public JobController(
             IContentManager contentManager,
             IContentItemDisplayManager contentItemDisplayManager,
-            ISession session,
+            YesSqlSession session,
             ISiteService siteService,
             IUpdateModelAccessor updateModelAccessor,
             IJobApplicationService jobApplicationService,
+            IUserJobService userJobService,
             IShapeFactory shapeFactory)
         {
             _contentManager = contentManager;
@@ -37,6 +40,7 @@ namespace HoangNgocCMS.Web.Controllers
             _siteService = siteService;
             _updateModelAccessor = updateModelAccessor;
             _jobApplicationService = jobApplicationService;
+            _userJobService = userJobService;
             _shapeFactory = shapeFactory;
         }
 
@@ -44,7 +48,7 @@ namespace HoangNgocCMS.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(JobListViewModel model)
         {
-            var query = _session.Query<ContentItem>()
+            var query = _session.Query<ContentItem>("ContentItem")
                 .Where(x => x.ContentType == "JobPosting" && x.Published);
 
             // Apply search filter
@@ -143,7 +147,7 @@ namespace HoangNgocCMS.Web.Controllers
             }
 
             // Track job view
-            await _jobApplicationService.TrackJobViewAsync(id, HttpContext.Connection.RemoteIpAddress?.ToString());
+            await _userJobService.TrackJobViewAsync(id, HttpContext.Connection.RemoteIpAddress?.ToString());
 
             // Build display shape
             var shape = await _contentItemDisplayManager.BuildDisplayAsync(job, _updateModelAccessor.ModelUpdater);
@@ -299,7 +303,7 @@ namespace HoangNgocCMS.Web.Controllers
             var category = job.Content.JobPosting.Category?.Text;
             var location = job.Content.JobPosting.Location?.Text;
 
-            var query = _session.Query<ContentItem>()
+            var query = _session.Query<ContentItem>("ContentItem")
                 .Where(x => x.ContentType == "JobPosting" && 
                            x.Published && 
                            x.ContentItemId != job.ContentItemId);

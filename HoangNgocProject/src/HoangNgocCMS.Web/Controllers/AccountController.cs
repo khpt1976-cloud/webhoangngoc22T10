@@ -7,8 +7,10 @@ using OrchardCore.Users.Models;
 using OrchardCore.Users.Services;
 using OrchardCore.Email;
 using HoangNgoc.UserProfile.Services;
-using HoangNgoc.UserProfile.ViewModels;
 using HoangNgoc.JobPosting.Services;
+using HoangNgocCMS.Web.ViewModels;
+using HoangNgocCMS.Web.Services;
+using YesSqlSession = YesSql.ISession;
 
 namespace HoangNgocCMS.Web.Controllers
 {
@@ -19,7 +21,7 @@ namespace HoangNgocCMS.Web.Controllers
         private readonly SignInManager<IUser> _signInManager;
         private readonly IUserProfileService _userProfileService;
         private readonly IJobApplicationService _jobApplicationService;
-        private readonly IEmailService _emailService;
+        private readonly ICustomEmailService _emailService;
 
         public AccountController(
             IUserService userService,
@@ -27,7 +29,7 @@ namespace HoangNgocCMS.Web.Controllers
             SignInManager<IUser> signInManager,
             IUserProfileService userProfileService,
             IJobApplicationService jobApplicationService,
-            IEmailService emailService)
+            ICustomEmailService emailService)
         {
             _userService = userService;
             _userManager = userManager;
@@ -145,17 +147,14 @@ namespace HoangNgocCMS.Web.Controllers
             if (result.Succeeded)
             {
                 // Create user profile
-                await _userProfileService.CreateUserProfileAsync(new UserProfileCreateModel
+                await _userProfileService.CreateUserProfileAsync(user.UserId, new UpdateProfileViewModel
                 {
-                    UserId = user.UserId,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     Email = model.Email,
                     Phone = model.Phone,
                     Country = model.Country,
-                    UserType = model.UserType,
-                    AllowMarketing = model.AllowMarketing,
-                    AllowDataProcessing = model.AllowDataProcessing
+                    UserType = model.UserType
                 });
 
                 // Send confirmation email

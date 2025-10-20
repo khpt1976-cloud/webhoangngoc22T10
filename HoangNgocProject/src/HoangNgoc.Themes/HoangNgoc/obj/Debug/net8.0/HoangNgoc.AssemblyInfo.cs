@@ -15,12 +15,34 @@ using System.Reflection;
     "oangNgoc/Placement.json")]
 [assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/README.md|/workspace/HoangNgocProject/src/HoangNgoc.Themes/HoangN" +
     "goc/README.md")]
+[assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Account/Login.liquid|/workspace/HoangNgocProject/src/HoangN" +
+    "goc.Themes/HoangNgoc/Views/Account/Login.liquid")]
+[assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Account/Profile.liquid|/workspace/HoangNgocProject/src/Hoan" +
+    "gNgoc.Themes/HoangNgoc/Views/Account/Profile.liquid")]
+[assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Account/Register.liquid|/workspace/HoangNgocProject/src/Hoa" +
+    "ngNgoc.Themes/HoangNgoc/Views/Account/Register.liquid")]
 [assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Application/AppList.liquid|/workspace/HoangNgocProject/src/" +
     "HoangNgoc.Themes/HoangNgoc/Views/Application/AppList.liquid")]
 [assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Comment/CommentWidget.liquid|/workspace/HoangNgocProject/sr" +
     "c/HoangNgoc.Themes/HoangNgoc/Views/Comment/CommentWidget.liquid")]
+[assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Content-Course.liquid|/workspace/HoangNgocProject/src/Hoang" +
+    "Ngoc.Themes/HoangNgoc/Views/Content-Course.liquid")]
+[assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Content-Event.liquid|/workspace/HoangNgocProject/src/HoangN" +
+    "goc.Themes/HoangNgoc/Views/Content-Event.liquid")]
+[assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Content-JobPosting.liquid|/workspace/HoangNgocProject/src/H" +
+    "oangNgoc.Themes/HoangNgoc/Views/Content-JobPosting.liquid")]
+[assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Content-JobPosting.Summary.liquid|/workspace/HoangNgocProje" +
+    "ct/src/HoangNgoc.Themes/HoangNgoc/Views/Content-JobPosting.Summary.liquid")]
+[assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Content-NewsArticle.liquid|/workspace/HoangNgocProject/src/" +
+    "HoangNgoc.Themes/HoangNgoc/Views/Content-NewsArticle.liquid")]
 [assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Home/Index.liquid|/workspace/HoangNgocProject/src/HoangNgoc" +
     ".Themes/HoangNgoc/Views/Home/Index.liquid")]
+[assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Jobs/Apply.liquid|/workspace/HoangNgocProject/src/HoangNgoc" +
+    ".Themes/HoangNgoc/Views/Jobs/Apply.liquid")]
+[assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Jobs/Details.liquid|/workspace/HoangNgocProject/src/HoangNg" +
+    "oc.Themes/HoangNgoc/Views/Jobs/Details.liquid")]
+[assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Jobs/Index.liquid|/workspace/HoangNgocProject/src/HoangNgoc" +
+    ".Themes/HoangNgoc/Views/Jobs/Index.liquid")]
 [assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Layout.liquid|/workspace/HoangNgocProject/src/HoangNgoc.The" +
     "mes/HoangNgoc/Views/Layout.liquid")]
 [assembly: OrchardCore.Modules.Manifest.ModuleAssetAttribute("Areas/HoangNgoc/Views/Messages.liquid|/workspace/HoangNgocProject/src/HoangNgoc.T" +
@@ -44,7 +66,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HoangNgoc")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ecb06ad14f7f8bce5e00a8f0ba0e0d2c553524c6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3efde7509768235469cc879a1052d12b00e5e4f1")]
 [assembly: System.Reflection.AssemblyProductAttribute("HoangNgoc")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HoangNgoc")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

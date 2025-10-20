@@ -1,3 +1,4 @@
+using OrchardCore.Media.Fields;
 using System;
 using System.ComponentModel.DataAnnotations;
 

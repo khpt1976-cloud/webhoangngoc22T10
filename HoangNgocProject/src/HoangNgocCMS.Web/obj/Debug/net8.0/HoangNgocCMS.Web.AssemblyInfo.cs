@@ -118,7 +118,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HoangNgocCMS.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ecb06ad14f7f8bce5e00a8f0ba0e0d2c553524c6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3efde7509768235469cc879a1052d12b00e5e4f1")]
 [assembly: System.Reflection.AssemblyProductAttribute("HoangNgocCMS.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HoangNgocCMS.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
