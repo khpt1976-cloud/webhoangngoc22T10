@@ -17,13 +17,29 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
+  <!-- Exclude backup files from compilation -->
+  <ItemGroup>
+    <Compile Remove="Controllers_Backup\**" />
+    <Compile Remove="Controllers_Backup2\**" />
+    <Compile Remove="Services_Backup\**" />
+    <Content Remove="Controllers_Backup\**" />
+    <Content Remove="Controllers_Backup2\**" />
+    <Content Remove="Services_Backup\**" />
+    <EmbeddedResource Remove="Controllers_Backup\**" />
+    <EmbeddedResource Remove="Controllers_Backup2\**" />
+    <EmbeddedResource Remove="Services_Backup\**" />
+    <None Remove="Controllers_Backup\**" />
+    <None Remove="Controllers_Backup2\**" />
+    <None Remove="Services_Backup\**" />
+  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="OrchardCore.Application.Cms.Targets" Version="2.2.1" />
   </ItemGroup>
 
-  <!-- Reference HoangNgoc Bundle -->
-  <ItemGroup>
+  <!-- Reference HoangNgoc Bundle - Temporarily disabled for testing -->
+  <!-- <ItemGroup>
     <ProjectReference Include="..\HoangNgoc.Application.Targets\HoangNgoc.Application.Targets.csproj" />
-  </ItemGroup>
+  </ItemGroup> -->
 
 </Project>

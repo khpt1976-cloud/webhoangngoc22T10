@@ -32,8 +32,11 @@ namespace HoangNgoc.News.Migrations
                 .WithPart("HtmlBodyPart", part => part
                     .WithPosition("2")
                 )
-                .WithPart("CommonPart", part => part
+                .WithPart("NewsArticlePart", part => part
                     .WithPosition("3")
+                )
+                .WithPart("CommonPart", part => part
+                    .WithPosition("4")
                 )
                 .Creatable()
                 .Listable()
@@ -62,6 +65,40 @@ namespace HoangNgoc.News.Migrations
                 .Listable()
                 .Draftable()
                 .Versionable()
+            );
+
+            // Create NewsArticlePart definition with fields
+            await _contentDefinitionManager.AlterPartDefinitionAsync("NewsArticlePart", part => part
+                .WithField("Summary", field => field
+                    .OfType("TextField")
+                    .WithDisplayName("Tóm tắt")
+                    .WithPosition("0")
+                )
+                .WithField("Author", field => field
+                    .OfType("TextField")
+                    .WithDisplayName("Tác giả")
+                    .WithPosition("1")
+                )
+                .WithField("IsFeatured", field => field
+                    .OfType("BooleanField")
+                    .WithDisplayName("Tin nổi bật")
+                    .WithPosition("2")
+                )
+                .WithField("ViewCount", field => field
+                    .OfType("NumericField")
+                    .WithDisplayName("Lượt xem")
+                    .WithPosition("3")
+                )
+                .WithField("PublishedDate", field => field
+                    .OfType("DateTimeField")
+                    .WithDisplayName("Ngày xuất bản")
+                    .WithPosition("4")
+                )
+                .WithField("FeaturedImage", field => field
+                    .OfType("MediaField")
+                    .WithDisplayName("Ảnh đại diện")
+                    .WithPosition("5")
+                )
             );
 
             return 1;
