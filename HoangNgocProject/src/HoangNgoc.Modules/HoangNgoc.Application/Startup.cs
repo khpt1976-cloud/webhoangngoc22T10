@@ -49,7 +49,7 @@ namespace HoangNgoc.Application
 
         public override void Configure(IApplicationBuilder builder, IEndpointRouteBuilder routes, IServiceProvider serviceProvider)
         {
-            // Public routes
+            // Public routes for JobController (not admin)
             routes.MapAreaControllerRoute(
                 name: "HoangNgoc.Application.Job",
                 areaName: "HoangNgoc.Application",
@@ -57,7 +57,23 @@ namespace HoangNgoc.Application
                 defaults: new { controller = "Job" }
             );
 
-            // Admin controllers use OrchardCore convention-based routing
+            // Public routes for ApplicationController
+            routes.MapAreaControllerRoute(
+                name: "HoangNgoc.Application.Application",
+                areaName: "HoangNgoc.Application",
+                pattern: "Application/{action=Index}/{id?}",
+                defaults: new { controller = "Application" }
+            );
+
+            // Public routes for CandidateController
+            routes.MapAreaControllerRoute(
+                name: "HoangNgoc.Application.Candidate",
+                areaName: "HoangNgoc.Application",
+                pattern: "Candidate/{action=Index}/{id?}",
+                defaults: new { controller = "Candidate" }
+            );
+
+            // Admin controllers use OrchardCore convention-based routing via [Admin] attributes
         }
     }
 }

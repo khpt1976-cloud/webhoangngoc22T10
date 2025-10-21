@@ -37,9 +37,9 @@
     <PackageReference Include="OrchardCore.Application.Cms.Targets" Version="2.2.1" />
   </ItemGroup>
 
-  <!-- Reference HoangNgoc Bundle - Temporarily disabled for testing -->
-  <!-- <ItemGroup>
+  <!-- Reference HoangNgoc Bundle -->
+  <ItemGroup>
     <ProjectReference Include="..\HoangNgoc.Application.Targets\HoangNgoc.Application.Targets.csproj" />
-  </ItemGroup> -->
+  </ItemGroup>
 
 </Project>

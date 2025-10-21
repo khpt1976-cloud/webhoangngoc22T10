@@ -14,7 +14,7 @@ using OrchardCore.Html.Models;
 
 namespace HoangNgoc.Application.Controllers
 {
-    [Admin("HoangNgoc.Application/{action}/{id?}", "HoangNgoc.Application{action}")]
+    [Admin]
     public class AdminController : Controller, IUpdateModel
     {
         private readonly ISession _session;
